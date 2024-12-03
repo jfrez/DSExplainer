@@ -18,7 +18,6 @@ class DSExplainer:
         self.explainer = shap.TreeExplainer(model)
 
     def generate_combinations(self, X):
-        """Generar todas las combinaciones posibles de hasta 'comb' columnas y añadir el producto al dataset."""
         new_dataset = X.copy()
         for r in range(2, self.comb + 1):
             combinations = list(itertools.combinations(X.columns, r))
@@ -31,26 +30,21 @@ class DSExplainer:
         X = self.generate_combinations(X)
         shap_values = self.explainer.shap_values(X, check_additivity=False)
 
-        # Crear un DataFrame para almacenar la importancia de cada característica por predicción
         shap_values_df = pd.DataFrame(
             shap_values,
             columns=X.columns,
             index=X.index
         )
 
-        # Seleccionar únicamente las columnas de características
         feature_columns = shap_values_df.columns
 
-        # Normalizar los valores SHAP para cada fila (interpretarlos como masas)
         normalized_shap = shap_values_df[feature_columns].abs()
         normalized_shap = normalized_shap.div(normalized_shap.sum(axis=1), axis=0)
 
-        # Inicializar lista para almacenar certeza y plausibilidad
         results = []
 
-        # Iterar sobre cada fila (predicción)
         for idx, row in normalized_shap.iterrows():
-            masses = row.to_dict()  # Masas iniciales para cada hipótesis
+            masses = row.to_dict()
             certainty = {}
             plausibility = {}
 
@@ -79,7 +73,6 @@ class DSExplainer:
                 'Plausibility': plausibility
             })
 
-        # Crear DataFrames para almacenar resultados resumidos
         certainty_df = pd.DataFrame([
             {**{'Index': res['Index']}, **res['Certainty']} for res in results
         ]).set_index('Index')
