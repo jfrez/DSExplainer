@@ -17,9 +17,7 @@ class DSExplainer:
         self.model = model
         self.comb = comb
         X = self.generate_combinations(X)
-        print(X)
         model.fit(X, Y)
-        print(model)
         self.explainer = shap.TreeExplainer(model)
         
     def getModel(self):
