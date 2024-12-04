@@ -1,5 +1,4 @@
 import pandas as pd
-from DSExplainer import DSExplainer
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
@@ -28,19 +27,13 @@ def main():
     y = target
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
-    model = RandomForestRegressor(n_estimators=500, random_state=42)
-    model.fit(X_train, y_train)
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    
 
-    max_comb = 5
-    explainer = DSExplainer(model, comb=max_comb)
-    shap_values_df, certainty_df, plausibility_df = explainer.ds_values(X_test)
-
-    print("SHAP Values DataFrame:")
-    print(shap_values_df.head())
-    print("Certainty DataFrame:")
-    print(certainty_df.head())
-    print("Plausibility DataFrame:")
-    print(plausibility_df.head())
+    max_comb = 3
+    explainer = DSExplainer(model, comb=max_comb,X=X_train,Y=y_train)
+    model = explainer.getModel()
+    mass_values_df, certainty_df, plausibility_df = explainer.ds_values(X_test)
 
 if __name__ == "__main__":
     main()
