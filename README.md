@@ -30,57 +30,49 @@ The example below demonstrates how to use `DSExplainer` with the Titanic dataset
 
 ```python
 import pandas as pd
-from DSExplainer import DSExplainer
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 
-# Load Titanic dataset
-from sklearn.datasets import fetch_openml
-titanic = fetch_openml('titanic', version=1, as_frame=True)
-data = titanic.frame
-data = data.drop(columns=['boat', 'body', 'home.dest'])
-data = data.dropna()  # Eliminate rows with missing values
+def main():
+    from sklearn.datasets import fetch_openml
+    titanic = fetch_openml('titanic', version=1, as_frame=True)
+    data = titanic.frame
+    data = data.drop(columns=['boat', 'body', 'home.dest'])
+    data = data.dropna()  
 
-# Define target and features
-target_column = 'survived'
-target = data[target_column]
-features = data.drop(columns=[target_column])
+    target_column = 'survived'
+    target = data[target_column]
+    features = data.drop(columns=[target_column])
 
-# Identify numerical and categorical columns
-numerical_columns = features.select_dtypes(include=['number']).columns
-categorical_columns = features.columns.difference(numerical_columns)
+    numerical_columns = features.select_dtypes(include=['number']).columns
+    categorical_columns = features.columns.difference(numerical_columns)
 
-# Preprocess data
-scaler = MinMaxScaler()
-features[numerical_columns] = scaler.fit_transform(features[numerical_columns])
-for col in categorical_columns:
-    le = LabelEncoder()
-    features[col] = le.fit_transform(features[col]).astype(int)
+    scaler = MinMaxScaler()
+    features[numerical_columns] = scaler.fit_transform(features[numerical_columns])
+    for col in categorical_columns:
+        le = LabelEncoder()
+        features[col] = le.fit_transform(features[col]).astype(int)
 
-# Split data into train and test sets
-X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.1, random_state=42)
+    X = features
+    y = target
 
-# Train RandomForest model
-model = RandomForestRegressor(n_estimators=500, random_state=42)
-model.fit(X_train, y_train)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    
 
-# Use DSExplainer
-max_comb = 5
-explainer = DSExplainer(model, comb=max_comb)
-shap_values_df, certainty_df, plausibility_df = explainer.ds_values(X_test)
+    max_comb = 3
+    explainer = DSExplainer(model, comb=max_comb,X=X_train,Y=y_train)
+    model = explainer.getModel()
+    mass_values_df, certainty_df, plausibility_df = explainer.ds_values(X_test)
 
-print("SHAP Values DataFrame:")
-print(shap_values_df.head())
-print("Certainty DataFrame:")
-print(certainty_df.head())
-print("Plausibility DataFrame:")
-print(plausibility_df.head())
+if __name__ == "__main__":
+    main()
 ```
 
 ### Parameters
 
-- `model`: A trained machine learning model. Currently, `DSExplainer` is designed to work with tree-based models compatible with SHAP.
+- `model`: A un-trained machine learning model (the DSExplainer will do the fit). Currently, `DSExplainer` is designed to work with tree-based models compatible with SHAP.
 - `comb`: An integer representing the maximum number of features to be combined. This parameter controls how many features are considered in feature interactions (e.g., pairs, triplets).
 
 ### Methods
