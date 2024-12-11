@@ -28,9 +28,11 @@ class DSExplainer:
         
         # Generate combinations of columns and add their sums to the dataset
         for r in range(2, self.comb + 1):
-            for cols in combinations(X.columns, r):
-                new_col_name = "_x_".join(cols)
-                new_dataset[new_col_name] = X[list(cols)].sum(axis=1)
+           new_columns = [
+              (pd.Series(X[list(cols)].sum(axis=1), name="_x_".join(cols)))
+                  for cols in combinations(X.columns, r)]
+
+        new_dataset = pd.concat([new_dataset] + new_columns, axis=1)
                 
         # Scale the dataset using MinMaxScaler
         scaler = MinMaxScaler()
@@ -62,16 +64,16 @@ class DSExplainer:
 
             for k in masses.keys():
                 hip = k.split("_x_")
+
+                #certainity of the hypotessis k
                 cert = 0
                 for h in hip:
                     cert += masses[h]
                 cert += masses[k]
                 certainty[k] = cert
 
-            for k in masses.keys():
-                hip = k.split("_x_")
+                #plausibility of the hypotessis k
                 plaus = 0
-
                 for h_key, mass_value in masses.items():
                     related_hypotheses = h_key.split("_x_")
                     if any(h in hip for h in related_hypotheses):
