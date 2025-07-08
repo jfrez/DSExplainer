@@ -164,5 +164,6 @@ for idx in range(len(mass_values_df)):
 
         print(f"\nLLM interpretation for row {idx} ({TRANSLATION_LANGUAGE}):")
         print(translated_clean)
+
     except Exception as e:
         print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
