@@ -13,11 +13,12 @@ import re
 titanic = fetch_openml('titanic', version=1, as_frame=True)
 data = titanic.frame
 data = data.drop(columns=['boat','name', 'body', 'home.dest'])
-data = data.dropna()  
+data = data.dropna()
 
 target_column = 'survived'
 target = data[target_column]
 features = data.drop(columns=[target_column])
+original_features = features.copy()
 
 numerical_columns = features.select_dtypes(include=['number']).columns
 categorical_columns = features.columns.difference(numerical_columns)
@@ -31,8 +32,8 @@ for col in categorical_columns:
 X = features
 y = target
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.1, random_state=42
+X_train, X_test, orig_train, orig_test, y_train, y_test = train_test_split(
+    X, original_features, y, test_size=0.1, random_state=42
 )
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 
@@ -45,6 +46,7 @@ max_comb = 3
 explainer = DSExplainer(model, comb=max_comb,X=X_train,Y=y_train)
 model = explainer.getModel()
 subset = X_test.sample(n=1, random_state=42)
+orig_subset = orig_test.loc[subset.index]
 mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
 
 # Generate predictions for the same rows and append them to each result DataFrame
@@ -90,7 +92,7 @@ OBJECTIVE_DESCRIPTION = (
     "briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility."
 )
 
-FEATURES_TEXT = ", ".join(X.columns)
+
 
 
 def resumen_fila(row_idx: int) -> str:
@@ -116,10 +118,13 @@ def resumen_fila(row_idx: int) -> str:
 
 
 for idx in range(len(mass_values_df)):
+    features_text = ", ".join(
+        f"{col}: {orig_subset.iloc[idx][col]}" for col in orig_subset.columns
+    )
     prompt = (
         DATASET_DESCRIPTION
         + f"\nObjective: {OBJECTIVE_DESCRIPTION}"
-        + f"\nColumns: {FEATURES_TEXT}\n"
+        + f"\nColumns: {features_text}\n"
         + resumen_fila(idx)
     )
 
