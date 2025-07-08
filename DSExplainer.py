@@ -42,6 +42,7 @@ class DSExplainer:
         Y : pandas.Series or array-like
             Target values corresponding to ``X``.
         """
+
         self.model = model
         self.comb = comb
         self.scaler = None
@@ -70,6 +71,7 @@ class DSExplainer:
             combinations up to ``self.comb`` and scaled between 0 and 1.
         """
 
+
         new_dataset = X.copy()
 
         # Generate combinations of columns and add their sums to the dataset
@@ -84,6 +86,7 @@ class DSExplainer:
         scaler = MinMaxScaler()
         new_dataset = pd.DataFrame(scaler.fit_transform(new_dataset), columns=new_dataset.columns)
         
+
 
         return new_dataset
 
@@ -108,6 +111,7 @@ class DSExplainer:
             ``plausibility_df`` containing Dempster–Shafer metrics.
         """
         X = self.generate_combinations(X, scaler=self.scaler)
+
 
         shap_values = self.explainer.shap_values(X, check_additivity=False)
 
