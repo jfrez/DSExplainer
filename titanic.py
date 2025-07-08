@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
+from DSExplainer import DSExplainer
 
 from sklearn.datasets import fetch_openml
 titanic = fetch_openml('titanic', version=1, as_frame=True)
