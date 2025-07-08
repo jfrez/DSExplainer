@@ -2,8 +2,6 @@ import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
-
 from DSExplainer import DSExplainer
 import numpy as np
 import ollama
@@ -30,23 +28,19 @@ original_features = X.copy()
 scaler = MinMaxScaler()
 X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
 
-# Split dataset
-X_train, X_test, orig_train, orig_test, y_train, y_test = train_test_split(
-    X_scaled, original_features, y, test_size=0.1, random_state=42
-)
-
 # Train a tree-based model
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 
-# Create the DSExplainer
+# Create the DSExplainer using the full dataset
 max_comb = 3
-explainer = DSExplainer(model, comb=max_comb, X=X_train, Y=y_train)
+explainer = DSExplainer(model, comb=max_comb, X=X_scaled, Y=y)
 model = explainer.getModel()
 
-# Generate DSExplainer outputs for a random test sample
+# Generate DSExplainer outputs for a random sample from the full dataset
 np.random.seed(int(time.time()) % 2**32)
-subset = X_test.sample(n=1, random_state=np.random.randint(0, 10000))
-orig_subset = orig_test.loc[subset.index]
+subset = X_scaled.sample(n=1, random_state=np.random.randint(0, 10000))
+orig_subset = original_features.loc[subset.index]
+
 mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
 
 # Generate predictions for the selected rows
@@ -58,7 +52,8 @@ for df in (mass_values_df, certainty_df, plausibility_df):
     df["prediction"] = pred_labels
 
 # Compare predictions with the original target values
-true_labels = [target_names[t] for t in y_test.loc[subset.index]]
+true_labels = [target_names[t] for t in y.loc[subset.index]]
+
 
 comparison_df = orig_subset.copy()
 comparison_df["actual"] = true_labels
