@@ -87,7 +87,7 @@ DATASET_DESCRIPTION = dedent(
 )
 
 OBJECTIVE_DESCRIPTION = (
-    "briefly conclude why the passenger survived or not. Only provide the final conclusion, no explanations."
+    "briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility."
 )
 
 FEATURES_TEXT = ", ".join(X.columns)
