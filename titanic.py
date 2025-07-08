@@ -12,7 +12,7 @@ import re
 
 titanic = fetch_openml('titanic', version=1, as_frame=True)
 data = titanic.frame
-data = data.drop(columns=['boat', 'body', 'home.dest'])
+data = data.drop(columns=['boat','name', 'body', 'home.dest'])
 data = data.dropna()  
 
 target_column = 'survived'
@@ -44,7 +44,7 @@ llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
 max_comb = 3
 explainer = DSExplainer(model, comb=max_comb,X=X_train,Y=y_train)
 model = explainer.getModel()
-subset = X_test[:2]
+subset = X_test.sample(n=1, random_state=42)
 mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
 
 # Generate predictions for the same rows and append them to each result DataFrame
@@ -56,7 +56,7 @@ for df in (mass_values_df, certainty_df, plausibility_df):
  
 
 
-top_n = 3  
+top_n = 5
 
 
 def print_top_columns(df, df_name):
