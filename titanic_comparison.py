@@ -88,11 +88,13 @@ DATASET_DESCRIPTION = dedent(
 )
 
 OBJECTIVE_SHAP = (
-    "briefly conclude why the passenger survived or not using only the SHAP feature importances."
+    "briefly conclude why the passenger survived or not. "
+    "Only provide the final conclusion based on SHAP feature importances."
 )
 
 OBJECTIVE_DEMPSTER = (
-    "briefly conclude why the passenger survived or not based on Certainty and Plausibility."
+    "briefly conclude why the passenger survived or not. "
+    "Only provide the final conclusion based on Certainty and Plausibility."
 )
 
 
