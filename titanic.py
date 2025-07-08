@@ -88,7 +88,6 @@ def print_top_columns(df, df_name):
             print(f"    {col}: {val}")
 
 
-print_top_columns(mass_values_df, "mass_values_df")
 print_top_columns(certainty_df, "certainty_df")
 print_top_columns(plausibility_df, "plausibility_df")
 
@@ -112,10 +111,6 @@ OBJECTIVE_DESCRIPTION = (
 
 def resumen_fila(row_idx: int) -> str:
     pred = mass_values_df.loc[row_idx, "prediction"]
-
-    mass_vals = ", ".join(
-        f"{k}: {v:.3f}" for k, v in mass_values_df.drop(columns="prediction").iloc[row_idx].items()
-    )
     cert_vals = ", ".join(
         f"{k}: {v:.3f}" for k, v in certainty_df.drop(columns="prediction").iloc[row_idx].items()
     )
@@ -131,18 +126,18 @@ def resumen_fila(row_idx: int) -> str:
 
     return "\n".join(resumen)
 
-
 for idx in range(len(mass_values_df)):
     features_text = ", ".join(
         f"{col}: {orig_subset.iloc[idx][col]}" for col in orig_subset.columns
     )
+    
     prompt = (
         DATASET_DESCRIPTION
         + f"\nObjective: {OBJECTIVE_DESCRIPTION}"
         + f"\nColumns: {features_text}\n"
         + resumen_fila(idx)
     )
-
+    print(prompt)
     try:
         response = llm_client.chat(model="mannix/jan-nano", messages=[{"role": "user", "content": prompt}])
         clean = re.sub(r"<think>.*?</think>", "", response.message.content, flags=re.DOTALL).strip()
