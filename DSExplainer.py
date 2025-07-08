@@ -13,9 +13,11 @@ from scipy.sparse import csr_matrix
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 
 class DSExplainer:
-    def __init__(self, model, comb,X,Y):
+    def __init__(self, model, comb, X, Y):
         self.model = model
         self.comb = comb
+        self.scaler = None
+
         X = self.generate_combinations(X)
         model.fit(X, Y)
         self.explainer = shap.TreeExplainer(model)
@@ -23,23 +25,27 @@ class DSExplainer:
     def getModel(self):
         return self.model
 
-    def generate_combinations(self, X):
+    def generate_combinations(self, X, scaler=None):
         new_dataset = X.copy()
-        
+
         # Generate combinations of columns and add their sums to the dataset
         for r in range(2, self.comb + 1):
             for cols in combinations(X.columns, r):
                 new_col_name = "_x_".join(cols)
                 new_dataset[new_col_name] = X[list(cols)].sum(axis=1)
-                
-        # Scale the dataset using MinMaxScaler
-        scaler = MinMaxScaler()
-        new_dataset = pd.DataFrame(scaler.fit_transform(new_dataset), columns=new_dataset.columns)
-        
+
+        # Scale the dataset using the provided scaler or fit a new one
+        if scaler is None:
+            scaler = MinMaxScaler()
+            self.scaler = scaler
+            scaler.fit(new_dataset)
+
+        new_dataset = pd.DataFrame(scaler.transform(new_dataset), columns=new_dataset.columns)
+
         return new_dataset
 
     def ds_values(self, X):
-        X=self.generate_combinations(X)
+        X = self.generate_combinations(X, scaler=self.scaler)
         shap_values = self.explainer.shap_values(X, check_additivity=False)
 
         shap_values_df = pd.DataFrame(
