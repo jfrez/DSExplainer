@@ -62,6 +62,7 @@ model = RandomForestRegressor(n_estimators=100, random_state=42)
 
 max_comb = 3
 explainer = DSExplainer(model, comb=max_comb,X=X_train,Y=y_train)
+# The fitted MinMaxScaler is stored in the explainer and reused for new data
 model = explainer.getModel()
 mass_values_df, certainty_df, plausibility_df = explainer.ds_values(X_test[:2])
  
