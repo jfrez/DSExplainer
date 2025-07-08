@@ -9,6 +9,7 @@ import ollama
 import os
 from textwrap import dedent
 import re
+
 titanic = fetch_openml('titanic', version=1, as_frame=True)
 data = titanic.frame
 data = data.drop(columns=['boat', 'body', 'home.dest'])
@@ -62,6 +63,7 @@ def print_top_columns(df, df_name):
     for idx, row in df.iterrows():
         numeric_row = row.drop(labels=["prediction"], errors="ignore")
         numeric_row = pd.to_numeric(numeric_row, errors="coerce")
+
         top_values = numeric_row.nlargest(top_n)
         print(f"\n{df_name}, Fila {idx}:")
         for col, val in top_values.items():
