@@ -13,8 +13,8 @@ import time
 import sys
 
 # Redirect stdout and stderr to a log file line by line
-sys.stdout = open("LOG", "w", buffering=1)
-sys.stderr = sys.stdout
+sys.stdout = open("log.txt", "w", buffering=1)
+
 
 
 
