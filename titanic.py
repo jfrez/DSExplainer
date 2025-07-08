@@ -73,18 +73,22 @@ FEATURES_TEXT = ", ".join(X.columns)
 def resumen_fila(row_idx: int) -> str:
     X_row = explainer.generate_combinations(X_test.iloc[[row_idx]])
     pred = model.predict(X_row)[0]
-    mass_top = mass_values_df.iloc[row_idx].nlargest(top_n)
-    cert_top = certainty_df.iloc[row_idx].nlargest(top_n)
-    plaus_top = plausibility_df.iloc[row_idx].nlargest(top_n)
+
+    mass_vals = ", ".join(
+        f"{k}: {v:.3f}" for k, v in mass_values_df.iloc[row_idx].items()
+    )
+    cert_vals = ", ".join(
+        f"{k}: {v:.3f}" for k, v in certainty_df.iloc[row_idx].items()
+    )
+    plaus_vals = ", ".join(
+        f"{k}: {v:.3f}" for k, v in plausibility_df.iloc[row_idx].items()
+    )
 
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
-        "Top combinations by mass: "
-        + ", ".join(f"{k} ({v:.3f})" for k, v in mass_top.items()),
-        "Highest certainty in: "
-        + ", ".join(f"{k} ({v:.3f})" for k, v in cert_top.items()),
-        "Greatest plausibility in: "
-        + ", ".join(f"{k} ({v:.3f})" for k, v in plaus_top.items()),
+        f"Mass values: {mass_vals}",
+        f"Certainty values: {cert_vals}",
+        f"Plausibility values: {plaus_vals}",
     ]
 
     return "\n".join(resumen)
@@ -95,7 +99,7 @@ for idx in range(len(mass_values_df)):
         DATASET_DESCRIPTION
         + f"\nColumns: {FEATURES_TEXT}\n"
         + resumen_fila(idx)
-        + "\nProvide an English interpretation of this inference result."
+        + "\nInterpret the prediction, certainty (certeza) and plausibility (plausabilidad) in English."
     )
 
     try:
