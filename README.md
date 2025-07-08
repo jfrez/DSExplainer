@@ -38,6 +38,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
 
 from sklearn.datasets import fetch_openml
 titanic = fetch_openml('titanic', version=1, as_frame=True)
@@ -63,13 +64,15 @@ y = target
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 model = RandomForestRegressor(n_estimators=100, random_state=42)
-    
+
 
 max_comb = 3
 explainer = DSExplainer(model, comb=max_comb,X=X_train,Y=y_train)
 # The fitted MinMaxScaler is stored in the explainer and reused for new data
 model = explainer.getModel()
-mass_values_df, certainty_df, plausibility_df = explainer.ds_values(X_test[:2])
+train_preds = model.predict(explainer.generate_combinations(X_train))
+model_error = mean_absolute_error(y_train, train_preds) / (y_train.max() - y_train.min())
+mass_values_df, certainty_df, plausibility_df = explainer.ds_values(X_test[:2], error_rate=model_error)
  
 
 
@@ -96,7 +99,7 @@ print_top_columns(plausibility_df, "plausibility_df")
 
 ### Methods
 
-- `ds_values(X)`: Generates SHAP values, certainty, and plausibility metrics for the input dataset `X`.
+- `ds_values(X, error_rate=0.0)`: Generates SHAP values, certainty, and plausibility metrics for the input dataset `X`. The optional `error_rate` parameter represents the model's percent error (between 0 and 1) and is treated as the Dempster\u2013Shafer uncertainty mass.
   - **Returns**: Three pandas DataFrames: `shap_values_df`, `certainty_df`, and `plausibility_df`.
 
 ## Theory Behind DSExplainer

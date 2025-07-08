@@ -90,7 +90,7 @@ class DSExplainer:
 
         return new_dataset
 
-    def ds_values(self, X):
+    def ds_values(self, X, error_rate=0.0):
         """Compute SHAP masses, certainty and plausibility for ``X``.
 
         The method first generates the same feature combinations that
@@ -103,6 +103,10 @@ class DSExplainer:
         ----------
         X : pandas.DataFrame
             Dataset for which the explanations are generated.
+        error_rate : float, optional
+            Percentage of model error expressed as a fraction between
+            0 and 1. This value is treated as the Dempster\u2013Shafer
+            "uncertainty" mass. Default is ``0.0``.
 
         Returns
         -------
@@ -126,10 +130,16 @@ class DSExplainer:
         normalized_shap = shap_values_df[feature_columns].abs()
         normalized_shap = normalized_shap.div(normalized_shap.sum(axis=1), axis=0)
 
+        if not 0.0 <= error_rate <= 1.0:
+            raise ValueError("error_rate must be between 0 and 1")
+
+        normalized_shap = normalized_shap.mul(1 - error_rate, axis=0)
+        normalized_shap["uncertainty"] = error_rate
+
         results = []
 
         for idx, row in normalized_shap.iterrows():
-            masses = row.to_dict()
+            masses = row.drop("uncertainty").to_dict()
             certainty = {}
             plausibility = {}
 
