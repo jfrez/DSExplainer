@@ -161,8 +161,10 @@ for idx in range(len(mass_values_df)):
             model="mannix/jan-nano",
             messages=[{"role": "user", "content": translation_prompt}],
         ).message.content.strip()
+        clean = re.sub(r"<think>.*?</think>", "", translated, flags=re.DOTALL).strip()
+
 
         print(f"\nLLM interpretation for row {idx} ({TRANSLATION_LANGUAGE}):")
-        print(translated)
+        print(clean)
     except Exception as e:
         print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
