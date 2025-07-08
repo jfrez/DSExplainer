@@ -13,7 +13,35 @@ from scipy.sparse import csr_matrix
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 
 class DSExplainer:
+    """Wrapper around SHAP that adds Dempster–Shafer style metrics.
+
+    Parameters
+    ----------
+    model : object
+        A tree based estimator compatible with ``shap.TreeExplainer``.
+    comb : int
+        Maximum size of feature combinations to generate.
+    X : pandas.DataFrame
+        Training features used to fit ``model``.
+    Y : pandas.Series or array-like
+        Target values used to fit ``model``.
+    """
     def __init__(self, model, comb, X, Y):
+
+
+        """Fit the estimator and prepare the SHAP explainer.
+
+        Parameters
+        ----------
+        model : object
+            Estimator that will be fitted on the provided data.
+        comb : int
+            Maximum size of feature combinations to generate.
+        X : pandas.DataFrame
+            Feature matrix used to fit ``model``.
+        Y : pandas.Series or array-like
+            Target values corresponding to ``X``.
+        """
         self.model = model
         self.comb = comb
         self.scaler = None
@@ -23,9 +51,25 @@ class DSExplainer:
         self.explainer = shap.TreeExplainer(model)
         
     def getModel(self):
+        """Return the underlying fitted model."""
         return self.model
 
     def generate_combinations(self, X, scaler=None):
+
+        """Create scaled columns for feature combinations.
+
+        Parameters
+        ----------
+        X : pandas.DataFrame
+            Dataset for which the combinations will be generated.
+
+        Returns
+        -------
+        pandas.DataFrame
+            A new dataset containing the original features, their
+            combinations up to ``self.comb`` and scaled between 0 and 1.
+        """
+
         new_dataset = X.copy()
 
         # Generate combinations of columns and add their sums to the dataset
@@ -45,7 +89,27 @@ class DSExplainer:
         return new_dataset
 
     def ds_values(self, X):
+        """Compute SHAP masses, certainty and plausibility for ``X``.
+
+        The method first generates the same feature combinations that
+        were used to fit the model. It then obtains SHAP values and
+        normalizes them into "masses". These masses are used to derive
+        Dempster–Shafer certainty and plausibility measures for each
+        hypothesis (feature or feature combination).
+
+        Parameters
+        ----------
+        X : pandas.DataFrame
+            Dataset for which the explanations are generated.
+
+        Returns
+        -------
+        tuple of pandas.DataFrame
+            ``shap_values_df`` with raw SHAP values, ``certainty_df`` and
+            ``plausibility_df`` containing Dempster–Shafer metrics.
+        """
         X = self.generate_combinations(X, scaler=self.scaler)
+
         shap_values = self.explainer.shap_values(X, check_additivity=False)
 
         shap_values_df = pd.DataFrame(
