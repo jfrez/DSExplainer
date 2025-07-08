@@ -10,6 +10,12 @@ import os
 from textwrap import dedent
 import re
 import time
+import sys
+
+# Redirect stdout and stderr to a log file line by line
+sys.stdout = open("LOG", "w", buffering=1)
+sys.stderr = sys.stdout
+
 
 
 titanic = fetch_openml('titanic', version=1, as_frame=True)
@@ -102,12 +108,10 @@ def resumen_shap(row_idx: int) -> str:
 
 def resumen_dempster(row_idx: int) -> str:
     pred = shap_values_df.loc[row_idx, "prediction"]
-
     cert_vals = ", ".join(certainty_top[row_idx])
     plaus_vals = ", ".join(plausibility_top[row_idx])
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
-
         f"Certainty values: {cert_vals}",
         f"Plausibility values: {plaus_vals}",
     ]
@@ -159,5 +163,4 @@ for idx in range(len(shap_values_df)):
         print(clean)
     except Exception as e:
         print(f"\nCould not obtain Dempster interpretation for row {idx}: {e}")
-
 
