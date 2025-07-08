@@ -74,7 +74,7 @@ print(comparison_df)
  
 
 
-top_n = 5
+top_n = 3
 
 
 def print_top_columns(df, df_name):
