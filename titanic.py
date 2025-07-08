@@ -1,7 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
 from DSExplainer import DSExplainer
 import time
 import numpy as np
@@ -33,23 +32,24 @@ for col in categorical_columns:
 X = features
 y = target
 
-X_train, X_test, orig_train, orig_test, y_train, y_test = train_test_split(
-    X, original_features, y, test_size=0.1, random_state=42
-)
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 
 
 OLLAMA_HOST = os.getenv("OLLAMA_HOST")
 llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
 
+# Language used to translate the LLM output. Can be overridden with the
+# TRANSLATION_LANGUAGE environment variable.
+TRANSLATION_LANGUAGE = os.getenv("TRANSLATION_LANGUAGE", "español")
+
     
 
 max_comb = 3
-explainer = DSExplainer(model, comb=max_comb,X=X_train,Y=y_train)
+explainer = DSExplainer(model, comb=max_comb, X=X, Y=y)
 model = explainer.getModel()
 np.random.seed(int(time.time()) % 2**32)  # Cambia semilla en cada ejecución
-subset = X_test.sample(n=1, random_state=np.random.randint(0, 10000))
-orig_subset = orig_test.loc[subset.index]
+subset = X.sample(n=1, random_state=np.random.randint(0, 10000))
+orig_subset = original_features.loc[subset.index]
 mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
 
 # Generate predictions for the selected rows
@@ -62,7 +62,7 @@ for df in (mass_values_df, certainty_df, plausibility_df):
 
 # Compare predictions with the original target values
 true_labels = [
-    "survived" if t == 1 else "did not survive" for t in y_test.loc[subset.index]
+    "survived" if t == 1 else "did not survive" for t in y.loc[subset.index]
 ]
 
 comparison_df = orig_subset.copy()
@@ -109,14 +109,20 @@ OBJECTIVE_DESCRIPTION = (
 
 
 
-def resumen_fila(row_idx: int) -> str:
+def resumen_fila(row_idx: int, top_n: int = top_n) -> str:
     pred = mass_values_df.loc[row_idx, "prediction"]
-    cert_vals = ", ".join(
-        f"{k}: {v:.3f}" for k, v in certainty_df.drop(columns="prediction").iloc[row_idx].items()
+
+    cert_series = pd.to_numeric(
+        certainty_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
     )
-    plaus_vals = ", ".join(
-        f"{k}: {v:.3f}" for k, v in plausibility_df.drop(columns="prediction").iloc[row_idx].items()
+    top_cert = cert_series.nlargest(top_n)
+    cert_vals = ", ".join(top_cert.index)
+
+    plaus_series = pd.to_numeric(
+        plausibility_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
     )
+    top_plaus = plaus_series.nlargest(top_n)
+    plaus_vals = ", ".join(top_plaus.index)
 
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
@@ -139,9 +145,20 @@ for idx in range(len(mass_values_df)):
     )
     print(prompt)
     try:
-        response = llm_client.chat(model="mannix/jan-nano", messages=[{"role": "user", "content": prompt}])
+        response = llm_client.chat(
+            model="mannix/jan-nano", messages=[{"role": "user", "content": prompt}]
+        )
         clean = re.sub(r"<think>.*?</think>", "", response.message.content, flags=re.DOTALL).strip()
-        print(f"\nLLM interpretation for row {idx}:")
-        print(clean)
+
+        translation_prompt = (
+            f"Translate the following text to {TRANSLATION_LANGUAGE}:\n{clean}"
+        )
+        translated = llm_client.chat(
+            model="mannix/jan-nano",
+            messages=[{"role": "user", "content": translation_prompt}],
+        ).message.content.strip()
+
+        print(f"\nLLM interpretation for row {idx} ({TRANSLATION_LANGUAGE}):")
+        print(translated)
     except Exception as e:
         print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
