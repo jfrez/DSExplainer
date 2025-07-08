@@ -52,18 +52,30 @@ subset = X_test.sample(n=1, random_state=np.random.randint(0, 10000))
 orig_subset = orig_test.loc[subset.index]
 mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
 
-# Generate predictions for the same rows and append them to each result DataFrame
+# Generate predictions for the selected rows
 X_pred = explainer.generate_combinations(subset)
 raw_preds = model.predict(X_pred)
 pred_labels = ["survived" if p >= 0.5 else "did not survive" for p in raw_preds]
+
 for df in (mass_values_df, certainty_df, plausibility_df):
     df["prediction"] = pred_labels
+
+# Compare predictions with the original target values
+true_labels = [
+    "survived" if t == 1 else "did not survive" for t in y_test.loc[subset.index]
+]
+
+comparison_df = orig_subset.copy()
+comparison_df["actual"] = true_labels
+comparison_df["predicted"] = pred_labels
+
+print("Original features with actual vs. predicted labels:")
+print(comparison_df)
  
 
 
 top_n = 5
 
-print(orig_subset,pred_labels)
 
 def print_top_columns(df, df_name):
     for idx, row in df.iterrows():
