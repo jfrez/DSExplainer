@@ -26,7 +26,7 @@ from DSExplainer import DSExplainer
 
 ### Example Usage
 
-The example below demonstrates how to use `DSExplainer` with the Titanic dataset to train a `RandomForestRegressor` and analyze its predictions:
+The example below demonstrates how to use `DSExplainer` with the Titanic dataset to train a `RandomForestRegressor` and analyze its predictions. The script also shows how to send a summary of each prediction—including certainty and plausibility metrics—to an LLM using the `ollama` package for natural language interpretation. Each DSExplainer dataframe is augmented with the predicted survival label so the LLM can explain why the passenger survived or not, based on a provided dataset description and objective:
 
 ```python
 import pandas as pd
