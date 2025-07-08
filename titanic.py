@@ -3,7 +3,8 @@ from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from DSExplainer import DSExplainer
-
+import time
+import numpy as np
 from sklearn.datasets import fetch_openml
 import ollama
 import os
@@ -40,12 +41,14 @@ model = RandomForestRegressor(n_estimators=100, random_state=42)
 
 OLLAMA_HOST = os.getenv("OLLAMA_HOST")
 llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
+
     
 
 max_comb = 3
 explainer = DSExplainer(model, comb=max_comb,X=X_train,Y=y_train)
 model = explainer.getModel()
-subset = X_test.sample(n=1, random_state=42)
+np.random.seed(int(time.time()) % 2**32)  # Cambia semilla en cada ejecución
+subset = X_test.sample(n=1, random_state=np.random.randint(0, 10000))
 orig_subset = orig_test.loc[subset.index]
 mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
 
