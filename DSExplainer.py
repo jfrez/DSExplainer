@@ -42,6 +42,7 @@ class DSExplainer:
         Y : pandas.Series or array-like
             Target values corresponding to ``X``.
         """
+
         self.model = model
         self.comb = comb
         self.scaler = None
@@ -70,21 +71,22 @@ class DSExplainer:
             combinations up to ``self.comb`` and scaled between 0 and 1.
         """
 
+
         new_dataset = X.copy()
 
         # Generate combinations of columns and add their sums to the dataset
         for r in range(2, self.comb + 1):
-            for cols in combinations(X.columns, r):
-                new_col_name = "_x_".join(cols)
-                new_dataset[new_col_name] = X[list(cols)].sum(axis=1)
+           new_columns = [
+              (pd.Series(X[list(cols)].sum(axis=1), name="_x_".join(cols)))
+                  for cols in combinations(X.columns, r)]
 
-        # Scale the dataset using the provided scaler or fit a new one
-        if scaler is None:
-            scaler = MinMaxScaler()
-            self.scaler = scaler
-            scaler.fit(new_dataset)
+        new_dataset = pd.concat([new_dataset] + new_columns, axis=1)
+                
+        # Scale the dataset using MinMaxScaler
+        scaler = MinMaxScaler()
+        new_dataset = pd.DataFrame(scaler.fit_transform(new_dataset), columns=new_dataset.columns)
+        
 
-        new_dataset = pd.DataFrame(scaler.transform(new_dataset), columns=new_dataset.columns)
 
         return new_dataset
 
@@ -110,6 +112,7 @@ class DSExplainer:
         """
         X = self.generate_combinations(X, scaler=self.scaler)
 
+
         shap_values = self.explainer.shap_values(X, check_additivity=False)
 
         shap_values_df = pd.DataFrame(
@@ -132,16 +135,16 @@ class DSExplainer:
 
             for k in masses.keys():
                 hip = k.split("_x_")
+
+                #certainity of the hypotessis k
                 cert = 0
                 for h in hip:
                     cert += masses[h]
                 cert += masses[k]
                 certainty[k] = cert
 
-            for k in masses.keys():
-                hip = k.split("_x_")
+                #plausibility of the hypotessis k
                 plaus = 0
-
                 for h_key, mass_value in masses.items():
                     related_hypotheses = h_key.split("_x_")
                     if any(h in hip for h in related_hypotheses):
