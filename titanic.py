@@ -42,6 +42,10 @@ model = RandomForestRegressor(n_estimators=100, random_state=42)
 OLLAMA_HOST = os.getenv("OLLAMA_HOST")
 llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
 
+# Language used to translate the LLM output. Can be overridden with the
+# TRANSLATION_LANGUAGE environment variable.
+TRANSLATION_LANGUAGE = os.getenv("TRANSLATION_LANGUAGE", "español")
+
     
 
 max_comb = 3
@@ -145,9 +149,20 @@ for idx in range(len(mass_values_df)):
     )
     print(prompt)
     try:
-        response = llm_client.chat(model="mannix/jan-nano", messages=[{"role": "user", "content": prompt}])
+        response = llm_client.chat(
+            model="mannix/jan-nano", messages=[{"role": "user", "content": prompt}]
+        )
         clean = re.sub(r"<think>.*?</think>", "", response.message.content, flags=re.DOTALL).strip()
-        print(f"\nLLM interpretation for row {idx}:")
-        print(clean)
+
+        translation_prompt = (
+            f"Translate the following text to {TRANSLATION_LANGUAGE}:\n{clean}"
+        )
+        translated = llm_client.chat(
+            model="mannix/jan-nano",
+            messages=[{"role": "user", "content": translation_prompt}],
+        ).message.content.strip()
+
+        print(f"\nLLM interpretation for row {idx} ({TRANSLATION_LANGUAGE}):")
+        print(translated)
     except Exception as e:
         print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
