@@ -142,7 +142,12 @@ for idx in range(len(mass_values_df)):
             messages=[{"role": "user", "content": translation_prompt}],
         ).message.content.strip()
 
+        translated_clean = re.sub(
+            r"<think>.*?</think>", "", translated, flags=re.DOTALL
+        ).strip()
+
         print(f"\nLLM interpretation for row {idx} ({TRANSLATION_LANGUAGE}):")
-        print(translated)
+        print(translated_clean)
+
     except Exception as e:
         print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
