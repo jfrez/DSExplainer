@@ -9,6 +9,7 @@ import ollama
 import os
 from textwrap import dedent
 import re
+
 titanic = fetch_openml('titanic', version=1, as_frame=True)
 data = titanic.frame
 data = data.drop(columns=['boat', 'body', 'home.dest'])
@@ -84,6 +85,7 @@ DATASET_DESCRIPTION = dedent(
 
 OBJECTIVE_DESCRIPTION = "Explain why the passenger survived or not based on the DSExplainer metrics."
 
+
 FEATURES_TEXT = ", ".join(X.columns)
 
 
@@ -98,6 +100,7 @@ def resumen_fila(row_idx: int) -> str:
     )
     plaus_vals = ", ".join(
         f"{k}: {v:.3f}" for k, v in plausibility_df.drop(columns="prediction").iloc[row_idx].items()
+
     )
 
     resumen = [
@@ -123,5 +126,6 @@ for idx in range(len(mass_values_df)):
         clean = re.sub(r"<think>.*?</think>", "", response.message.content, flags=re.DOTALL).strip()
         print(f"\nLLM interpretation for row {idx}:")
         print(clean)
+
     except Exception as e:
         print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
