@@ -17,6 +17,7 @@ sys.stdout = open("LOG", "w", buffering=1)
 sys.stderr = sys.stdout
 
 
+
 titanic = fetch_openml('titanic', version=1, as_frame=True)
 data = titanic.frame
 data = data.drop(columns=['boat','name', 'body', 'home.dest'])
@@ -69,6 +70,7 @@ def get_top_features(df):
     return top_dict
 
 shap_top = get_top_features(shap_values_df[original_features.columns])
+
 certainty_top = get_top_features(certainty_df)
 plausibility_top = get_top_features(plausibility_df)
 
