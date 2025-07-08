@@ -87,7 +87,6 @@ DATASET_DESCRIPTION = dedent(
 )
 
 OBJECTIVE_DESCRIPTION = (
-    "Based on the DSExplainer metrics (certainty and plausibility from Dempster-Shafer theory), "
     "briefly conclude why the passenger survived or not. Only provide the final conclusion, no explanations."
 )
 
@@ -109,7 +108,6 @@ def resumen_fila(row_idx: int) -> str:
 
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
-        f"Mass values: {mass_vals}",
         f"Certainty values: {cert_vals}",
         f"Plausibility values: {plaus_vals}",
     ]
