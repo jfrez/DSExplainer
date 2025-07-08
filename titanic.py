@@ -109,14 +109,20 @@ OBJECTIVE_DESCRIPTION = (
 
 
 
-def resumen_fila(row_idx: int) -> str:
+def resumen_fila(row_idx: int, top_n: int = top_n) -> str:
     pred = mass_values_df.loc[row_idx, "prediction"]
-    cert_vals = ", ".join(
-        f"{k}: {v:.3f}" for k, v in certainty_df.drop(columns="prediction").iloc[row_idx].items()
+
+    cert_series = pd.to_numeric(
+        certainty_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
     )
-    plaus_vals = ", ".join(
-        f"{k}: {v:.3f}" for k, v in plausibility_df.drop(columns="prediction").iloc[row_idx].items()
+    top_cert = cert_series.nlargest(top_n)
+    cert_vals = ", ".join(f"{k}: {v:.3f}" for k, v in top_cert.items())
+
+    plaus_series = pd.to_numeric(
+        plausibility_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
     )
+    top_plaus = plaus_series.nlargest(top_n)
+    plaus_vals = ", ".join(f"{k}: {v:.3f}" for k, v in top_plaus.items())
 
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
