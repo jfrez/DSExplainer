@@ -120,13 +120,15 @@ def resumen_fila(row_idx: int, top_n: int = top_n) -> str:
         certainty_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
     )
     top_cert = cert_series.nlargest(top_n)
-    cert_vals = ", ".join(f"{k}: {v:.3f}" for k, v in top_cert.items())
+    cert_vals = ", ".join(top_cert.index)
+
 
     plaus_series = pd.to_numeric(
         plausibility_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
     )
     top_plaus = plaus_series.nlargest(top_n)
-    plaus_vals = ", ".join(f"{k}: {v:.3f}" for k, v in top_plaus.items())
+    plaus_vals = ", ".join(top_plaus.index)
+
 
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
@@ -161,10 +163,9 @@ for idx in range(len(mass_values_df)):
             model="mannix/jan-nano",
             messages=[{"role": "user", "content": translation_prompt}],
         ).message.content.strip()
-        clean = re.sub(r"<think>.*?</think>", "", translated, flags=re.DOTALL).strip()
-
 
         print(f"\nLLM interpretation for row {idx} ({TRANSLATION_LANGUAGE}):")
-        print(clean)
+        print(translated)
+
     except Exception as e:
         print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
