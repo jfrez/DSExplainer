@@ -85,7 +85,10 @@ DATASET_DESCRIPTION = dedent(
     """
 )
 
-OBJECTIVE_DESCRIPTION = "Explain why the passenger survived or not based on the DSExplainer metrics."
+OBJECTIVE_DESCRIPTION = (
+    "Based on the DSExplainer metrics (certainty and plausibility from Dempster-Shafer theory), "
+    "briefly conclude why the passenger survived or not. Only provide the final conclusion, no explanations."
+)
 
 FEATURES_TEXT = ", ".join(X.columns)
 
