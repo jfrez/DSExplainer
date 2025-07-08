@@ -6,6 +6,7 @@ from DSExplainer import DSExplainer
 
 from sklearn.datasets import fetch_openml
 import ollama
+import os
 from textwrap import dedent
 import re
 titanic = fetch_openml('titanic', version=1, as_frame=True)
@@ -33,6 +34,10 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.1, random_state=42
 )
 model = RandomForestRegressor(n_estimators=100, random_state=42)
+
+
+OLLAMA_HOST = os.getenv("OLLAMA_HOST")
+llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
     
 
 max_comb = 3
@@ -114,7 +119,7 @@ for idx in range(len(mass_values_df)):
     )
 
     try:
-        response = ollama.chat(model="llama2", messages=[{"role": "user", "content": prompt}])
+        response = llm_client.chat(model="mannix/jan-nano", messages=[{"role": "user", "content": prompt}])
         clean = re.sub(r"<think>.*?</think>", "", response.message.content, flags=re.DOTALL).strip()
         print(f"\nLLM interpretation for row {idx}:")
         print(clean)
