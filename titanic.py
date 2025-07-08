@@ -60,7 +60,7 @@ for df in (mass_values_df, certainty_df, plausibility_df):
 
 top_n = 5
 
-print(df)
+print(orig_subset)
 
 def print_top_columns(df, df_name):
     for idx, row in df.iterrows():
