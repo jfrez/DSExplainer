@@ -63,7 +63,8 @@ def get_top_features(df):
         top_dict[idx] = list(top_series.index)
     return top_dict
 
-shap_top = get_top_features(shap_values_df)
+shap_top = get_top_features(shap_values_df[original_features.columns])
+
 certainty_top = get_top_features(certainty_df)
 plausibility_top = get_top_features(plausibility_df)
 
@@ -80,40 +81,83 @@ DATASET_DESCRIPTION = dedent(
     """
 )
 
-OBJECTIVE_DESCRIPTION = (
-    "briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility."
+OBJECTIVE_SHAP = (
+    "briefly conclude why the passenger survived or not using only the SHAP feature importances."
+)
+
+OBJECTIVE_DEMPSTER = (
+    "briefly conclude why the passenger survived or not based on Certainty and Plausibility."
 )
 
 
-def resumen_fila(row_idx: int) -> str:
+def resumen_shap(row_idx: int) -> str:
     pred = shap_values_df.loc[row_idx, "prediction"]
     shap_vals = ", ".join(shap_top[row_idx])
+    resumen = [
+        f"Prediction for row {row_idx}: {pred}",
+        f"Top SHAP values: {shap_vals}",
+    ]
+    return "\n".join(resumen)
+
+
+def resumen_dempster(row_idx: int) -> str:
+    pred = shap_values_df.loc[row_idx, "prediction"]
+
     cert_vals = ", ".join(certainty_top[row_idx])
     plaus_vals = ", ".join(plausibility_top[row_idx])
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
-        f"Top SHAP values: {shap_vals}",
+
         f"Certainty values: {cert_vals}",
         f"Plausibility values: {plaus_vals}",
     ]
     return "\n".join(resumen)
 
 for idx in range(len(shap_values_df)):
-    features_text = ", ".join(f"{col}: {orig_subset.iloc[idx][col]}" for col in orig_subset.columns)
-    prompt = (
-        DATASET_DESCRIPTION
-        + f"\nObjective: {OBJECTIVE_DESCRIPTION}"
-        + f"\nColumns: {features_text}\n"
-        + resumen_fila(idx)
+    features_text = ", ".join(
+        f"{col}: {orig_subset.iloc[idx][col]}" for col in orig_subset.columns
     )
-    print(prompt)
+
+    # ---- SHAP interpretation ----
+    shap_prompt = (
+        DATASET_DESCRIPTION
+        + f"\nObjective: {OBJECTIVE_SHAP}"
+        + f"\nColumns: {features_text}\n"
+        + resumen_shap(idx)
+    )
+    print(shap_prompt)
     try:
-        response = llm_client.chat(
-            model="mannix/jan-nano", messages=[{"role": "user", "content": prompt}]
+        shap_response = llm_client.chat(
+            model="mannix/jan-nano",
+            messages=[{"role": "user", "content": shap_prompt}],
         )
-        clean = re.sub(r"<think>.*?</think>", "", response.message.content, flags=re.DOTALL).strip()
-        print(f"\nLLM interpretation for row {idx} (English):")
+        clean = re.sub(
+            r"<think>.*?</think>", "", shap_response.message.content, flags=re.DOTALL
+        ).strip()
+        print(f"\nLLM SHAP interpretation for row {idx} (English):")
         print(clean)
     except Exception as e:
-        print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
+        print(f"\nCould not obtain SHAP interpretation for row {idx}: {e}")
+
+    # ---- Dempster-Shafer interpretation ----
+    demp_prompt = (
+        DATASET_DESCRIPTION
+        + f"\nObjective: {OBJECTIVE_DEMPSTER}"
+        + f"\nColumns: {features_text}\n"
+        + resumen_dempster(idx)
+    )
+    print(demp_prompt)
+    try:
+        demp_response = llm_client.chat(
+            model="mannix/jan-nano",
+            messages=[{"role": "user", "content": demp_prompt}],
+        )
+        clean = re.sub(
+            r"<think>.*?</think>", "", demp_response.message.content, flags=re.DOTALL
+        ).strip()
+        print(f"\nLLM Dempster interpretation for row {idx} (English):")
+        print(clean)
+    except Exception as e:
+        print(f"\nCould not obtain Dempster interpretation for row {idx}: {e}")
+
 
