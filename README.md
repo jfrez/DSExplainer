@@ -26,7 +26,11 @@ from DSExplainer import DSExplainer
 
 ### Example Usage
 
-The example below demonstrates how to use `DSExplainer` with the Titanic dataset to train a `RandomForestRegressor` and analyze its predictions:
+The example below demonstrates how to use `DSExplainer` with the Titanic dataset to train a `RandomForestRegressor` and analyze its predictions. The script also shows how to send a summary of each prediction—including certainty and plausibility metrics—to an LLM using the `ollama` package for natural language interpretation. Each DSExplainer dataframe is augmented with the predicted survival label so the LLM can explain why the passenger survived or not, based on a provided dataset description and objective.
+
+By default the script queries the `mannix/jan-nano` model. If your Ollama server
+is running on a different machine, set the `OLLAMA_HOST` environment variable to
+the server's address, for example `OLLAMA_HOST="http://1.2.3.4:11434"`.
 
 ```python
 import pandas as pd

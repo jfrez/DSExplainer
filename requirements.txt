@@ -2,3 +2,4 @@ pandas
 statsmodels
 scikit-learn
 shap
+ollama
