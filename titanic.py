@@ -124,6 +124,7 @@ def resumen_fila(row_idx: int, top_n: int = top_n) -> str:
     top_plaus = plaus_series.nlargest(top_n)
     plaus_vals = ", ".join(top_plaus.index)
 
+
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
         f"Certainty values: {cert_vals}",
@@ -159,6 +160,6 @@ for idx in range(len(mass_values_df)):
         ).message.content.strip()
 
         print(f"\nLLM interpretation for row {idx} ({TRANSLATION_LANGUAGE}):")
-        print(translated)
+
     except Exception as e:
         print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
