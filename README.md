@@ -74,7 +74,9 @@ train_preds = model.predict(
     explainer.generate_combinations(X_train, scaler=explainer.scaler)
 )
 model_error = mean_absolute_error(y_train, train_preds) / (y_train.max() - y_train.min())
-mass_values_df, certainty_df, plausibility_df = explainer.ds_values(X_test[:2], error_rate=model_error)
+shap_values_df, mass_values_df, certainty_df, plausibility_df = explainer.ds_values(
+    X_test[:2], error_rate=model_error
+)
  
 
 
@@ -102,7 +104,9 @@ print_top_columns(plausibility_df, "plausibility_df")
 ### Methods
 
 - `ds_values(X, error_rate=0.0)`: Generates SHAP values, certainty, and plausibility metrics for the input dataset `X`. The optional `error_rate` parameter represents the model's percent error (between 0 and 1) and is treated as the Dempster\u2013Shafer uncertainty mass.
-  - **Returns**: Three pandas DataFrames: `shap_values_df`, `certainty_df`, and `plausibility_df`.
+  - **Returns**: Four pandas DataFrames: `shap_values_df`,
+    `mass_values_df` (normalized masses with an `"uncertainty"` column),
+    `certainty_df`, and `plausibility_df`.
 
 ## Theory Behind DSExplainer
 

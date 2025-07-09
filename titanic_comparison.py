@@ -50,7 +50,7 @@ np.random.seed(int(time.time()) % 2**32)
 subset = X.sample(n=20, random_state=np.random.randint(0, 100000))
 orig_subset = original_features.loc[subset.index]
 
-shap_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
+shap_values_df, mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
 
 # Use the stored scaler for prediction features
 X_pred = explainer.generate_combinations(subset, scaler=explainer.scaler)

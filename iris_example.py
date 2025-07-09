@@ -41,7 +41,9 @@ np.random.seed(int(time.time()) % 2**32)
 subset = X_scaled.sample(n=1, random_state=np.random.randint(0, 10000))
 orig_subset = original_features.loc[subset.index]
 
-mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
+shap_values_df, mass_values_df, certainty_df, plausibility_df = explainer.ds_values(
+    subset
+)
 
 # Generate predictions for the selected rows using the fitted scaler
 X_pred = explainer.generate_combinations(subset, scaler=explainer.scaler)

@@ -130,8 +130,10 @@ class DSExplainer:
         Returns
         -------
         tuple of pandas.DataFrame
-            ``shap_values_df`` with raw SHAP values, ``certainty_df`` and
-            ``plausibility_df`` containing Dempster–Shafer metrics.
+            ``shap_values_df`` with raw SHAP values, ``mass_values_df`` with the
+            normalized masses (including an ``"uncertainty"`` column),
+            ``certainty_df`` and ``plausibility_df`` containing Dempster–Shafer
+            metrics.
         """
         X = self.generate_combinations(X, scaler=self.scaler)
 
@@ -154,6 +156,8 @@ class DSExplainer:
 
         normalized_shap = normalized_shap.mul(1 - error_rate, axis=0)
         normalized_shap["uncertainty"] = error_rate
+
+        mass_values_df = normalized_shap.copy()
 
         results = []
 
@@ -194,4 +198,4 @@ class DSExplainer:
             {**{'Index': res['Index']}, **res['Plausibility']} for res in results
         ]).set_index('Index')
 
-        return shap_values_df, certainty_df, plausibility_df
+        return shap_values_df, mass_values_df, certainty_df, plausibility_df
