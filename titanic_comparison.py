@@ -91,65 +91,89 @@ DATASET_DESCRIPTION = dedent(
     """
 )
 
-SUMMARY_INSTRUCTIONS = dedent(
-    """
-    You are an analyst explaining Titanic survival predictions.
-
-    Input:
-     – Top SHAP features (ordered list with values, N≤3)
-     – DS certainty & plausibility triples (ordered by weight, N≤3 each)
-    Task:
-    1. Draft ONE sentence (≤30 words) that states survived / did not survive **and** the 1-2 strongest SHAP features.
-    2. Draft ONE sentence (≤30 words) that confirms or nuances the first sentence using at most ONE DS triple.
-    Output exactly two sentences. Do not mention features not present in SHAP or DS lists.
-    """
+OBJECTIVE_SHAP = (
+    "briefly conclude why the passenger survived or not. "
+    "Only provide the final conclusion based on SHAP feature importances."
 )
 
-def build_prompt(row_idx: int) -> str:
-    """Return summary lines for row ``row_idx``."""
-    pred = shap_values_df.loc[row_idx, "prediction"]
+OBJECTIVE_DEMPSTER = (
+    "briefly conclude why the passenger survived or not. "
+    "Only provide the final conclusion based on Certainty and Plausibility."
+)
 
+
+def resumen_shap(row_idx: int) -> str:
+    pred = shap_values_df.loc[row_idx, "prediction"]
     shap_vals = ", ".join(
         f"{name}: {val:.3f}" for name, val in shap_top[row_idx]
     )
+    resumen = [
+        f"Prediction for row {row_idx}: {pred}",
+        f"Top SHAP features: {shap_vals}",
+    ]
+    return "\n".join(resumen)
+
+
+def resumen_dempster(row_idx: int) -> str:
+    pred = shap_values_df.loc[row_idx, "prediction"]
     cert_vals = ", ".join(
         f"{name}: {val:.3f}" for name, val in certainty_top[row_idx]
     )
     plaus_vals = ", ".join(
         f"{name}: {val:.3f}" for name, val in plausibility_top[row_idx]
     )
-
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
-        f"Top SHAP features: {shap_vals}",
         f"Certainty triples: {cert_vals}",
         f"Plausibility triples: {plaus_vals}",
     ]
     return "\n".join(resumen)
+
 
 for idx in range(len(shap_values_df)):
     features_text = ", ".join(
         f"{col}: {orig_subset.iloc[idx][col]}" for col in orig_subset.columns
     )
 
-    prompt = (
+    # ---- SHAP interpretation ----
+    shap_prompt = (
         DATASET_DESCRIPTION
+        + f"\nObjective: {OBJECTIVE_SHAP}"
         + f"\nColumns: {features_text}\n"
-        + build_prompt(idx)
-        + "\n" + SUMMARY_INSTRUCTIONS
+        + resumen_shap(idx)
     )
-
-    print(prompt)
+    print(shap_prompt)
     try:
-        response = llm_client.chat(
+        shap_response = llm_client.chat(
             model="mannix/jan-nano",
-            messages=[{"role": "user", "content": prompt}],
+            messages=[{"role": "user", "content": shap_prompt}],
         )
-        clean = re.sub(
-            r"<think>.*?</think>", "", response.message.content, flags=re.DOTALL
+        clean_shap = re.sub(
+            r"<think>.*?</think>", "", shap_response.message.content, flags=re.DOTALL
         ).strip()
-        print(f"\nLLM interpretation for row {idx} (English):")
-        print(clean)
+        print(f"\nLLM SHAP interpretation for row {idx} (English):")
+        print(clean_shap)
     except Exception as e:
-        print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
+        print(f"\nCould not obtain SHAP interpretation for row {idx}: {e}")
+
+    # ---- Dempster-Shafer interpretation ----
+    demp_prompt = (
+        DATASET_DESCRIPTION
+        + f"\nObjective: {OBJECTIVE_DEMPSTER}"
+        + f"\nColumns: {features_text}\n"
+        + resumen_dempster(idx)
+    )
+    print(demp_prompt)
+    try:
+        demp_response = llm_client.chat(
+            model="mannix/jan-nano",
+            messages=[{"role": "user", "content": demp_prompt}],
+        )
+        clean_demp = re.sub(
+            r"<think>.*?</think>", "", demp_response.message.content, flags=re.DOTALL
+        ).strip()
+        print(f"\nLLM Dempster interpretation for row {idx} (English):")
+        print(clean_demp)
+    except Exception as e:
+        print(f"\nCould not obtain Dempster interpretation for row {idx}: {e}")
 
