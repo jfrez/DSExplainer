@@ -8,6 +8,7 @@ import numpy as np
 import ollama
 import os
 from textwrap import dedent
+import re
 
 OLLAMA_HOST = os.getenv("OLLAMA_HOST")
 llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
@@ -29,7 +30,7 @@ train_features = explainer.generate_combinations(X_scaled, scaler=explainer.scal
 train_preds = model.predict(train_features)
 model_error = mean_absolute_error(y, train_preds) / (y.max() - y.min())
 
-subset = X_scaled.sample(n=2, random_state=42)
+subset = X_scaled.sample(n=10, random_state=42)
 orig_subset = original_features.loc[subset.index]
 
 DATASET_DESCRIPTION = dedent(
@@ -70,6 +71,7 @@ for idx, prompt in demp_prompts.items():
     print(f"Prompt {idx}:\n{prompt}\n")
     try:
         resp = llm_client.chat(model="mannix/jan-nano", messages=[{"role": "user", "content": prompt}])
-        print("LLM:", resp.message.content.strip())
+        clean_resp = re.sub(r"<think>.*?</think>", "", resp.message.content, flags=re.DOTALL).strip()
+        print("LLM:", clean_resp)
     except Exception as e:
         print("LLM error:", e)
