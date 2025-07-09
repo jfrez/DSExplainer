@@ -133,9 +133,7 @@ def resumen_fila(row_idx: int, top_n: int = top_n) -> str:
     return "\n".join(resumen)
 
 for idx in range(len(mass_values_df)):
-    features_text = ", ".join(
-        f"{col}: {orig_subset.iloc[idx][col]}" for col in orig_subset.columns
-    )
+    features_text = ", ".join(orig_subset.columns)
     
     prompt = (
         DATASET_DESCRIPTION

@@ -62,15 +62,13 @@ for df in (shap_values_df, certainty_df, plausibility_df):
 TOP_N = 3
 
 def get_top_features(df):
-    """Return the top ``TOP_N`` columns with their original values."""
+    """Return the top ``TOP_N`` column names only."""
     top_dict = {}
     for idx, row in df.iterrows():
         numeric_row = row.drop(labels=["prediction"], errors="ignore")
         numeric_row = pd.to_numeric(numeric_row, errors="coerce")
         top_series = numeric_row.abs().nlargest(TOP_N)
-        top_dict[idx] = [
-            (col, row[col]) for col in top_series.index
-        ]
+        top_dict[idx] = list(top_series.index)
     return top_dict
 
 shap_top = get_top_features(shap_values_df[original_features.columns])
@@ -105,9 +103,7 @@ OBJECTIVE_DEMPSTER = (
 
 def resumen_shap(row_idx: int) -> str:
     pred = shap_values_df.loc[row_idx, "prediction"]
-    shap_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in shap_top[row_idx]
-    )
+    shap_vals = ", ".join(shap_top[row_idx])
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
         f"Top SHAP features: {shap_vals}",
@@ -117,12 +113,8 @@ def resumen_shap(row_idx: int) -> str:
 
 def resumen_dempster(row_idx: int) -> str:
     pred = shap_values_df.loc[row_idx, "prediction"]
-    cert_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in certainty_top[row_idx]
-    )
-    plaus_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in plausibility_top[row_idx]
-    )
+    cert_vals = ", ".join(certainty_top[row_idx])
+    plaus_vals = ", ".join(plausibility_top[row_idx])
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
         f"Certainty triples: {cert_vals}",
@@ -132,9 +124,7 @@ def resumen_dempster(row_idx: int) -> str:
 
 
 for idx in range(len(shap_values_df)):
-    features_text = ", ".join(
-        f"{col}: {orig_subset.iloc[idx][col]}" for col in orig_subset.columns
-    )
+    features_text = ", ".join(orig_subset.columns)
 
     # ---- SHAP interpretation ----
     shap_prompt = (
