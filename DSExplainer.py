@@ -87,11 +87,11 @@ class DSExplainer:
 
         # Generate combinations of columns and add their sums to the dataset
         for r in range(2, self.comb + 1):
-           new_columns = [
-              (pd.Series(X[list(cols)].sum(axis=1), name="_x_".join(cols)))
-                  for cols in combinations(X.columns, r)]
-
-        new_dataset = pd.concat([new_dataset] + new_columns, axis=1)
+            new_columns = [
+                pd.Series(X[list(cols)].sum(axis=1), name="_x_".join(cols))
+                for cols in combinations(X.columns, r)
+            ]
+            new_dataset = pd.concat([new_dataset] + new_columns, axis=1)
                 
         # Use the provided scaler or fall back to the stored one
         scaler = scaler or self.scaler
