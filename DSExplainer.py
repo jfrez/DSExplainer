@@ -41,13 +41,21 @@ class DSExplainer:
             Feature matrix used to fit ``model``.
         Y : pandas.Series or array-like
             Target values corresponding to ``X``.
+
+        Notes
+        -----
+        A :class:`~sklearn.preprocessing.MinMaxScaler` is created and fitted
+        on ``X`` (including generated combinations) and stored as
+        :pyattr:`self.scaler` for reuse on new data.
         """
 
         self.model = model
         self.comb = comb
-        self.scaler = None
+        # Scaler stored for reuse on new data
+        self.scaler = MinMaxScaler()
 
-        X = self.generate_combinations(X)
+        # Generate feature combinations and fit the scaler
+        X = self.generate_combinations(X, scaler=self.scaler)
         model.fit(X, Y)
         self.explainer = shap.TreeExplainer(model)
         
@@ -63,6 +71,9 @@ class DSExplainer:
         ----------
         X : pandas.DataFrame
             Dataset for which the combinations will be generated.
+        scaler : sklearn.preprocessing.MinMaxScaler, optional
+            Scaler used to normalize the columns. If ``None`` the scaler
+            stored in the explainer is used.
 
         Returns
         -------
@@ -82,9 +93,16 @@ class DSExplainer:
 
         new_dataset = pd.concat([new_dataset] + new_columns, axis=1)
                 
-        # Scale the dataset using MinMaxScaler
-        scaler = MinMaxScaler()
-        new_dataset = pd.DataFrame(scaler.fit_transform(new_dataset), columns=new_dataset.columns)
+        # Use the provided scaler or fall back to the stored one
+        scaler = scaler or self.scaler
+        if scaler is None:
+            scaler = MinMaxScaler()
+            self.scaler = scaler
+
+        if hasattr(scaler, "n_samples_seen_"):
+            new_dataset = pd.DataFrame(scaler.transform(new_dataset), columns=new_dataset.columns)
+        else:
+            new_dataset = pd.DataFrame(scaler.fit_transform(new_dataset), columns=new_dataset.columns)
         
 
 
@@ -102,7 +120,8 @@ class DSExplainer:
         Parameters
         ----------
         X : pandas.DataFrame
-            Dataset for which the explanations are generated.
+            Dataset for which the explanations are generated. It will be
+            transformed using the stored scaler.
         error_rate : float, optional
             Percentage of model error expressed as a fraction between
             0 and 1. This value is treated as the Dempster\u2013Shafer

@@ -52,8 +52,8 @@ subset = X.sample(n=1, random_state=np.random.randint(0, 10000))
 orig_subset = original_features.loc[subset.index]
 mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
 
-# Generate predictions for the selected rows
-X_pred = explainer.generate_combinations(subset)
+# Generate predictions for the selected rows using the stored scaler
+X_pred = explainer.generate_combinations(subset, scaler=explainer.scaler)
 raw_preds = model.predict(X_pred)
 pred_labels = ["survived" if p >= 0.5 else "did not survive" for p in raw_preds]
 
