@@ -97,6 +97,7 @@ OBJECTIVE_DESCRIPTION = (
 
 def resumen_fila(row_idx: int, top_n: int = TOP_N) -> str:
     pred = mass_values_df.loc[row_idx, "prediction"]
+    uncertainty = mass_values_df.loc[row_idx, "uncertainty"]
 
     cert_series = pd.to_numeric(
         certainty_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
@@ -112,6 +113,7 @@ def resumen_fila(row_idx: int, top_n: int = TOP_N) -> str:
 
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
+        f"Uncertainty value: {uncertainty}",
         f"Certainty values: {cert_vals}",
         f"Plausibility values: {plaus_vals}",
     ]

@@ -116,11 +116,13 @@ def resumen_shap(row_idx: int) -> str:
 
 def resumen_dempster(row_idx: int) -> str:
     pred = shap_values_df.loc[row_idx, "prediction"]
+    uncertainty = mass_values_df.loc[row_idx, "uncertainty"]
     # Only include feature names for the top triples
     cert_vals = ", ".join(name for name, _ in certainty_top[row_idx])
     plaus_vals = ", ".join(name for name, _ in plausibility_top[row_idx])
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
+        f"Uncertainty value: {uncertainty}",
         f"Certainty triples: {cert_vals}",
         f"Plausibility triples: {plaus_vals}",
     ]
