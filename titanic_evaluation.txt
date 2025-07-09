@@ -15,196 +15,272 @@ Prompt 36:
 
 The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
 
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.
+Objective: Explain whether the passenger survived using the Certainty and Plausibility metrics. Focus on these metrics and avoid stating the exact survival percentage.
 Columns: pclass=1, sex=female, age=22.0, sibsp=0, parch=1, ticket=113505, fare=55.0, cabin=E33, embarked=S
-Prediction for row 36: 1.0
 Uncertainty value: 10.16%
 Certainty triples: sex_x_age: 37.21%, pclass_x_sex_x_age: 19.98%, sex_x_age_x_fare: 9.22%
 Plausibility triples: sex_x_age_x_fare: 87.26%, age_x_fare_x_cabin: 87.25%, age_x_ticket_x_fare: 87.14%
 
-LLM: The passenger survived (prediction: 1.0) due to a combination of factors that strongly align with historical survival trends. Here's the breakdown:
+LLM: The passenger's survival is **plausible** based on the provided metrics, but the model's **certainty** about the outcome is relatively low. Here's the breakdown:
 
-1. **Sex (Female)**: Women, especially in first-class, had significantly higher survival rates. The passenger being female is a key factor.
-2. **Pclass (1st Class)**: First-class passengers had better access to lifeboats and were prioritized, increasing survival chances.
-3. **Age (22)**: Younger passengers (like 22-year-olds) had higher survival rates compared to older adults.
-4. **Fare (55.0)**: A higher fare suggests a first-class ticket, reinforcing the pclass=1 association and survival likelihood.
-5. **Cabin (E33)**: While not a direct survival factor, the cabin's location (E33) is in the lower deck, but the passenger's first-class status (pclass=1) overrides this.
+### **Certainty Metrics**  
+- **Sex_x_age**: 37.21%  
+- **Pclass_x_sex_x_age**: 19.98%  
+- **Sex_x_age_x_fare**: 9.22%  
 
-**Certainty and Plausibility**: While the model's certainty (10.16%) is low, the high plausibility (87.26% for sex-age-fare, 87.25% for age-fare-cabin) indicates strong alignment with survival factors. These triples confirm that the passenger's profile (female, first-class, high fare) is highly consistent with survival in the Titanic dataset. Thus, despite the uncertainty, the combination of factors strongly supports survival.
+These values indicate that the model is **not highly confident** in predicting survival. The combination of being female (sex), age 22, and a fare of 55 (which is relatively low for 1st class) contributes to low certainty. However, the **certainty is not zero**, suggesting that survival is still a possible outcome, albeit with limited confidence.
+
+### **Plausibility Metrics**  
+- **Sex_x_age_x_fare**: 87.26%  
+- **Age_x_fare_x_cabin**: 87.25%  
+- **Age_x_ticket_x_fare**: 87.14%  
+
+These metrics strongly indicate that the passenger’s characteristics (female, 22 years old, 1st class, moderate fare, and specific cabin/ticket) are **highly consistent with survival**. The high plausibility (over 87%) suggests that the passenger’s profile aligns with the likelihood of survival, even if the model is not certain.  
+
+### **Uncertainty Value**  
+The **10.16% uncertainty** reflects the model’s **inability to confidently predict survival**. This aligns with the low certainty triples but is supported by the high plausibility metrics. The combination of features (e.g., female, 1st class, moderate fare) makes survival **plausible**, but the model cannot definitively confirm it due to the uncertainty.  
+
+### **Conclusion**  
+While the model is **uncertain** (low certainty), the passenger’s profile is **plausible for survival** (high plausibility). The survival is **possible**, but the model cannot rule out the possibility of non-survival with high confidence. The passenger’s age, gender, and class (1st) are strong indicators of survival in the context of the Titanic dataset, but the fare and other factors contribute to the uncertainty.
 Prompt 148:
 
 The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
 
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.
+Objective: Explain whether the passenger survived using the Certainty and Plausibility metrics. Focus on these metrics and avoid stating the exact survival percentage.
 Columns: pclass=1, sex=male, age=45.0, sibsp=1, parch=0, ticket=36973, fare=83.475, cabin=C83, embarked=S
-Prediction for row 148: 0.16
 Uncertainty value: 10.16%
 Certainty triples: sex_x_age: 28.48%, pclass_x_sex_x_age: 12.98%, sex_x_age_x_fare: 6.50%
 Plausibility triples: age_x_fare_x_cabin: 86.43%, age_x_ticket_x_fare: 85.52%, sex_x_age_x_fare: 84.21%
 
-LLM: The passenger, a male in first class (pclass=1) with age 45, high fare (83.475), and cabin C83, has a predicted survival probability of **16%** (0.16) with **10.16% uncertainty**. While factors like **high fare** (86.43% plausibility) and **first-class status** (implied by cabin and ticket) suggest higher survival likelihood, the combination of **male sex** (28.48% certainty), **older age** (45), and **first-class fare** (6.50% certainty) reduces the probability. 
+LLM: The passenger's survival is **plausible** based on the metrics, but the model's **certainty** remains low. Here's the breakdown:
 
-**Key reasoning:**
-- **First-class passengers** typically had higher survival rates, but **male sex** (common in first class) historically correlates with lower survival. 
-- **Age 45** is older than average for first-class passengers, potentially lowering survival chances.
-- **High fare** (83.475) aligns with first-class status, but the passenger’s **male sex** and **age** outweigh this in the model’s uncertainty.
-- **Plausibility triples** (e.g., age-fare-cabin, age-ticket-fare) indicate strong associations with survival, but **certainty triples** (e.g., sex-age, pclass-sex-age) show weaker confidence in survival.
+- **Certainty**: The highest confidence in survival is derived from the combination of **sex and age** (28.48%), which is relatively low. This suggests the model is uncertain about the survival prediction, likely due to conflicting factors like the passenger being male (a group with lower survival rates) and 45 years old (a higher-risk age in the dataset). Other certainty triples (e.g., pclass_x_sex_x_age: 12.98%) further indicate weak confidence in the outcome.
 
-**Conclusion:** Despite being in first class and paying a high fare, the passenger’s **male sex** and **older age** significantly reduce the survival probability. The model’s low certainty (10.16% uncertainty) reflects conflicting factors, but the **plausibility** of high fare and first-class status suggests a lower likelihood of survival. The passenger is **unlikely to have survived**.
+- **Plausibility**: The highest plausibility is associated with **age, fare, and cabin** (86.43%), indicating strong support for survival based on these features. The passenger’s high fare (83.475), first-class cabin (C83), and age (45) align with patterns where wealthier passengers (first class, high fare) had higher survival rates, despite being male. This combination makes survival a **highly plausible** outcome.
+
+In conclusion, while the survival is **plausible** (high plausibility), the model’s **certainty** is **low**, reflecting uncertainty due to conflicting factors like gender and age. The passenger likely survived, but the model cannot confidently confirm this.
 Prompt 100:
 
 The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
 
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.
+Objective: Explain whether the passenger survived using the Certainty and Plausibility metrics. Focus on these metrics and avoid stating the exact survival percentage.
 Columns: pclass=1, sex=male, age=49.0, sibsp=1, parch=0, ticket=PC 17485, fare=56.9292, cabin=A20, embarked=C
-Prediction for row 100: 0.8
 Uncertainty value: 10.16%
 Certainty triples: sex_x_age: 17.27%, pclass_x_sex_x_age: 11.02%, age_x_sibsp_x_fare: 7.16%
 Plausibility triples: age_x_fare_x_cabin: 85.62%, age_x_sibsp_x_fare: 83.68%, sex_x_age_x_fare: 82.99%
 
-LLM: The passenger is likely to have survived based on the following reasoning:  
+LLM: The passenger's survival can be assessed using the **Certainty** and **Plausibility** metrics as follows:  
 
-- **Class and Fare**: The passenger is in **first class (pclass=1)** and paid a **high fare (56.9292)**, which historically correlated with higher survival rates for passengers in first class.  
-- **Cabin**: The **A20 cabin** (first class) further reinforces the likelihood of survival, as first-class cabins were associated with better access to lifeboats and priority in rescue efforts.  
-- **Age and Sex**: While the passenger is **male (sex=male)** and **49 years old**, these factors (commonly linked to lower survival rates) are outweighed by the strong positive influence of **first-class status** and **high fare**.  
-- **Plausibility Factors**: The **highest plausibility triple** (age_x_fare_x_cabin) at **85.62%** suggests that the combination of high fare, first-class cabin, and age (despite being older) aligns with survival.  
+### **Certainty Metrics**  
+- The highest certainty value is **17.27%** for the combination of *sex (male) and age (49)*, indicating a low probability of survival based on these features alone.  
+- Other certainty triples (e.g., *pclass_x_sex_x_age* at 11.02% and *age_x_sibsp_x_fare* at 7.16%) further confirm that the survival probability is low, with the overall uncertainty value at **10.16%**.  
 
-Despite the uncertainty (10.16%), the model predicts an **80% survival chance**, indicating that the passenger’s first-class status and high fare strongly support survival, even though age and sex introduce some risk. The overall conclusion is that the passenger is **likely to have survived**.
+### **Plausibility Metrics**  
+- The highest plausibility value is **85.62%** for the combination of *age (49), fare (56.92), and cabin (A20)*, suggesting that survival is a **plausible outcome** given these specific features.  
+- Other plausibility triples (e.g., *age_x_sibsp_x_fare* at 83.68% and *sex_x_age_x_fare* at 82.99%) also support that survival aligns with the passenger's characteristics.  
+
+### **Conclusion**  
+While the **certainty** (probability) of survival is low (around 17%), the **plausibility** (likelihood that survival is a reasonable outcome) is high (85.62%). This indicates that **survival is possible** given the passenger's features (e.g., age, fare, cabin), but the model is **uncertain** about the exact survival probability. Thus, the passenger's survival is **plausible** but not guaranteed.
 Prompt 161:
 
 The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
 
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.
+Objective: Explain whether the passenger survived using the Certainty and Plausibility metrics. Focus on these metrics and avoid stating the exact survival percentage.
 Columns: pclass=1, sex=female, age=51.0, sibsp=1, parch=0, ticket=13502, fare=77.9583, cabin=D11, embarked=S
-Prediction for row 161: 1.0
 Uncertainty value: 10.16%
 Certainty triples: sex_x_age: 34.37%, pclass_x_sex_x_age: 24.82%, sex_x_age_x_fare: 9.74%
 Plausibility triples: sex_x_age_x_fare: 87.63%, age_x_ticket_x_fare: 87.60%, age_x_sibsp_x_fare: 87.58%
 
-LLM: The passenger survived (prediction: 1.0) due to a combination of factors that align with historical survival trends and the data provided. Here's the breakdown:
+LLM: The passenger's survival is strongly supported by the **Certainty** and **Plausibility** metrics. 
 
-1. **Sex**: Being female (sex=female) is a strong indicator of survival, as women had a higher survival rate on the Titanic, especially in first class.  
-2. **Class and Fare**: First-class (pclass=1) and a high fare (77.9583) suggest a wealthy passenger, who likely had better access to lifeboats and priority during the crisis.  
-3. **Age**: At 51, the passenger is older, but survival for women of all ages was higher, and first-class females, regardless of age, had a strong survival rate.  
-4. **Plausibility Factors**: High plausibility triples (e.g., sex_x_age_x_fare: 87.63%, age_x_ticket_x_fare: 87.60%) indicate that the combination of sex, age, fare, and ticket (13502) strongly supports survival.  
+- **Certainty** indicates that the combination of **sex (female)**, **age (51)**, and **fare (77.9583)** contributes to a **9.74%** certainty of survival, though this is the lowest among the Certainty triples. However, the broader context of **sex (female)** and **pclass (1)**, combined with **age (51)**, provides a **24.82%** certainty, reflecting that being a female in first class is a strong predictor of survival. 
 
-While the **certainty** (10.16%) is relatively low, the **plausibility** (87.63%+ for key triples) overwhelmingly suggests survival. The passenger’s female identity, first-class status, and high fare align with the historical likelihood of survival, even for an older woman. Thus, the model confidently predicts survival.
+- **Plausibility** is more decisive. The triple **sex_x_age_x_fare** has a **87.63%** plausibility, meaning the combination of being female, 51 years old, and paying a high fare aligns strongly with survival. Similarly, **age_x_ticket_x_fare** and **age_x_sibsp_x_fare** also show **87.60%** and **87.58%** plausibility, respectively. These high values suggest that the passenger’s profile is highly consistent with surviving. 
+
+The **uncertainty value (10.16%)** is low, indicating that the model is fairly confident in the survival prediction. While the passenger is older (51), the combination of being female, in first class, and paying a high fare (a sign of wealth and social status) strongly supports survival. The plausibility metrics confirm that this profile is highly likely to align with survival, even if the certainty is not absolute. 
+
+In conclusion, the passenger’s survival is **plausible and likely**, with the **Certainty** and **Plausibility** metrics strongly favoring survival.
 Prompt 265:
 
 The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
 
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.
+Objective: Explain whether the passenger survived using the Certainty and Plausibility metrics. Focus on these metrics and avoid stating the exact survival percentage.
 Columns: pclass=1, sex=male, age=28.0, sibsp=0, parch=0, ticket=113788, fare=35.5, cabin=A6, embarked=S
-Prediction for row 265: 0.8
 Uncertainty value: 10.16%
 Certainty triples: sex_x_age: 21.08%, pclass_x_sex_x_age: 8.04%, age_x_parch_x_fare: 7.11%
 Plausibility triples: age_x_fare_x_cabin: 86.03%, age_x_ticket_x_cabin: 82.13%, pclass_x_age_x_cabin: 81.64%
 
-LLM: The passenger, a male in first class (pclass=1) with age 28, survived with high probability (80% certainty) based on the model's analysis. Key factors include:
+LLM: The passenger's survival can be evaluated using the **Certainty** and **Plausibility** metrics, which provide insights into the likelihood of survival based on the given features. Here's the breakdown:
 
-1. **Class and Cabin**: Being in first class (pclass=1) and occupying a cabin (A6) in the same class strongly correlates with survival, as first-class passengers had higher survival rates overall.  
-2. **Age and Fare**: The passenger’s age (28) and moderate fare (35.5) align with first-class passengers, who were more likely to survive compared to lower classes.  
-3. **Plausibility**: High plausibility triples (e.g., age_x_fare_x_cabin at 86.03%) indicate that the combination of age, fare, and cabin is consistent with survival.  
-4. **Uncertainty**: A low uncertainty (10.16%) suggests the model is confident in the prediction, despite the passenger being male (a group with historically lower survival rates).  
+1. **Certainty Metrics**:  
+   - **Sex_x_age** (21.08%): The passenger is male (sex=male) and 28 years old (age=28). This combination has a low certainty of survival (21.08%), indicating limited confidence in the prediction.  
+   - **Pclass_x_sex_x_age** (8.04%): First-class (pclass=1) status, combined with male sex and age, further reduces certainty.  
+   - **Age_x_parch_x_fare** (7.11%): The passenger’s age, 0 siblings/parch, and fare of 35.5 contribute to a minimal certainty.  
 
-While males in first class still had lower survival rates than females, the passenger’s privileged class and other factors (e.g., fare, cabin) significantly boost the survival probability. The model concludes the passenger likely survived.
+   These metrics suggest that survival is **not highly certain** (only 21.08% confidence from the most relevant combination).
+
+2. **Plausibility Metrics**:  
+   - **Age_x_fare_x_cabin** (86.03%): The passenger’s age (28), fare (35.5), and cabin (A6) strongly support survival. This combination is **highly plausible** (86.03%), indicating that survival is **likely** given these features.  
+   - **Age_x_ticket_x_cabin** (82.13%) and **pclass_x_age_x_cabin** (81.64%): These also align with the passenger’s profile, reinforcing the plausibility of survival.  
+
+   The **highest plausibility** (86.03%) from age, fare, and cabin suggests that survival is **plausible**, despite the low certainty from other factors.  
+
+3. **Uncertainty (10.16%)**:  
+   The overall uncertainty of 10.16% indicates that the survival prediction is **not definitive**. While plausibility is high, certainty remains low due to conflicting factors (e.g., male sex, pclass=1).  
+
+**Conclusion**:  
+The passenger’s survival is **plausible** (high plausibility from age, fare, and cabin) but **not certain** (low certainty from sex and pclass). The combination of features suggests that survival is more likely than not, though the model’s uncertainty (10.16%) reflects the need for further data to confirm the outcome.
 Prompt 178:
 
 The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
 
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.
+Objective: Explain whether the passenger survived using the Certainty and Plausibility metrics. Focus on these metrics and avoid stating the exact survival percentage.
 Columns: pclass=1, sex=female, age=45.0, sibsp=1, parch=0, ticket=11753, fare=52.5542, cabin=D19, embarked=S
-Prediction for row 178: 1.0
 Uncertainty value: 10.16%
 Certainty triples: sex_x_age: 34.32%, pclass_x_sex_x_age: 20.63%, sex_x_age_x_fare: 9.12%
 Plausibility triples: age_x_ticket_x_fare: 87.52%, age_x_fare_x_cabin: 87.12%, age_x_sibsp_x_fare: 86.85%
 
-LLM: The passenger survived (1.0) based on strong plausibility factors. Here's the reasoning:
+LLM: The passenger's survival can be analyzed using the **Certainty** and **Plausibility** metrics to assess the likelihood of survival based on their characteristics. Here's the breakdown:
 
-1. **First-Class Advantage**: The passenger is in **pclass=1** (first class), a key factor in survival. First-class passengers, especially women, had a significantly higher survival rate (around 60% for women in first class).
+### **Certainty Metrics**  
+- **Sex_x_age**: 34.32%  
+  - The passenger is female (sex) and 45 years old (age). While being female historically correlates with higher survival rates, the age of 45 (which is older than the average survivor age) slightly reduces the certainty of survival.  
+- **Pclass_x_sex_x_age**: 20.63%  
+  - First-class passengers (pclass=1) and females are typically more likely to survive. However, the combination of pclass, sex, and age yields a lower certainty (20.63%), indicating that age may offset the benefits of class and gender.  
+- **Sex_x_age_x_fare**: 9.12%  
+  - The passenger’s high fare (52.55) might suggest wealth, which historically correlates with survival. However, this combination has the lowest certainty, possibly due to the interplay of age and fare in the model.  
 
-2. **Gender and Age**: The passenger is a **female** (sex=female) and 45 years old. While older passengers (e.g., 40s) had lower survival rates in general, women in first class, regardless of age, historically had high survival rates. The **sex_x_age** certainty (34.32%) and **age_x_ticket_x_fare** plausibility (87.52%) align with this.
+**Conclusion**: The Certainty metrics suggest a **low to moderate probability** of survival (34.32%–20.63%), reflecting that while the passenger is female and in first class, their age and fare combination do not strongly support survival.  
 
-3. **High Fare**: The **fare=52.55** indicates a premium ticket, consistent with first-class status. Higher fares correlate with better survival outcomes (plausibility triple: **age_x_fare_x_cabin** at 87.12%).
+---
 
-4. **Cabin and Embarkation**: The **cabin=D19** (likely first-class) and **embarked=S** (Southampton) further support first-class status, reinforcing survival likelihood.
+### **Plausibility Metrics**  
+- **Age_x_ticket_x_fare**: 87.52%  
+  - The passenger’s age, ticket number, and fare are part of a group with high plausibility for survival. High fares (like 52.55) and certain ticket numbers (e.g., 11753) may indicate privilege or access to better accommodations, aligning with survival.  
+- **Age_x_fare_x_cabin**: 87.12%  
+  - The combination of age, fare, and cabin (D19, a lower deck) is plausible for survival. While the cabin is in a lower deck, the high fare and age might suggest the passenger was part of a group with better survival chances.  
+- **Age_x_sibsp_x_fare**: 86.85%  
+  - The passenger has one sibling/spouse (sibsp=1) and a high fare, which could indicate a more stable group (e.g., a family member) that might have had better survival outcomes.  
 
-5. **Plausibility Over Certainty**: While certainty triples (e.g., sex_x_age) are lower, the **plausibility triples** (e.g., age_x_ticket_x_fare, age_x_fare_x_cabin) strongly suggest survival. These combinations align with historical survival patterns for first-class women.
+**Conclusion**: The Plausibility metrics strongly suggest that the passenger’s features (age, fare, ticket, cabin) are **highly consistent with survival** (87.52%–87.12%), indicating that their profile aligns with a group more likely to survive.  
 
-**Conclusion**: The passenger's first-class status, gender, and high fare strongly indicate survival, even at 45 years old. The high plausibility of age, fare, and ticket (87.52%) confirms this.
+---
+
+### **Uncertainty**  
+The **uncertainty value of 10.16%** reflects a balance between the **Certainty** (low survival probability) and **Plausibility** (high likelihood of survival). While the passenger’s features are **plausible for survival**, the **Certainty metrics** indicate that the survival is not certain. This suggests a **moderate level of uncertainty**—the passenger may have survived, but the data does not definitively confirm it.  
+
+---
+
+### **Final Assessment**  
+- **Certainty**: Low (20.63%–34.32%), indicating limited confidence in survival.  
+- **Plausibility**: High (87.12%–87.52%), suggesting the passenger’s profile aligns with a group likely to survive.  
+- **Uncertainty**: 10.16%, reflecting a **balanced but uncertain** conclusion.  
+
+In summary, while the passenger’s characteristics are **plausible for survival**, the survival is **not certain**, and the outcome depends on the interplay of factors like age, class, and fare.
 Prompt 281:
 
 The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
 
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.
+Objective: Explain whether the passenger survived using the Certainty and Plausibility metrics. Focus on these metrics and avoid stating the exact survival percentage.
 Columns: pclass=1, sex=female, age=43.0, sibsp=1, parch=0, ticket=11778, fare=55.4417, cabin=C116, embarked=C
-Prediction for row 281: 1.0
 Uncertainty value: 10.16%
 Certainty triples: sex_x_age: 30.25%, pclass_x_sex_x_age: 16.62%, sex_x_age_x_fare: 9.16%
 Plausibility triples: age_x_ticket_x_fare: 87.14%, age_x_fare_x_cabin: 86.96%, age_x_sibsp_x_fare: 86.61%
 
-LLM: The passenger survived (prediction: 1.0) due to a combination of factors that align with historical survival patterns. Key reasons include:
+LLM: The passenger's survival can be assessed using the **Certainty** and **Plausibility** metrics, which evaluate the likelihood of survival based on their characteristics and the dataset's patterns. 
 
-1. **Gender (Female)**: Women had a significantly higher survival rate, especially in first class.  
-2. **First Class (pclass=1)**: First-class passengers, including those in cabins like C116, had better access to lifeboats and resources.  
-3. **High Fare (55.44)**: A higher fare suggests a more privileged position, aligning with first-class conditions.  
-4. **Age (43)**: While not the youngest, the passenger's age was moderate, and the combination of age, fare, and cabin (plausibility triple: 87.14%) strongly supports survival.  
-5. **Cabin (C116)**: First-class cabins (like C116) were associated with higher survival rates.  
+### **Certainty Metrics**  
+- **Sex and Age**: A female passenger aged 43 has a **30.25% certainty** of survival. This suggests a moderate likelihood of survival based on gender and age alone.  
+- **Combined Factors**: When considering **pclass=1 (first class)**, **sex=female**, and **age=43**, the certainty drops to **16.62%**, indicating that the passenger's class and age may slightly reduce the survival probability.  
+- **Fare Influence**: The combination of **sex=female**, **age=43**, and **fare=55.44** results in **9.16% certainty**, highlighting that higher fare (relative to others) might lower the survival probability.  
 
-The high plausibility triples (e.g., age_x_fare_x_cabin: 86.96%) and the passenger's female gender reinforce the survival prediction, despite the 10.16% uncertainty. The model confidently attributes survival to the passenger's privileged status and gender.
+### **Plausibility Metrics**  
+- **Age, Ticket, and Fare**: The passenger's **age=43**, **ticket=11778**, and **fare=55.44** are **plausible** (87.14%), suggesting their data aligns with the dataset's patterns, making survival more likely.  
+- **Age, Fare, and Cabin**: The combination of **age=43**, **fare=55.44**, and **cabin=C116** is **plausible** (86.96%), further supporting that the passenger’s characteristics fit within the dataset’s distribution.  
+- **Age, Sibsp, and Fare**: The passenger’s **age=43**, **sibsp=1**, and **fare=55.44** are also **plausible** (86.61%), indicating consistency with the dataset.  
+
+### **Uncertainty**  
+The **10.16% uncertainty** value reflects the probability that the passenger did **not survive**, implying that survival is **plausible but not certain**. The high plausibility of the passenger’s data (87%+ in key combinations) and the moderate certainty of survival (30.25%–16.62%) suggest that the passenger’s survival is **likely**, though not guaranteed.  
+
+### **Conclusion**  
+The passenger’s characteristics align with plausible survival scenarios (high plausibility metrics), and while the certainty of survival is moderate, the combination of factors (e.g., female, first class, moderate fare) supports that survival is **more probable than not**. The 10.16% uncertainty indicates a **non-trivial risk**, but the overall metrics lean toward **survival being plausible**.
 Prompt 57:
 
 The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
 
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.
+Objective: Explain whether the passenger survived using the Certainty and Plausibility metrics. Focus on these metrics and avoid stating the exact survival percentage.
 Columns: pclass=1, sex=female, age=36.0, sibsp=1, parch=2, ticket=113760, fare=120.0, cabin=B96 B98, embarked=S
-Prediction for row 57: 0.98
 Uncertainty value: 10.16%
 Certainty triples: sex_x_age: 32.07%, pclass_x_sex_x_age: 18.45%, sex_x_age_x_fare: 8.75%
 Plausibility triples: age_x_fare_x_cabin: 87.18%, age_x_ticket_x_fare: 86.26%, sex_x_age_x_fare: 85.23%
 
-LLM: The passenger survived due to a combination of factors that align with high survival probabilities in the Titanic dataset. Key reasons include:
+LLM: The passenger's survival can be assessed using the **Certainty** and **Plausibility** metrics, which reflect the likelihood of survival based on their attributes. 
 
-1. **Sex**: Being female is a strong indicator of survival, as women and children were prioritized in lifeboats.  
-2. **Class**: First-class (pclass=1) passengers had better access to lifeboats and were more likely to survive.  
-3. **Fare and Cabin**: A high fare (120.0) and first-class cabin (B96 B98) suggest a premium stateroom, which historically correlates with survival.  
-4. **Plausibility**: The combination of **age (36), fare, and cabin** (87.18% plausibility) strongly supports survival.  
+- **Certainty triples** indicate the probability of survival based on specific combinations of features. The highest Certainty value here is **sex_x_age** (32.07%), suggesting a moderate confidence in survival for a female aged 36. However, other Certainty combinations (e.g., pclass_x_sex_x_age, sex_x_age_x_fare) are lower, indicating less certainty when considering additional factors like class or fare. 
 
-The model’s high certainty (0.98) and low uncertainty (10.16%) confirm this conclusion, as the passenger’s profile aligns with first-class survival patterns.
+- **Plausibility triples** measure how consistent the passenger’s attributes are with survival. The highest Plausibility value is **age_x_fare_x_cabin** (87.18%), meaning the passenger’s age, fare, and cabin align strongly with survival scenarios. Other Plausibility combinations (e.g., age_x_ticket_x_fare, sex_x_age_x_fare) also show strong alignment, reinforcing that the passenger’s profile is consistent with survival. 
+
+The **uncertainty value** (10.16%) reflects the probability that the survival prediction is uncertain. This low uncertainty suggests that the passenger’s attributes are largely consistent with survival, even if the Certainty metrics are not extremely high. The combination of high Plausibility and low uncertainty indicates that the passenger’s survival is **plausible** and **likely**, though not definitively certain. 
+
+In summary, the passenger’s characteristics align closely with survival scenarios (high Plausibility), and the low uncertainty (10.16%) supports the conclusion that survival is probable, despite the moderate Certainty values.
 Prompt 209:
 
 The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
 
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.
+Objective: Explain whether the passenger survived using the Certainty and Plausibility metrics. Focus on these metrics and avoid stating the exact survival percentage.
 Columns: pclass=1, sex=male, age=30.0, sibsp=1, parch=0, ticket=13236, fare=57.75, cabin=C78, embarked=C
-Prediction for row 209: 0.76
 Uncertainty value: 10.16%
 Certainty triples: sex_x_age: 18.30%, pclass_x_sex_x_age: 9.04%, pclass_x_fare_x_embarked: 6.40%
 Plausibility triples: age_x_ticket_x_fare: 85.07%, sex_x_age_x_fare: 82.24%, age_x_sibsp_x_fare: 82.16%
 
-LLM: The passenger in row 209 is a **male** (sex) in **first class** (pclass=1) with an **age of 30**, **fare of $57.75**, and **ticket number 13236**. Based on the given data:
+LLM: The passenger's survival can be evaluated using the **Certainty** and **Plausibility** metrics, which provide insights into the confidence and likelihood of survival based on their attributes. Here's the breakdown:
 
-- **Plausibility** (strongest factor: **age_x_ticket_x_fare** at 85.07%) suggests survival is more likely due to the combination of **age (30)**, **high fare**, and **first-class ticket**. These factors align with historical patterns where **first-class passengers** (especially adults) had higher survival rates, and **higher fares** correlated with better access to lifeboats.  
-- **Certainty** (sex_x_age: 18.30%) is lower, as being male (a historically negative predictor) might counterbalance the positive factors. However, the **plausibility triples** dominate, indicating the passenger’s **adult age, first-class status, and high fare** strongly support survival.  
-- The **predicted survival probability** of **0.76** (76%) reflects a **high likelihood of survival**, though the **10.16% uncertainty** acknowledges some ambiguity, likely due to the passenger’s male sex and the complexity of interactions between variables.  
+### **Certainty Metrics**  
+- **Sex_x_age**: 18.30%  
+  - Combining **sex (male)** and **age (30)** suggests a relatively low certainty in survival, as male passengers in this age range historically had lower survival rates.  
+- **Pclass_x_sex_x_age**: 9.04%  
+  - First-class passengers (pclass=1) are typically more likely to survive, but the male sex and 30-year-old age reduce this certainty.  
+- **Pclass_x_fare_x_embarked**: 6.40%  
+  - The fare (57.75) and embarkation point (C) are less predictive of survival compared to other factors, further lowering certainty.  
 
-**Conclusion:** The passenger is most likely to have survived (76% probability) due to their **first-class status, adult age, and high fare**, despite being male. The combination of **age, ticket, and fare** (plausibility triple) strongly supports survival, even if other factors (like sex) introduce some uncertainty.
+These metrics indicate that the model has **low confidence** in predicting survival for this passenger, likely due to the interplay of male sex, first-class status, and age.  
+
+---
+
+### **Plausibility Metrics**  
+- **Age_x_ticket_x_fare**: 85.07%  
+  - The combination of **age (30)**, **ticket (13236)**, and **fare (57.75)** strongly supports the **plausibility of survival**. Higher fares in first class (pclass=1) and a moderate age suggest a reasonable chance of survival.  
+- **Sex_x_age_x_fare**: 82.24%  
+  - Male sex and age, paired with a higher fare, still align with the **plausibility of survival**, as first-class passengers with higher fares often survived.  
+- **Age_x_sibsp_x_fare**: 82.16%  
+  - While the passenger has **1 sibling/spouse** (sibsp=1), this factor is less impactful than age and fare in determining plausibility.  
+
+These metrics strongly indicate that the **survival is plausible**, as the passenger’s attributes align with patterns observed in first-class passengers with similar fares and ages.  
+
+---
+
+### **Conclusion**  
+- **Certainty**: The model is **uncertain** (10.16% uncertainty value) about survival, reflecting the low confidence in the prediction due to the interplay of male sex, first-class status, and age.  
+- **Plausibility**: The passenger’s attributes (age, fare, and ticket) **strongly support survival**, with a high plausibility (85.07% for age_x_ticket_x_fare).  
+
+Thus, while the model is uncertain, the passenger’s profile is **plausible for survival**, suggesting that survival is more likely than not based on the data.
 Prompt 490:
 
 The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
 
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.
+Objective: Explain whether the passenger survived using the Certainty and Plausibility metrics. Focus on these metrics and avoid stating the exact survival percentage.
 Columns: pclass=2, sex=female, age=57.0, sibsp=0, parch=0, ticket=S.O./P.P. 3, fare=10.5, cabin=E77, embarked=S
-Prediction for row 490: 0.36
 Uncertainty value: 10.16%
 Certainty triples: sex_x_age: 17.80%, pclass_x_age_x_fare: 14.20%, pclass_x_sex_x_age: 10.11%
 Plausibility triples: age_x_ticket_x_fare: 85.32%, age_x_sibsp_x_ticket: 81.78%, age_x_parch_x_fare: 81.48%
 
-LLM: The passenger in row 490 has a **36% probability of survival** (prediction) with **10.16% uncertainty**, indicating moderate confidence in the outcome. Key factors influencing this include:
+LLM: The passenger's survival likelihood can be assessed using the **Certainty** and **Plausibility** metrics, which evaluate the consistency of their attributes with survival outcomes. 
 
-- **Certainty factors**: 
-  - **Sex and age** (17.80%) and **pclass, age, and fare** (14.20%) contribute to the model’s confidence. However, these factors alone do not strongly support survival. 
-- **Plausibility factors**: 
-  - **Age, ticket, and fare** (85.32%) strongly suggest a plausible survival scenario, as older passengers in 2nd class with moderate fares might have had better access to lifeboats or social networks. 
+### **Certainty**  
+The passenger’s attributes (pclass=2, sex=female, age=57.0, fare=10.5) align with the **sex_x_age** combination (17.80% certainty), which suggests a moderate probability of survival based on gender and age. However, other Certainty triples (e.g., pclass_x_age_x_fare at 14.20%) are lower, indicating less confidence in survival when considering class, age, and fare together. This implies that while the passenger’s gender and age may slightly favor survival, other factors (like class and fare) reduce the certainty.
 
-**Conclusion**: While the passenger’s survival is **unlikely** (36% chance), **plausibility factors** (e.g., age, fare, ticket) hint at a possible survival. The low certainty and prediction value suggest the model is uncertain, but the high plausibility of age-related factors may slightly lean toward survival. However, given the low probability, the passenger is more likely to have **not survived**.
+### **Plausibility**  
+The **age_x_ticket_x_fare** triple (85.32% plausibility) is the strongest indicator, suggesting that the passenger’s age, ticket type, and fare align closely with survival. This high plausibility reflects that their characteristics are statistically consistent with surviving the Titanic. Other Plausibility triples (e.g., age_x_sibsp_x_ticket at 81.78%) also support this, though they are slightly lower than the highest value. 
+
+### **Conclusion**  
+The passenger’s profile is **highly plausible** for survival (85.32% plausibility), driven by their age, ticket, and fare. While Certainty metrics (17.80%) suggest a moderate likelihood, the plausibility metrics strongly indicate that the passenger’s attributes align with survival. Thus, survival is more likely than not, based on the provided data.
