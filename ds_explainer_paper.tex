@@ -74,10 +74,12 @@ Despite the widespread adoption of SHAP, one notable limitation remains: traditi
 \subsection{Incorporating Dempster-Shafer Theory for Uncertainty Modeling}
 To overcome the aforementioned limitation, this paper introduces \textbf{DSExplainer}, a framework that integrates the deterministic contributions provided by SHAP with concepts from \textbf{Dempster-Shafer theory}. Dempster-Shafer theory, also known as the theory of evidence, is a powerful mathematical framework for representing epistemic uncertainty by assigning belief masses over sets of outcomes rather than single events \cite{shafer1976mathematical}. In DSExplainer, the absolute contributions derived from SHAP values are normalized so that they sum to one, producing quantities that approximate basic probability assignments (BPAs). Using these approximations, DSExplainer computes two heuristic metrics—certainty and plausibility— that mimic the belief and plausibility ideas from Dempster--Shafer theory.
 
+
 \subsection{Key Contributions}
 The primary contributions of this work are as follows:
 \begin{itemize}
     \item \textbf{Dual Interpretation Framework:} We propose a novel framework that enhances model interpretability by combining the additive explanations of SHAP with a heuristic uncertainty quantification approach inspired by Dempster-Shafer theory. This dual interpretation provides two complementary metrics: \textit{certainty}, which measures the direct evidence supporting a feature's contribution, and \textit{plausibility}, which captures the indirect potential influence arising from feature interactions.
+
     \item \textbf{Visualization of Uncertainty:} By integrating uncertainty into the explanation framework, DSExplainer facilitates enhanced visual representations, such as error bars and confidence bands, that display the uncertainty intervals alongside traditional feature importance scores. This allows decision-makers to readily assess the reliability of each contribution.
     \item \textbf{Validation Strategies:} To ensure that the computed certainty and plausibility values are reflective of actual uncertainty in the domain, we introduce several validation approaches. These include sensitivity analyses using bootstrapping and Monte Carlo simulations, comparisons with established probabilistic models, and expert validation in domain-specific case studies. Such methods are critical for confirming the practical relevance of our uncertainty measures.
     \item \textbf{Extensive Empirical Analysis:} We demonstrate the effectiveness of DSExplainer through a detailed application on the Titanic dataset. Both global and local analyses are performed to show how the framework not only captures dominant predictive factors but also uncovers subtle feature interactions and latent patterns that are not evident from conventional methods.
@@ -261,7 +263,7 @@ In DSExplainer, certainty and plausibility are computed using simple heuristics 
     \item \textbf{Plausibility}: the sum of masses for any hypothesis that shares at least one feature with the target. This provides an upper bound on the potential support when indirect evidence is taken into account.
 \end{itemize}
 
-These metrics approximate the behavior of belief and plausibility without relying on the full formalism of Dempster--Shafer theory.
+
 
 \subsubsection{Insights from the Dempster-Shafer Approach}
 
@@ -270,6 +272,7 @@ The integration of Dempster-Shafer theory into our interpretability framework of
     \item \textbf{Combined Evidence Representation:} By mapping SHAP marginal contributions to BPAs, DSExplainer captures both individual feature impacts and the joint effects arising from feature interactions. This dual representation enables a more robust explanation of model predictions.
     \item \textbf{Quantification of Uncertainty:} The certainty and plausibility metrics offer simple numerical indicators of both direct and indirect support for each feature, helping practitioners gauge the reliability of model explanations.
     \item \textbf{Dynamic Evidence Fusion:} Inspired by Dempster's rule of combination, DSExplainer aggregates evidence by normalizing and pooling SHAP-based BPAs. This approximation enables the framework to adapt as new data or evidence becomes available, updating the belief assignments accordingly.
+
 \end{itemize}
 
 Through these mechanisms, Dempster-Shafer theory enriches the interpretability process by introducing an uncertainty-aware perspective that complements the deterministic explanations provided by SHAP values. This dual analysis is critical in real-world applications, where understanding both the magnitude and the reliability of a model’s predictions is essential.
@@ -310,6 +313,7 @@ Certainty estimates the direct support for a hypothesis. It is computed as the m
 Plausibility measures the total potential support for a hypothesis. It is obtained by summing the masses of all hypotheses that share at least one feature with the target hypothesis.
 
 These definitions mimic the intuition behind belief and plausibility in Dempster--Shafer theory while remaining lightweight enough for practical use.
+
 
 \subsection{Interpretation and Utility of the Combined Framework}
 
@@ -370,6 +374,7 @@ Furthermore, we leveraged the dataset to illustrate DSExplainer's capacity for p
 
 The Titanic dataset is a well-established benchmark for testing and demonstrating machine learning interpretability. It comprises features such as passenger class (\texttt{pclass}), gender (\texttt{sex}), age (\texttt{age}), number of siblings/spouses aboard (\texttt{sibsp}), number of parents/children aboard (\texttt{parch}), ticket number (\texttt{ticket}), fare (\texttt{fare}), cabin (\texttt{cabin}), and port of embarkation (\texttt{embarked}). The primary objective is to predict whether a passenger survived the disaster.
 
+
 \subsubsection{Key Results}
 
 The following tables summarize the most influential hypotheses based on the \textbf{certainty} and \textbf{plausibility} metrics, highlighting their complementary insights.
@@ -386,7 +391,6 @@ The following tables summarize the most influential hypotheses based on the \tex
         \texttt{sex\_x\_age} & 0.241 \\
         \texttt{cabin} & 0.213 \\
         \texttt{sex\_x\_age\_x\_cabin} & 0.167 \\
-        \texttt{ticket\_x\_cabin\_x\_embarked} & 0.164 \\
         \hline
     \end{tabular}
 \end{table}
@@ -415,6 +419,7 @@ The hypotheses ranked by certainty, such as \texttt{fare\_x\_cabin} and \texttt{
 
 \paragraph{Plausibility Hypotheses:}  
 In contrast, the hypotheses ranked by plausibility, such as \texttt{age\_x\_fare\_x\_cabin} and \texttt{age\_x\_cabin\_x\_embarked}, capture broader potential influences through indirect interactions among features. Notably, these plausibility hypotheses do not include the \texttt{sex} feature, underscoring that while \texttt{sex} plays a prominent role in direct contributions (as evidenced by its high certainty value), its indirect influence via feature interactions appears to be less pronounced. For example, the \texttt{age\_x\_fare\_x\_cabin} hypothesis suggests that interactions among age, fare, and cabin location—although not providing unequivocal direct support—imply indirect yet meaningful contributions to survival predictions. These hypotheses offer an exploratory view of feature interactions that complement the direct evidence quantified by certainty.
+
 
 
 \paragraph{Combined Factors and Marginal Contributions:}  
@@ -524,6 +529,7 @@ In this instance, direct evidence indicates that both age and the interaction be
     \item \texttt{age\_x\_ticket\_x\_fare}: 0.9718
     \item \texttt{age\_x\_sibsp\_x\_fare}: 0.9655
     \item \texttt{ticket_x_age_x_fare}: 0.9591
+
 \end{itemize}
 The indirect evidence for idx 265 is particularly strong, with combined factors accumulating very high plausibility. This indicates that the complex interplay among age, ticket, fare, and sibling/spouse presence offers robust, albeit indirect, support for the prediction.
 
@@ -547,6 +553,7 @@ By integrating \textbf{SHAP values} with \textbf{Dempster-Shafer theory}, \textb
 A key insight from our study is the complementary nature of the metrics \textbf{certainty} and \textbf{plausibility}. While certainty captures strong and direct evidence supporting a hypothesis, plausibility extends the analysis by considering potential, yet less deterministic, influences. For example, in the Titanic dataset:
 \begin{itemize}
     \item High-certainty hypotheses, such as \texttt{ticket_x_sex_x_age}, highlight well-established factors like gender and age that directly align with survival priorities during evacuation.
+
     \item High-plausibility hypotheses, such as \texttt{age\_x\_fare\_x\_cabin}, reveal complex socio-economic dynamics involving wealth and location, offering a broader perspective on feature interplay.
 \end{itemize}
 
