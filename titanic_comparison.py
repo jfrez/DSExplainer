@@ -105,39 +105,23 @@ SUMMARY_INSTRUCTIONS = dedent(
     """
 )
 
-def resumen_shap(row_idx: int) -> str:
+def build_prompt(row_idx: int) -> str:
+    """Return summary lines for row ``row_idx``."""
     pred = shap_values_df.loc[row_idx, "prediction"]
+
     shap_vals = ", ".join(
         f"{name}: {val:.3f}" for name, val in shap_top[row_idx]
     )
+    cert_vals = ", ".join(
+        f"{name}: {val:.3f}" for name, val in certainty_top[row_idx]
+    )
+    plaus_vals = ", ".join(
+        f"{name}: {val:.3f}" for name, val in plausibility_top[row_idx]
+    )
+
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
         f"Top SHAP features: {shap_vals}",
-    ]
-    return "\n".join(resumen)
-
-
-    shap_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in shap_top[row_idx]
-    )
-    cert_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in certainty_top[row_idx]
-    )
-    plaus_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in plausibility_top[row_idx]
-    )
-
-def resumen_dempster(row_idx: int) -> str:
-    pred = shap_values_df.loc[row_idx, "prediction"]
-    cert_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in certainty_top[row_idx]
-    )
-    plaus_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in plausibility_top[row_idx]
-    )
-    resumen = [
-        f"Prediction for row {row_idx}: {pred}",
-
         f"Certainty triples: {cert_vals}",
         f"Plausibility triples: {plaus_vals}",
     ]
@@ -154,20 +138,6 @@ for idx in range(len(shap_values_df)):
         + build_prompt(idx)
         + "\n" + SUMMARY_INSTRUCTIONS
     )
-    print(shap_prompt)
-    try:
-        shap_response = llm_client.chat(
-            model="mannix/jan-nano",
-            messages=[{"role": "user", "content": shap_prompt}],
-        )
-        clean_shap = re.sub(
-            r"<think>.*?</think>", "", shap_response.message.content, flags=re.DOTALL
-        ).strip()
-        print(f"\nLLM SHAP interpretation for row {idx} (English):")
-        print(clean_shap)
-    except Exception as e:
-        print(f"\nCould not obtain SHAP interpretation for row {idx}: {e}")
-
 
     print(prompt)
     try:
@@ -175,12 +145,11 @@ for idx in range(len(shap_values_df)):
             model="mannix/jan-nano",
             messages=[{"role": "user", "content": prompt}],
         )
-        clean_demp = re.sub(
-            r"<think>.*?</think>", "", demp_response.message.content, flags=re.DOTALL
+        clean = re.sub(
+            r"<think>.*?</think>", "", response.message.content, flags=re.DOTALL
         ).strip()
-        print(f"\nLLM Dempster interpretation for row {idx} (English):")
-        print(clean_demp)
-
+        print(f"\nLLM interpretation for row {idx} (English):")
+        print(clean)
     except Exception as e:
         print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
 
