@@ -140,8 +140,9 @@ def resumen_dempster(row_idx: int) -> str:
 
 
 for idx in range(len(shap_values_df)):
-    # Only include column names, not their values, in the LLM prompt
-    features_text = ", ".join(orig_subset.columns)
+    # Include column names and their values in the LLM prompt
+    feature_pairs = [f"{col}={orig_subset.iloc[idx][col]}" for col in orig_subset.columns]
+    features_text = ", ".join(feature_pairs)
 
     # ---- SHAP interpretation ----
     shap_prompt = (
