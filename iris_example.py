@@ -83,10 +83,8 @@ print_top_columns(plausibility_df, "plausibility_df")
 # ----- LLM Interpretation -----
 DATASET_DESCRIPTION = dedent(
     """
-    The Iris dataset contains measurements of iris flowers. Each row provides
-    the sepal length and width as well as petal length and width. The target
-    variable indicates the species of the flower (setosa, versicolor or
-    virginica).
+    The Iris dataset contains measurements of iris flowers and the species to
+    which each sample belongs.
     """
 )
 
@@ -97,6 +95,7 @@ OBJECTIVE_DESCRIPTION = (
 
 def resumen_fila(row_idx: int, top_n: int = TOP_N) -> str:
     pred = mass_values_df.loc[row_idx, "prediction"]
+    uncertainty = mass_values_df.loc[row_idx, "uncertainty"]
 
     cert_series = pd.to_numeric(
         certainty_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
@@ -112,6 +111,7 @@ def resumen_fila(row_idx: int, top_n: int = TOP_N) -> str:
 
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
+        f"Uncertainty value: {uncertainty}",
         f"Certainty values: {cert_vals}",
         f"Plausibility values: {plaus_vals}",
     ]

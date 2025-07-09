@@ -96,11 +96,8 @@ print_top_columns(plausibility_df, "plausibility_df")
 # ----- LLM Interpretation -----
 DATASET_DESCRIPTION = dedent(
     """
-    The Titanic dataset contains information about passengers on the famous ship.
-    Each row represents a passenger and includes variables such as ticket class
-    (`pclass`), sex, age, number of siblings/spouses (`sibsp`) and parents/
-    children (`parch`) aboard, the fare paid, cabin, and embarkation port. The
-    target variable is `survived`, indicating whether the passenger lived.
+    The Titanic dataset contains details about passengers on the ill-fated ship
+    and whether or not they survived.
     """
 )
 
@@ -113,6 +110,7 @@ OBJECTIVE_DESCRIPTION = (
 
 def resumen_fila(row_idx: int, top_n: int = top_n) -> str:
     pred = mass_values_df.loc[row_idx, "prediction"]
+    uncertainty = mass_values_df.loc[row_idx, "uncertainty"]
 
     cert_series = pd.to_numeric(
         certainty_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
@@ -128,6 +126,7 @@ def resumen_fila(row_idx: int, top_n: int = top_n) -> str:
 
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
+        f"Uncertainty value: {uncertainty}",
         f"Certainty values: {cert_vals}",
         f"Plausibility values: {plaus_vals}",
     ]

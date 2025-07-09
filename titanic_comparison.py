@@ -84,11 +84,8 @@ llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
 
 DATASET_DESCRIPTION = dedent(
     """
-    The Titanic dataset contains information about passengers on the famous ship.
-    Each row represents a passenger and includes variables such as ticket class
-    (`pclass`), sex, age, number of siblings/spouses (`sibsp`) and parents/
-    children (`parch`) aboard, the fare paid, cabin, and embarkation port. The
-    target variable is `survived`, indicating whether the passenger lived.
+    The Titanic dataset contains details about passengers on the ill-fated ship
+    and whether they survived.
     """
 )
 
@@ -116,11 +113,13 @@ def resumen_shap(row_idx: int) -> str:
 
 def resumen_dempster(row_idx: int) -> str:
     pred = shap_values_df.loc[row_idx, "prediction"]
+    uncertainty = mass_values_df.loc[row_idx, "uncertainty"]
     # Only include feature names for the top triples
     cert_vals = ", ".join(name for name, _ in certainty_top[row_idx])
     plaus_vals = ", ".join(name for name, _ in plausibility_top[row_idx])
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
+        f"Uncertainty value: {uncertainty}",
         f"Certainty triples: {cert_vals}",
         f"Plausibility triples: {plaus_vals}",
     ]
