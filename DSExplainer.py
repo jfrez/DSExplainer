@@ -12,6 +12,7 @@ from scipy.sparse import csr_matrix
 
 simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 
+
 class DSExplainer:
     """Wrapper around SHAP that adds Dempster–Shafer style metrics.
 
@@ -26,9 +27,8 @@ class DSExplainer:
     Y : pandas.Series or array-like
         Target values used to fit ``model``.
     """
+
     def __init__(self, model, comb, X, Y):
-
-
         """Fit the estimator and prepare the SHAP explainer.
 
         Parameters
@@ -58,13 +58,12 @@ class DSExplainer:
         X = self.generate_combinations(X, scaler=self.scaler)
         model.fit(X, Y)
         self.explainer = shap.TreeExplainer(model)
-        
+
     def getModel(self):
         """Return the underlying fitted model."""
         return self.model
 
     def generate_combinations(self, X, scaler=None):
-
         """Create scaled columns for feature combinations.
 
         Parameters
@@ -82,7 +81,6 @@ class DSExplainer:
             combinations up to ``self.comb`` and scaled between 0 and 1.
         """
 
-
         new_dataset = X.copy()
 
         # Generate combinations of columns and add their sums to the dataset
@@ -92,7 +90,7 @@ class DSExplainer:
                 for cols in combinations(X.columns, r)
             ]
             new_dataset = pd.concat([new_dataset] + new_columns, axis=1)
-                
+
         # Use the provided scaler or fall back to the stored one
         scaler = scaler or self.scaler
         if scaler is None:
@@ -111,8 +109,6 @@ class DSExplainer:
                 columns=new_dataset.columns,
                 index=new_dataset.index,
             )
-        
-
 
         return new_dataset
 
@@ -145,19 +141,18 @@ class DSExplainer:
         """
         X = self.generate_combinations(X, scaler=self.scaler)
 
-
         shap_values = self.explainer.shap_values(X, check_additivity=False)
 
         shap_values_df = pd.DataFrame(
-            shap_values,
-            columns=X.columns,
-            index=X.index
+            shap_values, columns=X.columns, index=X.index
         )
 
         feature_columns = shap_values_df.columns
 
         normalized_shap = shap_values_df[feature_columns].abs()
-        normalized_shap = normalized_shap.div(normalized_shap.sum(axis=1), axis=0)
+        normalized_shap = normalized_shap.div(
+            normalized_shap.sum(axis=1), axis=0
+        )
 
         if not 0.0 <= error_rate <= 1.0:
             raise ValueError("error_rate must be between 0 and 1")
@@ -177,14 +172,14 @@ class DSExplainer:
             for k in masses.keys():
                 hip = k.split("_x_")
 
-                #certainity of the hypotessis k
+                # certainity of the hypotessis k
                 cert = 0
                 for h in hip:
                     cert += masses[h]
                 cert += masses[k]
                 certainty[k] = cert
 
-                #plausibility of the hypotessis k
+                # plausibility of the hypotessis k
                 plaus = 0
                 for h_key, mass_value in masses.items():
                     related_hypotheses = h_key.split("_x_")
@@ -193,18 +188,26 @@ class DSExplainer:
 
                 plausibility[k] = plaus
 
-            results.append({
-                'Index': idx,
-                'Certainty': certainty,
-                'Plausibility': plausibility
-            })
+            results.append(
+                {
+                    "Index": idx,
+                    "Certainty": certainty,
+                    "Plausibility": plausibility,
+                }
+            )
 
-        certainty_df = pd.DataFrame([
-            {**{'Index': res['Index']}, **res['Certainty']} for res in results
-        ]).set_index('Index')
-        plausibility_df = pd.DataFrame([
-            {**{'Index': res['Index']}, **res['Plausibility']} for res in results
-        ]).set_index('Index')
+        certainty_df = pd.DataFrame(
+            [
+                {**{"Index": res["Index"]}, **res["Certainty"]}
+                for res in results
+            ]
+        ).set_index("Index")
+        plausibility_df = pd.DataFrame(
+            [
+                {**{"Index": res["Index"]}, **res["Plausibility"]}
+                for res in results
+            ]
+        ).set_index("Index")
 
         return shap_values_df, mass_values_df, certainty_df, plausibility_df
 
@@ -254,8 +257,8 @@ class DSExplainer:
             dictionaries keyed by row index.
         """
 
-        shap_values_df, mass_values_df, certainty_df, plausibility_df = self.ds_values(
-            X, error_rate=error_rate
+        shap_values_df, mass_values_df, certainty_df, plausibility_df = (
+            self.ds_values(X, error_rate=error_rate)
         )
 
         X_pred = self.generate_combinations(X, scaler=self.scaler)
@@ -289,12 +292,18 @@ class DSExplainer:
 
         def resumen_dempster(row_idx):
             pred = shap_values_df.loc[row_idx, "prediction"]
-            uncertainty = mass_values_df.loc[row_idx, "uncertainty"]
-            cert_vals = ", ".join(name for name, _ in certainty_top[row_idx])
-            plaus_vals = ", ".join(name for name, _ in plausibility_top[row_idx])
+            uncertainty = mass_values_df.loc[row_idx, "uncertainty"] * 100
+            cert_vals = ", ".join(
+                f"{name}: {value * 100:.2f}%"
+                for name, value in certainty_top[row_idx]
+            )
+            plaus_vals = ", ".join(
+                f"{name}: {value * 100:.2f}%"
+                for name, value in plausibility_top[row_idx]
+            )
             resumen = [
                 f"Prediction for row {row_idx}: {pred}",
-                f"Uncertainty value: {uncertainty}",
+                f"Uncertainty value: {uncertainty:.2f}%",
                 f"Certainty triples: {cert_vals}",
                 f"Plausibility triples: {plaus_vals}",
             ]
@@ -304,7 +313,10 @@ class DSExplainer:
         demp_prompts = {}
 
         for idx in shap_values_df.index:
-            feature_pairs = [f"{col}={original_X.loc[idx, col]}" for col in original_X.columns]
+            feature_pairs = [
+                f"{col}={original_X.loc[idx, col]}"
+                for col in original_X.columns
+            ]
             features_text = ", ".join(feature_pairs)
 
             shap_prompt = (
