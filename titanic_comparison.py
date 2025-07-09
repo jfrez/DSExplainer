@@ -91,14 +91,18 @@ DATASET_DESCRIPTION = dedent(
     """
 )
 
-OBJECTIVE_SHAP = (
-    "briefly conclude why the passenger survived or not. "
-    "Only provide the final conclusion based on SHAP feature importances."
-)
+SUMMARY_INSTRUCTIONS = dedent(
+    """
+    You are an analyst explaining Titanic survival predictions.
 
-OBJECTIVE_DEMPSTER = (
-    "briefly conclude why the passenger survived or not. "
-    "Only provide the final conclusion based on Certainty and Plausibility."
+    Input:
+     – Top SHAP features (ordered list with values, N≤3)
+     – DS certainty & plausibility triples (ordered by weight, N≤3 each)
+    Task:
+    1. Draft ONE sentence (≤30 words) that states survived / did not survive **and** the 1-2 strongest SHAP features.
+    2. Draft ONE sentence (≤30 words) that confirms or nuances the first sentence using at most ONE DS triple.
+    Output exactly two sentences. Do not mention features not present in SHAP or DS lists.
+    """
 )
 
 def resumen_shap(row_idx: int) -> str:
@@ -113,6 +117,16 @@ def resumen_shap(row_idx: int) -> str:
     return "\n".join(resumen)
 
 
+    shap_vals = ", ".join(
+        f"{name}: {val:.3f}" for name, val in shap_top[row_idx]
+    )
+    cert_vals = ", ".join(
+        f"{name}: {val:.3f}" for name, val in certainty_top[row_idx]
+    )
+    plaus_vals = ", ".join(
+        f"{name}: {val:.3f}" for name, val in plausibility_top[row_idx]
+    )
+
 def resumen_dempster(row_idx: int) -> str:
     pred = shap_values_df.loc[row_idx, "prediction"]
     cert_vals = ", ".join(
@@ -123,6 +137,7 @@ def resumen_dempster(row_idx: int) -> str:
     )
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
+
         f"Certainty triples: {cert_vals}",
         f"Plausibility triples: {plaus_vals}",
     ]
@@ -133,12 +148,11 @@ for idx in range(len(shap_values_df)):
         f"{col}: {orig_subset.iloc[idx][col]}" for col in orig_subset.columns
     )
 
-    # ---- SHAP interpretation ----
-    shap_prompt = (
+    prompt = (
         DATASET_DESCRIPTION
-        + f"\nObjective: {OBJECTIVE_SHAP}"
         + f"\nColumns: {features_text}\n"
-        + resumen_shap(idx)
+        + build_prompt(idx)
+        + "\n" + SUMMARY_INSTRUCTIONS
     )
     print(shap_prompt)
     try:
@@ -154,24 +168,19 @@ for idx in range(len(shap_values_df)):
     except Exception as e:
         print(f"\nCould not obtain SHAP interpretation for row {idx}: {e}")
 
-    # ---- Dempster-Shafer interpretation ----
-    demp_prompt = (
-        DATASET_DESCRIPTION
-        + f"\nObjective: {OBJECTIVE_DEMPSTER}"
-        + f"\nColumns: {features_text}\n"
-        + resumen_dempster(idx)
-    )
-    print(demp_prompt)
+
+    print(prompt)
     try:
-        demp_response = llm_client.chat(
+        response = llm_client.chat(
             model="mannix/jan-nano",
-            messages=[{"role": "user", "content": demp_prompt}],
+            messages=[{"role": "user", "content": prompt}],
         )
         clean_demp = re.sub(
             r"<think>.*?</think>", "", demp_response.message.content, flags=re.DOTALL
         ).strip()
         print(f"\nLLM Dempster interpretation for row {idx} (English):")
         print(clean_demp)
+
     except Exception as e:
-        print(f"\nCould not obtain Dempster interpretation for row {idx}: {e}")
+        print(f"\nCould not obtain LLM interpretation for row {idx}: {e}")
 
