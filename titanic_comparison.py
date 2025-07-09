@@ -52,7 +52,8 @@ orig_subset = original_features.loc[subset.index]
 
 shap_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
 
-X_pred = explainer.generate_combinations(subset)
+# Use the stored scaler for prediction features
+X_pred = explainer.generate_combinations(subset, scaler=explainer.scaler)
 raw_preds = model.predict(X_pred)
 pred_labels = ["survived" if p >= 0.5 else "did not survive" for p in raw_preds]
 for df in (shap_values_df, certainty_df, plausibility_df):

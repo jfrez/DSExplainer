@@ -70,7 +70,9 @@ max_comb = 3
 explainer = DSExplainer(model, comb=max_comb,X=X_train,Y=y_train)
 # The fitted MinMaxScaler is stored in the explainer and reused for new data
 model = explainer.getModel()
-train_preds = model.predict(explainer.generate_combinations(X_train))
+train_preds = model.predict(
+    explainer.generate_combinations(X_train, scaler=explainer.scaler)
+)
 model_error = mean_absolute_error(y_train, train_preds) / (y_train.max() - y_train.min())
 mass_values_df, certainty_df, plausibility_df = explainer.ds_values(X_test[:2], error_rate=model_error)
  

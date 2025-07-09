@@ -43,8 +43,8 @@ orig_subset = original_features.loc[subset.index]
 
 mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
 
-# Generate predictions for the selected rows
-X_pred = explainer.generate_combinations(subset)
+# Generate predictions for the selected rows using the fitted scaler
+X_pred = explainer.generate_combinations(subset, scaler=explainer.scaler)
 raw_preds = model.predict(X_pred)
 pred_labels = [target_names[int(round(p))] for p in raw_preds]
 
