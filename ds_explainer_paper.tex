@@ -3,7 +3,6 @@
 %%
 %% The original source files were:
 %%
-%% samples.dtx  (with options: `all,journal,bibtex,acmlarge')
 %% 
 \documentclass[acmlarge]{acmart}
 \AtBeginDocument{%
@@ -552,6 +551,10 @@ Overall, this local instance analysis underscores the advantages of DSExplainer 
 
 To gauge the predictive performance of the underlying models, we generated explanations for random subsets of 10 samples in both datasets. For the Titanic experiment, the RandomForest regressor exhibited a mean absolute error of $0.1016$, which DSExplainer treats as the Dempster--Shafer ``uncertainty'' mass. Within this subset only 2 of the 10 survival predictions matched the ground truth (20\% accuracy). Conversely, on the Iris dataset the model error was just $0.0082$ and all 10 predictions were correct, yielding 100\% accuracy. The detailed outputs are provided in the supplementary files \texttt{titanic\_evaluation.txt} and \texttt{iris\_evaluation.txt}.
 
+In addition to the evaluation scripts, the public repository includes an automated unit test that verifies DSExplainer's ability to generate pair and triple feature combinations. This test ensures that certainty and plausibility metrics are computed over the correct hypotheses and provides extra confidence in the numerical results.
+
+The evaluation logs also contain the complete prompts and LLM answers for each instance. These responses consistently reference the features highlighted by certainty and plausibility, demonstrating that the textual explanations align with the quantitative metrics.
+
 \paragraph{Example Prompt}
 Before generating the explanations, DSExplainer assembles a short prompt for each instance. A fragment for one Titanic passenger is shown below:
 \begin{quote}
@@ -568,24 +571,25 @@ An analogous prompt is created for each Iris sample.
 To illustrate the model reasoning, we highlight four explanations from each dataset.
 \begin{quote}
 \textbf{Titanic}\\
-``LLM: Row~57 --- a first-class woman paying 120.0 in cabin B96~B98. The model predicts survival (0.98) with low uncertainty.''\\
-``LLM: Row~148 --- a 45-year-old man in first class has only a 16\% chance of survival; male sex and age outweigh his high fare.''\\
-``LLM: Row~265 --- a 28-year-old male in cabin~A6 is likely to survive (80\%) because class and fare outweigh the risk from being male.''\\
-``LLM: Row~490 --- a second-class woman aged~57 faces just a 36\% survival probability. Ticket and fare offer some support, but overall the model expects she did not survive.''
 
-\vspace{0.5em}
+``LLM: Row~161 --- a 51-year-old first-class woman paying 77.96 appears likely to survive.''\\
+``LLM: Row~148 --- a 45-year-old man in first class is unlikely to survive; male sex and age outweigh his high fare.''\\
+``LLM: Row~178 --- fare 52.6 and a first-class cabin make survival plausible for a 45-year-old woman, though some uncertainty remains.''\\
+``LLM: Row~490 --- a second-class woman aged~57 is not expected to survive. Ticket and fare offer some support, but overall the model is doubtful.''
+These messages often begin with statements such as ``The passenger's survival can be evaluated using the Certainty and Plausibility metrics, which provide insights into the confidence and likelihood of survival based on their attributes.''
+\vspace{0.5em}
 \textbf{Iris}\\
-``LLM: Row~73 --- sepal length 6.1~cm and petal length 4.7~cm match Versicolor with minimal uncertainty.''\\
+
+``LLM: Row~118 --- long petals (6.9~cm) and narrow sepals confirm Virginica with high confidence.''\\
 ``LLM: Row~18 --- short petals (1.7~cm~$\times$~0.3~cm) clearly indicate Setosa.''\\
-``LLM: Row~118 --- long petals (6.9~cm) and narrow sepals classify the sample as Virginica.''\\
+``LLM: Row~76 --- sepal length 6.8~cm with petals 4.8~cm suggests Versicolor with near-zero uncertainty.''\\
 ``LLM: Row~31 --- small petals (1.5~cm~$\times$~0.4~cm) again point to Setosa with high certainty.''
 \end{quote}
-
 \subsection{LLM-Assisted Interpretation}
 
 Numerical metrics can be difficult to convey to non-experts. To bridge this gap we experimented with a lightweight large language model (LLM) that receives the top certainty and plausibility hypotheses as a prompt and returns a concise narrative explaining each prediction. We use the open-source \texttt{mannix/jan-nano} model via the \texttt{ollama} interface, allowing DSExplainer to produce a short textual rationale that complements the quantitative tables.
 
-Across both datasets, the LLM focused on the same features highlighted by DSExplainer. In the Titanic case it frequently discussed how \texttt{sex}, \texttt{age} and \texttt{fare} interacted to influence the survival probability, echoing the model's low certainty but high plausibility when evidence conflicted. On the Iris samples the LLM attributed each species prediction to characteristic petal measurements, mirroring the top certainty and plausibility triples. These summaries show that even a compact LLM can translate DSExplainer's numeric metrics into accessible language, enhancing the overall interpretability of individual predictions.
+Across both datasets, the LLM focused on the same features highlighted by DSExplainer. In the Titanic case it frequently discussed how \texttt{sex}, \texttt{age} and \texttt{fare} interacted to influence the survival outcome, echoing the model's low certainty but high plausibility when evidence conflicted. On the Iris samples the LLM attributed each species prediction to characteristic petal measurements, mirroring the top certainty and plausibility triples. These summaries show that even a compact LLM can translate DSExplainer's numeric metrics into accessible language, enhancing the overall interpretability of individual predictions.
 
 
 \section{Discussion}

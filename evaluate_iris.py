@@ -73,6 +73,8 @@ for idx, prompt in demp_prompts.items():
     try:
         resp = llm_client.chat(model="mannix/jan-nano", messages=[{"role": "user", "content": prompt}])
         clean_resp = re.sub(r"<think>.*?</think>", "", resp.message.content, flags=re.DOTALL).strip()
-        print("LLM:", clean_resp)
+        print("--- LLM RESPONSE ---")
+        print(clean_resp)
+        print("--------------------\n")
     except Exception as e:
         print("LLM error:", e)
