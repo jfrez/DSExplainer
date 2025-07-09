@@ -73,8 +73,10 @@ def get_top_features(df):
     return top_dict
 
 shap_top = get_top_features(shap_values_df[original_features.columns])
-certainty_top = get_top_features(certainty_df)
-plausibility_top = get_top_features(plausibility_df)
+# Only consider combination columns for Dempster--Shafer metrics
+combo_cols = [c for c in certainty_df.columns if "_x_" in c]
+certainty_top = get_top_features(certainty_df[combo_cols])
+plausibility_top = get_top_features(plausibility_df[combo_cols])
 
 OLLAMA_HOST = os.getenv("OLLAMA_HOST")
 llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
