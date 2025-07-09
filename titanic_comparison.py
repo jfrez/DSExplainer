@@ -105,9 +105,8 @@ OBJECTIVE_DEMPSTER = (
 
 def resumen_shap(row_idx: int) -> str:
     pred = shap_values_df.loc[row_idx, "prediction"]
-    shap_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in shap_top[row_idx]
-    )
+    # Only include feature names, not SHAP values
+    shap_vals = ", ".join(name for name, _ in shap_top[row_idx])
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
         f"Top SHAP features: {shap_vals}",
@@ -117,12 +116,9 @@ def resumen_shap(row_idx: int) -> str:
 
 def resumen_dempster(row_idx: int) -> str:
     pred = shap_values_df.loc[row_idx, "prediction"]
-    cert_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in certainty_top[row_idx]
-    )
-    plaus_vals = ", ".join(
-        f"{name}: {val:.3f}" for name, val in plausibility_top[row_idx]
-    )
+    # Only include feature names for the top triples
+    cert_vals = ", ".join(name for name, _ in certainty_top[row_idx])
+    plaus_vals = ", ".join(name for name, _ in plausibility_top[row_idx])
     resumen = [
         f"Prediction for row {row_idx}: {pred}",
         f"Certainty triples: {cert_vals}",
@@ -132,9 +128,8 @@ def resumen_dempster(row_idx: int) -> str:
 
 
 for idx in range(len(shap_values_df)):
-    features_text = ", ".join(
-        f"{col}: {orig_subset.iloc[idx][col]}" for col in orig_subset.columns
-    )
+    # Only include column names, not their values, in the LLM prompt
+    features_text = ", ".join(orig_subset.columns)
 
     # ---- SHAP interpretation ----
     shap_prompt = (
