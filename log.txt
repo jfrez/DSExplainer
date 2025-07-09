@@ -4,478 +4,478 @@ The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
+Columns: pclass=1, sex=female, age=16.0, sibsp=0, parch=1, ticket=111361, fare=57.9792, cabin=B18, embarked=C
 Prediction for row 0: survived
-Top SHAP features: age, fare, cabin
+Top SHAP features: fare, ticket, age
 
 LLM SHAP interpretation for row 0 (English):
-The passenger survived primarily due to high fare (indicating first-class travel, which had better lifeboat access), a cabin (associated with higher class and improved survival chances), and a low age (as younger passengers, especially children, had higher survival rates). These SHAP features positively contributed to the survival prediction.
+The passenger survived primarily due to high fare (57.9792), which likely reflects a first-class ticket (pclass=1), and being a female (age=16, a child). The ticket number (111361) and age contributed significantly to the survival prediction, as higher fares and younger females are associated with higher survival rates in the Titanic dataset.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
+Columns: pclass=1, sex=female, age=16.0, sibsp=0, parch=1, ticket=111361, fare=57.9792, cabin=B18, embarked=C
 Prediction for row 0: survived
 Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, age_x_sibsp_x_fare
-Plausibility triples: age_x_ticket_x_fare, age_x_fare_x_cabin, age_x_parch_x_fare
+Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
+Plausibility triples: age_x_ticket_x_fare, age_x_sibsp_x_fare, sex_x_age_x_fare
 
 LLM Dempster interpretation for row 0 (English):
-The passenger survived due to being female (sex), belonging to the highest passenger class (pclass), and likely a younger age, which are strong indicators of survival in the Titanic dataset. These factors align with historical survival trends where women, first-class passengers, and younger individuals had higher survival rates. The low uncertainty (0.1016) confirms the plausibility of this conclusion.
+The passenger survived because being female (sex), first-class passenger (pclass=1), and a young age (16.0) are strong indicators of survival, supported by the certainty triples (sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare). The high fare (57.9792) and lack of family members (sibsp=0) further align with plausibility triples (age_x_ticket_x_fare, sex_x_age_x_fare), reinforcing the conclusion. The low uncertainty (0.1016) confirms high confidence in this prediction.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 1: did not survive
-Top SHAP features: age, ticket, fare
+Columns: pclass=1, sex=male, age=45.0, sibsp=1, parch=1, ticket=16966, fare=134.5, cabin=E34, embarked=C
+Prediction for row 1: survived
+Top SHAP features: age, cabin, fare
 
 LLM SHAP interpretation for row 1 (English):
-The passenger did not survive primarily due to high age, low fare, and a ticket associated with lower-class status, as these SHAP features strongly influenced the negative survival prediction. High age (adult) and low fare (indicative of third-class travel) align with historical survival trends where younger passengers and higher-class travelers had better survival rates. The ticket's association with lower-class status further exacerbates the risk, contributing to the unfavorable outcome.
+The passenger survived based on the SHAP feature importances, which indicate that **age (45.0)**, **cabin (E34)**, and **fare (134.5)** were the most influential factors. The model's SHAP values suggest that these features contributed positively to the survival prediction, despite the passenger being in third-class cabin (E34) and male. The higher fare and age may have been associated with survival in this model's training data, leading to the conclusion that the passenger survived.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 1: did not survive
+Columns: pclass=1, sex=male, age=45.0, sibsp=1, parch=1, ticket=16966, fare=134.5, cabin=E34, embarked=C
+Prediction for row 1: survived
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
+Plausibility triples: age_x_ticket_x_fare, age_x_fare_x_cabin, sex_x_age_x_fare
+
+LLM Dempster interpretation for row 1 (English):
+The passenger survived due to being in first class (pclass=1) and having a high fare (134.5), which aligns with the plausibility factors of age, fare, and cabin. While male sex (sex=male) historically correlates with lower survival rates, the combination of first-class status and higher fare suggests a greater likelihood of survival, making the outcome both plausible and consistent with the data.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=1, sex=female, age=30.0, sibsp=0, parch=0, ticket=PC 17485, fare=56.9292, cabin=E36, embarked=C
+Prediction for row 2: survived
+Top SHAP features: age, fare, cabin
+
+LLM SHAP interpretation for row 2 (English):
+The passenger survived primarily due to the combined contributions of **high fare**, **being in a cabin**, and **age** as highlighted by SHAP feature importances. The model prioritizes these factors: a high fare (56.9292) indicates wealthier status, which correlates with higher survival likelihood. Being in a cabin (E36) is a positive factor, as cabin presence generally improves survival odds. While age (30) might seem counterintuitive, the model's SHAP analysis suggests this age contributes positively to survival in this context. Thus, the passenger's survival is attributed to these key features.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=1, sex=female, age=30.0, sibsp=0, parch=0, ticket=PC 17485, fare=56.9292, cabin=E36, embarked=C
+Prediction for row 2: survived
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, age_x_parch_x_fare
+
+LLM Dempster interpretation for row 2 (English):
+The passenger survived because they were a female in first class (pclass=1), which historically had a high survival rate, combined with a relatively high fare (56.9292) and age (30), factors that align with first-class passengers. The certainty and plausibility triples strongly support this conclusion, indicating a high likelihood of survival.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=1, sex=male, age=21.0, sibsp=0, parch=1, ticket=35281, fare=77.2875, cabin=D26, embarked=S
+Prediction for row 3: did not survive
+Top SHAP features: age, fare, cabin
+
+LLM SHAP interpretation for row 3 (English):
+The passenger did not survive based on SHAP feature importances, where their age, fare, and cabin were key factors. The lower cabin (D26) and age likely contributed to the prediction of not surviving, while the higher fare may have had a lesser impact compared to these factors.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=1, sex=male, age=21.0, sibsp=0, parch=1, ticket=35281, fare=77.2875, cabin=D26, embarked=S
+Prediction for row 3: did not survive
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, age_x_parch_x_fare
+
+LLM Dempster interpretation for row 3 (English):
+The passenger did not survive. The male sex (a historically lower survival rate) combined with first-class status (pclass=1) and a relatively high fare (77.2875) suggest a higher likelihood of survival, but the lower-deck cabin (D26) and age (21) align with poorer survival odds. Certainty triples (sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare) and plausibility triples (age_x_fare_x_cabin, age_x_parch_x_fare) collectively point to a low survival probability, despite the high fare. The model's uncertainty (0.1016) reflects moderate confidence in the prediction.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=1, sex=male, age=61.0, sibsp=0, parch=0, ticket=111240, fare=33.5, cabin=B19, embarked=S
+Prediction for row 4: did not survive
+Top SHAP features: age, ticket, fare
+
+LLM SHAP interpretation for row 4 (English):
+The passenger did not survive primarily due to the high age (61 years) and elevated fare (33.5), which, according to SHAP feature importances, are critical factors in the model's prediction. While first-class status (pclass=1) typically correlates with higher survival rates, the model emphasizes that the combination of being a male in an older age group and paying a high fare (possibly linked to first-class status) significantly reduced the likelihood of survival. These features collectively outweighed other attributes like ticket number, leading to the conclusion of non-survival.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=1, sex=male, age=61.0, sibsp=0, parch=0, ticket=111240, fare=33.5, cabin=B19, embarked=S
+Prediction for row 4: did not survive
 Uncertainty value: 0.1015925925925926
 Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
 Plausibility triples: age_x_ticket_x_fare, age_x_fare_x_cabin, age_x_sibsp_x_ticket
 
-LLM Dempster interpretation for row 1 (English):
-The passenger did not survive due to being male (sex), older (age), and in a lower passenger class (pclass), which are strong predictors of lower survival rates. These certainty factors (sex_x_age, pclass_x_sex_x_age) align with historical survival trends, where males, especially older individuals in lower classes, had significantly reduced survival chances. Plausibility factors like fare and ticket details further support this conclusion by reinforcing the socioeconomic context of the passenger's situation.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 2: survived
-Top SHAP features: cabin, ticket, fare
-
-LLM SHAP interpretation for row 2 (English):
-The passenger survived because the SHAP feature importances indicate that their **cabin** (likely a higher-class cabin), **ticket** (possibly linked to a premium or first-class ticket), and **fare** (a high value) were key factors contributing to survival. These features collectively suggest the passenger belonged to a higher social class, which historically correlated with better survival outcomes.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 2: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, age_x_sibsp_x_fare
-
-LLM Dempster interpretation for row 2 (English):
-The passenger survived due to being female (sex) and likely young (age), which are strong predictors of survival. These factors, combined with plausible associations between age, fare, and cabin conditions, support the conclusion with high certainty.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 3: survived
-Top SHAP features: age, ticket, cabin
-
-LLM SHAP interpretation for row 3 (English):
-The passenger survived based on the SHAP feature importances, which indicate that their age, ticket, and cabin attributes were key factors. The model suggests that these features contributed positively to the survival prediction, though the exact relationship (e.g., higher age, specific ticket class, or cabin location) is determined by the SHAP analysis.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 3: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: parch_x_fare_x_embarked, age_x_parch_x_embarked, sex_x_age
-Plausibility triples: age_x_ticket_x_fare, age_x_fare_x_embarked, age_x_fare_x_cabin
-
-LLM Dempster interpretation for row 3 (English):
-The passenger survived due to the combination of factors indicated by the Certainty and Plausibility triples. Specifically, the sex (likely female) and age (possibly a child) strongly correlate with higher survival rates, while the fare (indicating first-class status) and embarkation port (possibly Southampton or Cherbourg) further support survival. These factors align with historical survival trends, making the conclusion highly plausible and certain.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 4: survived
-Top SHAP features: cabin, fare, age
-
-LLM SHAP interpretation for row 4 (English):
-The passenger survived due to the combined positive contributions of **high fare** (indicating higher class or better access to lifeboats), **a cabin** (suggesting higher class or better conditions), and **younger age** (as children had a higher survival rate). These factors, weighted by SHAP importance, collectively favored survival.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 4: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, sex_x_age_x_fare
-
 LLM Dempster interpretation for row 4 (English):
-The passenger survived due to the combination of being female (sex), likely in a higher passenger class (pclass), and having an age and fare that align with survival factors. These attributes contribute to a higher plausibility of survival, despite the low uncertainty value, as they correlate with historical survival trends in the Titanic dataset.
+The passenger did not survive due to the combination of being male (a high-risk factor for survival), aged 61 (a significant risk factor), and belonging to pclass 1 (first class, which historically had higher survival rates, but the male and age factors outweighed this). The certainty triples (sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare) strongly indicate a low survival probability, while plausibility factors like age_x_fare_x_cabin and age_x_ticket_x_fare do not counterbalance the certainty of the male and age-based risks. The low uncertainty value (0.10) confirms this conclusion.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 5: did not survive
-Top SHAP features: cabin, fare, age
+Columns: pclass=1, sex=female, age=50.0, sibsp=1, parch=1, ticket=113503, fare=211.5, cabin=C80, embarked=C
+Prediction for row 5: survived
+Top SHAP features: age, ticket, fare
 
 LLM SHAP interpretation for row 5 (English):
-The passenger did not survive because the SHAP feature importances highlighted that **cabin**, **fare**, and **age** were the most critical factors. These features likely contributed to a lower survival probability, with the passenger's values (e.g., lower-class cabin, higher fare, or older age) aligning with historical patterns where such attributes correlated with reduced survival chances.
+The passenger survived primarily due to the high fare (211.5), the specific ticket number (113503), and the age (50.0), as these features were identified as the most significant contributors by SHAP analysis. The model suggests that higher fare and associated ticket details (possibly linked to first-class status) positively influenced survival, while age contributed positively in this context.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 5: did not survive
+Columns: pclass=1, sex=female, age=50.0, sibsp=1, parch=1, ticket=113503, fare=211.5, cabin=C80, embarked=C
+Prediction for row 5: survived
 Uncertainty value: 0.1015925925925926
 Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
 Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, age_x_sibsp_x_fare
 
 LLM Dempster interpretation for row 5 (English):
-The passenger did not survive due to being male (sex), older (age), and likely in a lower passenger class (pclass), which are strong indicators of lower survival rates in the Titanic dataset. These factors align with the certainty and plausibility triples, confirming the prediction.
+The passenger survived due to being a female in first class (pclass=1), which historically had higher survival rates, combined with a high fare (211.5) and first-class cabin (C80). These factors, along with the age of 50 (a typical adult in first class), strongly align with the plausibility of survival, as confirmed by the low uncertainty (0.1016).
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
+Columns: pclass=1, sex=female, age=63.0, sibsp=1, parch=0, ticket=PC 17483, fare=221.7792, cabin=C55 C57, embarked=S
 Prediction for row 6: did not survive
-Top SHAP features: cabin, fare, age
+Top SHAP features: age, cabin, fare
 
 LLM SHAP interpretation for row 6 (English):
-The passenger did not survive primarily due to high age and a lower class cabin, which were the top SHAP features indicating negative contributions to survival. While high fare (a positive factor) was also considered, the combined impact of advanced age and cabin class (likely lower class) outweighed the fare's benefit, leading to the prediction of not surviving.
+The passenger did not survive primarily due to the negative impact of their high age (63 years) and lower-class cabin (C55 C57), which are top SHAP features. While being female and in first class (pclass=1) may have slightly improved survival odds, the dominant factors in the model's prediction were the adverse effects of advanced age and lower deck cabin, leading to the conclusion of non-survival.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
+Columns: pclass=1, sex=female, age=63.0, sibsp=1, parch=0, ticket=PC 17483, fare=221.7792, cabin=C55 C57, embarked=S
 Prediction for row 6: did not survive
 Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, sex_x_age_x_fare
+Certainty triples: age_x_fare_x_embarked, sex_x_age, pclass_x_age_x_fare
+Plausibility triples: age_x_sibsp_x_fare, sex_x_age_x_fare, age_x_parch_x_fare
 
 LLM Dempster interpretation for row 6 (English):
-The passenger did not survive due to being male (sex), older (age), and likely in a lower passenger class (pclass), which are strong predictors of lower survival rates in the Titanic dataset. These factors align with historical data showing that males, especially older individuals in lower classes, had significantly reduced survival chances. The low uncertainty (0.1) reinforces this conclusion.
+The passenger did not survive due to a combination of factors: being a female in first class (pclass=1) typically correlates with higher survival rates, but her advanced age (63) and high fare (indicating first-class status) may have conflicted with other risk factors. While female passengers and first-class travelers generally had higher survival probabilities, the model's low uncertainty (0.1016) suggests the conclusion is based on the plausibility of age, fare, and embarked port (S), which collectively indicate a lower likelihood of survival despite her class and gender.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 7: survived
-Top SHAP features: age, ticket, cabin
+Columns: pclass=1, sex=female, age=50.0, sibsp=0, parch=0, ticket=PC 17595, fare=28.7125, cabin=C49, embarked=C
+Prediction for row 7: did not survive
+Top SHAP features: age, ticket, fare
 
 LLM SHAP interpretation for row 7 (English):
-The passenger survived primarily due to the combination of low age (likely a child, increasing survival chances), a ticket associated with higher survival probability (possibly first-class or a specific group), and possession of a cabin (indicating higher class or better conditions). These top SHAP features collectively contributed to the survival prediction.
+The passenger did not survive primarily due to the high age (50.0), which is a significant negative factor in survival probability, and the combination of their ticket (PC 17595) and fare (28.7125), which may indicate lower social status or class within first class, despite being female and in first class. These SHAP features dominate the prediction, suggesting that the model attributes the survival outcome to these specific factors.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 7: survived
+Columns: pclass=1, sex=female, age=50.0, sibsp=0, parch=0, ticket=PC 17595, fare=28.7125, cabin=C49, embarked=C
+Prediction for row 7: did not survive
 Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, pclass_x_fare_x_embarked
-Plausibility triples: age_x_fare_x_cabin, age_x_cabin_x_embarked, pclass_x_age_x_fare
+Certainty triples: pclass_x_fare_x_embarked, sex_x_age, sibsp_x_fare_x_embarked
+Plausibility triples: age_x_ticket_x_fare, pclass_x_age_x_fare, age_x_sibsp_x_fare
 
 LLM Dempster interpretation for row 7 (English):
-The passenger survived due to a combination of factors including their sex, class, and fare, which align with the certainty and plausibility triples. Being female (sex) and in a higher class (pclass) along with a higher fare (fare) and embarkation port (embarked) strongly correlate with survival, as these factors are central to the model's confidence in the prediction.
+The passenger did not survive due to a combination of factors: being a female in first class (which historically should improve survival) was offset by her advanced age (50), likely lower deck location (C49), and the specific cabin (C49) which may have been in a less survivable area. Despite these, the model's low uncertainty (0.10) suggests a plausible conclusion that her survival was unlikely.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
+Columns: pclass=1, sex=female, age=48.0, sibsp=1, parch=1, ticket=13567, fare=79.2, cabin=B41, embarked=C
 Prediction for row 8: survived
-Top SHAP features: fare, cabin, age
+Top SHAP features: age, cabin, fare
 
 LLM SHAP interpretation for row 8 (English):
-The passenger survived due to positive contributions from the top SHAP features: **fare** (higher fare likely indicating a more affluent class or priority), **cabin** (a higher-quality cabin or location), and **age** (a specific age range or value that positively influenced survival probability). These factors collectively supported the survival prediction.
+The passenger survived because the SHAP feature importances indicate that their **age (48.0)**, **cabin (B41)**, and **fare (79.2)** positively contributed to the survival prediction. These features were prioritized by the model as key drivers of the outcome, suggesting that higher fare, a cabin (possibly in a higher category), and the passenger's age (likely a factor in the model's context) collectively supported the survival prediction.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
+Columns: pclass=1, sex=female, age=48.0, sibsp=1, parch=1, ticket=13567, fare=79.2, cabin=B41, embarked=C
 Prediction for row 8: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_fare_x_cabin, age_x_sibsp_x_fare, age_x_ticket_x_fare
-
-LLM Dempster interpretation for row 8 (English):
-The passenger survived due to being female (sex), likely in a higher passenger class (pclass), and possibly younger age with a higher fare (fare), which are strong predictors of survival in the Titanic dataset. These factors align with historical survival trends where women, first-class passengers, and those with higher fares had greater survival rates.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 9: survived
-Top SHAP features: fare, age, cabin
-
-LLM SHAP interpretation for row 9 (English):
-The passenger survived primarily due to high fare, young age, and possession of a cabin. These top SHAP features indicate that higher fare (often linked to first-class travel), younger age (which may correlate with higher survival rates), and having a cabin (implying higher social class) were the key factors contributing to the survival prediction.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 9: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, age_x_parch_x_fare
-Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, age_x_parch_x_fare
-
-LLM Dempster interpretation for row 9 (English):
-The passenger survived due to a combination of factors: being female (sex), belonging to a higher passenger class (pclass), and having a younger age, which are strong predictors of survival. These attributes align with historical data showing that women and first-class passengers had higher survival rates, especially in the Titanic dataset. The low uncertainty (0.1016) and plausibility triples further support this conclusion.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 10: survived
-Top SHAP features: fare, age, cabin
-
-LLM SHAP interpretation for row 10 (English):
-The passenger survived because the SHAP feature importances indicate that higher **fare**, **younger age**, and the presence of a **cabin** (likely associated with higher-class travel) contributed positively to the survival prediction. These factors collectively favored survival.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 10: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_fare_x_cabin, sex_x_age_x_fare, age_x_ticket_x_fare
-
-LLM Dempster interpretation for row 10 (English):
-The passenger survived due to the combination of being female (sex), young (age), and in a higher class (pclass), which aligns with historical survival trends. These factors (sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare) strongly indicate survival, while plausible associations with fare and cabin conditions further support this conclusion. Low uncertainty confirms the reliability of this inference.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 11: survived
-Top SHAP features: age, cabin, fare
-
-LLM SHAP interpretation for row 11 (English):
-The passenger survived primarily due to higher **age** (likely a child or young adult, associated with higher survival rates), **cabin** (indicating a higher-class accommodation), and **fare** (suggesting a more affluent passenger, possibly in first class). These features collectively contributed positively to the survival prediction based on SHAP importance.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 11: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_ticket_x_fare, age_x_fare_x_cabin, sex_x_age_x_fare
-
-LLM Dempster interpretation for row 11 (English):
-The passenger survived due to a combination of factors including their sex, age, and class (certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare), which strongly correlate with survival probabilities. While plausibility factors like fare and cabin conditions may also contribute, the low uncertainty value (0.10) indicates high confidence in this conclusion.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 12: survived
-Top SHAP features: fare, cabin, ticket
-
-LLM SHAP interpretation for row 12 (English):
-The passenger survived due to high fare (indicating likely first-class status), possession of a cabin (suggesting better access to lifeboats or resources), and a ticket associated with favorable conditions, which collectively contributed to the survival prediction based on SHAP feature importances.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 12: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_ticket_x_fare, age_x_fare_x_cabin, sex_x_age_x_fare
-
-LLM Dempster interpretation for row 12 (English):
-The passenger survived due to being female (sex), likely in a higher class (pclass), and higher fare (age and fare), which are strongly associated with survival in the Titanic dataset. These factors align with historical survival trends, where women, first-class passengers, and those paying higher fares had greater survival chances. The low uncertainty (0.1016) confirms this conclusion.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 13: survived
-Top SHAP features: ticket, fare, age
-
-LLM SHAP interpretation for row 13 (English):
-The passenger survived primarily due to the positive contributions of the top SHAP features: **ticket**, **fare**, and **age**. Higher fare likely indicates a higher-class ticket, which historically correlates with increased survival chances. A younger age also aligns with higher survival rates, while the ticket's specific value (possibly linked to class or group status) further supported the survival prediction. These factors collectively contributed to the model's conclusion that the passenger survived.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 13: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: sex_x_age_x_fare, age_x_fare_x_cabin, age_x_ticket_x_fare
-
-LLM Dempster interpretation for row 13 (English):
-The passenger survived due to the combination of factors: female sex, moderate age, and higher fare (certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare). These traits align with historical survival patterns where females, higher-class passengers, and those with higher fares had greater survival chances. Plausibility factors like age, fare, and cabin (age_x_fare_x_cabin) further support this conclusion. The low uncertainty (0.1016) indicates strong confidence in the prediction.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 14: survived
-Top SHAP features: fare, age, cabin
-
-LLM SHAP interpretation for row 14 (English):
-The passenger survived due to the positive contributions of **high fare**, **younger age**, and **better cabin** (likely indicating a higher-class cabin) as per the SHAP feature importances. These factors were deemed most influential in determining survival.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 14: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, sex_x_fare_x_cabin
-
-LLM Dempster interpretation for row 14 (English):
-The passenger survived due to a combination of factors: being female (sex), which historically correlates with higher survival rates, and belonging to a higher passenger class (pclass) and paying a higher fare (age_x_fare). These elements, along with plausible associations between age, fare, and cabin class, strongly support the survival prediction with high certainty.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 15: did not survive
-Top SHAP features: fare, ticket, age
-
-LLM SHAP interpretation for row 15 (English):
-The passenger did not survive because the SHAP feature importances indicate that high fare, a specific ticket, and older age were the most significant factors. These features collectively contributed to a lower survival probability, as higher fare (possibly linked to a higher-class ticket), an unusual ticket identifier, and advanced age were associated with reduced survival chances in the model's prediction.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 15: did not survive
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_fare_x_cabin, age_x_sibsp_x_fare, age_x_ticket_x_fare
-
-LLM Dempster interpretation for row 15 (English):
-The passenger did not survive due to a combination of factors: male sex (sex_x_age), lower passenger class (pclass_x_sex_x_age), and potentially lower fare (sex_x_age_x_fare). These certainty triples indicate a high likelihood of non-survival, supported by plausibility factors like age, fare, and cabin conditions, which align with historical survival patterns (e.g., lower-class males in older age groups had lower survival rates). The low uncertainty (0.1016) confirms this conclusion is statistically robust.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 16: survived
-Top SHAP features: age, cabin, fare
-
-LLM SHAP interpretation for row 16 (English):
-The passenger survived due to the top SHAP features (age, cabin, fare), indicating that higher fare, a specific cabin, and a particular age were significant contributors to the survival prediction.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 16: survived
-Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, age_x_sibsp_x_fare
-
-LLM Dempster interpretation for row 16 (English):
-The passenger survived due to being female (sex), older (age), in a higher class (pclass), and paying a higher fare, which are factors associated with increased survival likelihood. Low uncertainty (0.1016) confirms this conclusion.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 17: did not survive
-Top SHAP features: age, fare, ticket
-
-LLM SHAP interpretation for row 17 (English):
-The passenger did not survive because the SHAP feature importances indicate that high fare, older age, and the specific ticket number were key factors in the model's prediction of non-survival. These features collectively contributed to the negative outcome.
-
-The Titanic dataset contains details about passengers on the ill-fated ship
-and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
-Prediction for row 17: did not survive
 Uncertainty value: 0.1015925925925926
 Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
 Plausibility triples: age_x_ticket_x_fare, age_x_fare_x_cabin, age_x_parch_x_fare
 
-LLM Dempster interpretation for row 17 (English):
-The passenger did not survive due to being male (sex), older (age), and in a lower class (pclass), which aligns with historical survival trends where males, especially older individuals, had lower survival rates in lower classes. These factors (sex_x_age, pclass_x_sex_x_age) dominate the certainty and plausibility triples, supporting the conclusion.
+LLM Dempster interpretation for row 8 (English):
+The passenger survived due to being a female in first class (pclass=1), which historically had a high survival rate, combined with a high fare (79.2) indicating affluence and a relatively young age (48) for a female in that class. The certainty triples (sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare) and plausibility factors (age_x_fare_x_cabin, etc.) align with the historical survival trends for first-class females, leading to a high confidence in the survival prediction.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
+Columns: pclass=1, sex=male, age=35.0, sibsp=0, parch=0, ticket=PC 17755, fare=512.3292, cabin=B101, embarked=C
+Prediction for row 9: survived
+Top SHAP features: age, fare, cabin
+
+LLM SHAP interpretation for row 9 (English):
+The passenger survived primarily due to high fare (512.3292, indicating first-class status), the presence of a cabin (B101, suggesting first-class eligibility), and an age of 35, which the model associates with higher survival likelihood. These features collectively outweigh the negative influence of being male, as SHAP importance highlights their critical role in the survival prediction.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=1, sex=male, age=35.0, sibsp=0, parch=0, ticket=PC 17755, fare=512.3292, cabin=B101, embarked=C
+Prediction for row 9: survived
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, pclass_x_sex_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_sibsp_x_fare, pclass_x_age_x_fare
+
+LLM Dempster interpretation for row 9 (English):
+The passenger survived due to being in first class (pclass=1), which historically correlated with higher survival rates, and their high fare (512.3292) indicating a premium cabin (B101). While male gender typically had lower survival rates, the combination of pclass, fare, and cabin (plausibly linked to social status and access to lifeboats) outweighed this factor, leading to a confident prediction of survival.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=3, sex=male, age=25.0, sibsp=0, parch=0, ticket=2654, fare=7.2292, cabin=F E57, embarked=C
+Prediction for row 10: survived
+Top SHAP features: fare, age, cabin
+
+LLM SHAP interpretation for row 10 (English):
+The passenger survived because the SHAP feature importances indicate that **fare, age, and cabin** contributed positively to the survival prediction. Higher fare (7.2292) and the presence of a cabin (FE57) suggest better access to resources or safety, while an age of 25 (a middle-aged individual) may have been associated with survival in this model's context. These factors collectively outweighed other characteristics like being male or in third class (pclass=3).
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=3, sex=male, age=25.0, sibsp=0, parch=0, ticket=2654, fare=7.2292, cabin=F E57, embarked=C
+Prediction for row 10: survived
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, sex_x_age_x_fare, pclass_x_sex_x_age
+Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, pclass_x_age_x_fare
+
+LLM Dempster interpretation for row 10 (English):
+The passenger survived. Despite being a male in third class (pclass=3) with a low fare, the combination of age (25), cabin (F E57), and ticket details suggests a plausible survival scenario, though the low uncertainty (0.1) indicates limited confidence in the prediction.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=1, sex=female, age=50.0, sibsp=0, parch=1, ticket=PC 17558, fare=247.5208, cabin=B58 B60, embarked=C
+Prediction for row 11: survived
+Top SHAP features: age, fare, cabin
+
+LLM SHAP interpretation for row 11 (English):
+The passenger survived primarily due to high fare (247.52), possession of a cabin (B58 B60), and an age of 50, as these features were identified as the top contributors by SHAP importance. These factors collectively influenced the survival prediction according to the model's explanation.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=1, sex=female, age=50.0, sibsp=0, parch=1, ticket=PC 17558, fare=247.5208, cabin=B58 B60, embarked=C
+Prediction for row 11: survived
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_sibsp_x_fare, pclass_x_age_x_fare
+
+LLM Dempster interpretation for row 11 (English):
+The passenger survived due to being a female (high survival likelihood in first class), aged 50 (older but with a high fare indicating affluent status), and in first class (pclass=1). These factors align with historical survival trends, making the outcome both certain and plausible.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=1, sex=female, age=39.0, sibsp=1, parch=1, ticket=17421, fare=110.8833, cabin=C68, embarked=C
+Prediction for row 12: survived
+Top SHAP features: cabin, fare, sibsp
+
+LLM SHAP interpretation for row 12 (English):
+The passenger survived primarily due to the high fare (110.88), which indicates wealth and better access to lifeboats, and the first-class cabin (C68), which is associated with higher survival rates. The sibsp=1 (1 sibling/spouse) also contributed positively, though its impact was less significant compared to fare and cabin. These top SHAP features collectively supported the survival prediction.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=1, sex=female, age=39.0, sibsp=1, parch=1, ticket=17421, fare=110.8833, cabin=C68, embarked=C
+Prediction for row 12: survived
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, sex_x_age_x_fare
+
+LLM Dempster interpretation for row 12 (English):
+The passenger survived due to being a female in first class (pclass=1), which historically had higher survival rates, combined with a high fare (110.88) indicating privilege, and an adult age (39) that still aligns with female survival trends. Certainty and plausibility factors (sex, pclass, age, fare) strongly support this outcome.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=1, sex=female, age=33.0, sibsp=1, parch=0, ticket=113806, fare=53.1, cabin=E8, embarked=S
+Prediction for row 13: survived
+Top SHAP features: age, fare, cabin
+
+LLM SHAP interpretation for row 13 (English):
+The passenger survived due to the positive contributions of high fare (53.1) and the cabin (E8) as top SHAP features, which likely indicate better access to resources or priority in survival. Age (33.0) also played a role, though its impact was secondary to fare and cabin.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=1, sex=female, age=33.0, sibsp=1, parch=0, ticket=113806, fare=53.1, cabin=E8, embarked=S
+Prediction for row 13: survived
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, age_x_parch_x_fare
+
+LLM Dempster interpretation for row 13 (English):
+The passenger survived because they were a female in first class (pclass=1) with a high fare (53.1), which historically correlates with higher survival rates for women and upper-class passengers. The combination of sex, class, and fare strongly supports survival, despite the low uncertainty value (0.10), indicating high confidence in the prediction.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=1, sex=female, age=43.0, sibsp=0, parch=1, ticket=24160, fare=211.3375, cabin=B3, embarked=S
+Prediction for row 14: survived
+Top SHAP features: age, cabin, fare
+
+LLM SHAP interpretation for row 14 (English):
+The passenger survived primarily due to high fare (first class), which is a strong indicator of survival, and the age (43) being a positive contributor according to SHAP feature importances. The cabin (B3) also played a role, as the model attributed survival to this feature.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=1, sex=female, age=43.0, sibsp=0, parch=1, ticket=24160, fare=211.3375, cabin=B3, embarked=S
+Prediction for row 14: survived
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
+Plausibility triples: age_x_ticket_x_fare, age_x_fare_x_cabin, sex_x_age_x_fare
+
+LLM Dempster interpretation for row 14 (English):
+The passenger survived because they were a female in first class (pclass=1), which historically had a high survival rate, and their high fare (211.3375) aligns with first-class privileges. While age (43) and cabin (B3) are less directly predictive, the combination of sex, class, and fare strongly supports survival, with low uncertainty (0.10) confirming the conclusion.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=1, sex=male, age=19.0, sibsp=3, parch=2, ticket=19950, fare=263.0, cabin=C23 C25 C27, embarked=S
+Prediction for row 15: did not survive
+Top SHAP features: cabin, fare, age
+
+LLM SHAP interpretation for row 15 (English):
+The passenger did not survive primarily due to the combined influence of the top SHAP features: **cabin**, **fare**, and **age**. While the passenger was in first class (pclass=1), their **cabin** (C23, C25, C27) likely corresponds to lower-quality accommodations, and their **fare** of 263.0 was below average for first class, suggesting limited access to premium resources. The **age** of 19, though young, was weighted negatively in the model's survival prediction, possibly due to the passenger being male (a known risk factor for lower survival). These features collectively contributed to the model's conclusion that survival was unlikely.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=1, sex=male, age=19.0, sibsp=3, parch=2, ticket=19950, fare=263.0, cabin=C23 C25 C27, embarked=S
+Prediction for row 15: did not survive
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, age_x_parch_x_fare
+
+LLM Dempster interpretation for row 15 (English):
+The passenger did not survive. The combination of being male (lower survival rate), first class (higher survival but not guaranteed), and a high fare (indicating a premium cabin) suggests a lower likelihood of survival. Certainty factors like sex, age, and pclass align with historical survival trends, while plausibility factors like fare and cabin location further support the conclusion. The low uncertainty value (0.10) indicates the model's confidence in this outcome.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=2, sex=female, age=24.0, sibsp=0, parch=0, ticket=248733, fare=13.0, cabin=F33, embarked=S
+Prediction for row 16: survived
+Top SHAP features: fare, age, cabin
+
+LLM SHAP interpretation for row 16 (English):
+The passenger survived because the SHAP feature importances indicate that **fare**, **age**, and **cabin** contributed positively to the survival prediction. Higher fare (13.0) and a cabin (F33) suggest better access to lifeboats and higher social status, while the young age (24.0) aligns with a lower risk of death. These factors collectively strengthened the model's prediction of survival.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=2, sex=female, age=24.0, sibsp=0, parch=0, ticket=248733, fare=13.0, cabin=F33, embarked=S
+Prediction for row 16: survived
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, sex_x_fare_x_cabin
+
+LLM Dempster interpretation for row 16 (English):
+The passenger survived because being female (a strong predictor of survival) combined with a moderate age (24) and second-class (pclass=2) status, which historically had higher survival rates for females compared to males in the same class. The fare (13.0) and cabin (F33) align with second-class conditions, further supporting the plausibility of survival. Low uncertainty (0.1) confirms the conclusion is statistically confident.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=2, sex=male, age=34.0, sibsp=0, parch=0, ticket=248698, fare=13.0, cabin=D56, embarked=S
+Prediction for row 17: survived
+Top SHAP features: age, cabin, fare
+
+LLM SHAP interpretation for row 17 (English):
+The passenger survived because the SHAP feature importances indicate that the features **age**, **cabin**, and **fare** contributed positively to the survival prediction. Higher age (34.0), the cabin (D56), and higher fare (13.0) were associated with increased survival likelihood according to the model.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
+Columns: pclass=2, sex=male, age=34.0, sibsp=0, parch=0, ticket=248698, fare=13.0, cabin=D56, embarked=S
+Prediction for row 17: survived
+Uncertainty value: 0.1015925925925926
+Certainty triples: sex_x_age, pclass_x_sex_x_age, age_x_parch_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, age_x_ticket_x_cabin
+
+LLM Dempster interpretation for row 17 (English):
+The passenger survived based on the combination of certainty factors (sex, age, pclass) and plausibility factors (age, fare, cabin). Despite being male (lower survival likelihood) and in second class, the low fare, third-class cabin, and age of 34 suggest a plausible survival scenario, supported by the model's low uncertainty value (0.1016). The model concludes survival with confidence.
+
+The Titanic dataset contains details about passengers on the ill-fated ship
+and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
+Columns: pclass=1, sex=male, age=48.0, sibsp=1, parch=0, ticket=PC 17572, fare=76.7292, cabin=D33, embarked=C
 Prediction for row 18: survived
 Top SHAP features: age, cabin, ticket
 
 LLM SHAP interpretation for row 18 (English):
-The passenger survived due to the combined influence of higher age (possibly indicating a more favorable age group for survival), a non-missing cabin (suggesting a higher-class accommodation), and a ticket associated with a premium or privileged category (implying better access to lifeboat resources or priority). These factors collectively contributed to the positive survival prediction based on SHAP feature importances.
+The passenger survived based on SHAP feature importances, which highlight that **age**, **cabin**, and **ticket** were the most significant predictors. The combination of being in a first-class cabin (D33), a ticket (PC 17572), and an age of 48 contributed positively to the survival prediction. These features likely indicate a higher likelihood of survival compared to other passengers, as per the model's analysis.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
+Columns: pclass=1, sex=male, age=48.0, sibsp=1, parch=0, ticket=PC 17572, fare=76.7292, cabin=D33, embarked=C
 Prediction for row 18: survived
 Uncertainty value: 0.1015925925925926
 Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_fare_x_cabin, sex_x_age_x_fare, age_x_ticket_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_sibsp_x_fare, age_x_ticket_x_fare
 
 LLM Dempster interpretation for row 18 (English):
-The passenger survived due to being female (sex), young (age), in a higher class (pclass), and paying a higher fare (fare), which aligns with the certainty and plausibility factors.
+The passenger survived due to being in first class (pclass=1), which historically correlated with higher survival rates, combined with a high fare (76.7292) indicating affluence and possibly better access to lifeboat resources. While male and older age (48) typically lower survival chances, the combination of pclass, fare, and cabin (D33) strongly supports survival. Certainty and plausibility triples confirm that these factors outweigh the risks associated with sex and age.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on SHAP feature importances.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
+Columns: pclass=3, sex=female, age=2.0, sibsp=0, parch=1, ticket=347054, fare=10.4625, cabin=G6, embarked=S
 Prediction for row 19: did not survive
-Top SHAP features: fare, age, ticket
+Top SHAP features: fare, age, cabin
 
 LLM SHAP interpretation for row 19 (English):
-The passenger did not survive because the SHAP feature importances highlighted that **fare**, **age**, and **ticket** were critical factors. Higher fare (possibly indicating a higher-class ticket) and older age may have contributed to a lower survival probability, while the specific ticket details (e.g., class or booking information) further influenced the prediction of non-survival.
+The passenger did not survive primarily due to the combined influence of lower-class features (pclass=3, cabin=G6) and a relatively low fare (10.4625), which, according to SHAP feature importances, strongly contributed to the negative prediction. While being female and young (age=2.0) typically correlate with higher survival rates, the SHAP analysis indicates that the cabin and fare, reflecting third-class status, were more critical in determining the outcome.
 
 The Titanic dataset contains details about passengers on the ill-fated ship
 and whether they survived.
 
 Objective: briefly conclude why the passenger survived or not. Only provide the final conclusion based on Certainty and Plausibility.
-Columns: pclass, sex, age, sibsp, parch, ticket, fare, cabin, embarked
+Columns: pclass=3, sex=female, age=2.0, sibsp=0, parch=1, ticket=347054, fare=10.4625, cabin=G6, embarked=S
 Prediction for row 19: did not survive
 Uncertainty value: 0.1015925925925926
-Certainty triples: sex_x_age, pclass_x_sex_x_age, sex_x_age_x_fare
-Plausibility triples: age_x_fare_x_cabin, age_x_ticket_x_fare, pclass_x_age_x_cabin
+Certainty triples: sex_x_fare, age_x_fare_x_cabin, age_x_parch_x_fare
+Plausibility triples: age_x_fare_x_cabin, age_x_sibsp_x_fare, age_x_fare_x_embarked
 
 LLM Dempster interpretation for row 19 (English):
-The passenger did not survive due to being male (sex), older (age), and in a lower passenger class (pclass), which are strong predictors of lower survival rates. These factors, combined with lower fare (fare) and possibly a lower-class cabin (cabin), align with historical data showing that males, especially older adults, in lower classes had reduced survival chances. The low uncertainty (0.1) reflects high confidence in this conclusion.
+The passenger did not survive due to being a female in third class (pclass=3) with a very young age (2.0 years), which typically correlates with higher survival rates, but the combination of low fare (10.46), third-class cabin (G6), and embarked from Southampton (S) reduced the likelihood of survival. Despite her gender and age, the lower socioeconomic status and limited access to lifeboat resources in third class, along with the uncertainty value of 0.10, support the conclusion that she did not survive.
