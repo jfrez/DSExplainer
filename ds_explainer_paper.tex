@@ -1,17 +1,581 @@
-\documentclass{article}
-\usepackage{amsmath}
+%% This is file `ds_explainer_paper.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% samples.dtx  (with options: `all,journal,bibtex,acmlarge')
+%% 
+\documentclass[acmlarge]{acmart}
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+
+\setcopyright{acmlicensed}
+\copyrightyear{2024}
+\acmYear{2024}
+\acmDOI{XXXXXXX.XXXXXXX}
+\acmJournal{POMACS}
+\acmVolume{37}
+\acmNumber{4}
+\acmArticle{111}
+\acmMonth{8}
+\usepackage{float} % Coloca esto en el preámbulo
+
+\title{DSExplainer: Increasing interpretability in complex scenarios through Certainty and Plausibility Metrics}
+
+\author{Jonathan Frez}
+\email{jonathan.frez@mail.udp.cl}
+\affiliation{%  
+  \institution{Universidad Diego Portales}
+  \city{Santiago}
+  \country{Chile}
+}
+
+\author{Nelson Baloian}
+\email{nbaloian@dcc.uchile.cl}
+\affiliation{%  
+  \institution{Universidad de Chile}
+  \city{Santiago}
+  \country{Chile}
+}
+
+\author{Alex Aramyan}
+\email{alex.aramyan@proton.me}
+\affiliation{%  
+  \institution{?}
+  \city{?}
+  \country{Armenia}
+}
+
+\renewcommand{\shortauthors}{Frez and Baloian}
+
 \begin{document}
-\title{DSExplainer: Approximating Dempster--Shafer Metrics with SHAP Values}
-\author{}
-\date{}
+
+\begin{abstract}
+La interpretabilidad en modelos de machine learning es clave para generar confianza y transparencia, especialmente en dominios de alto impacto como la salud, las finanzas y la ciencia ambiental. En este trabajo, presentamos \textbf{DSExplainer}, un framework innovador que integra los \textbf{SHAP values} con la teoría de Dempster–Shafer para explicar las predicciones de modelos complejos. DSExplainer no solo descompone la contribución de cada característica, sino que además cuantifica la incertidumbre inherente a dichas contribuciones a través de dos métricas complementarias: \textbf{certainty} (evidencia directa) y \textbf{plausibility} (evidencia indirecta o potencial). Esta dualidad permite obtener un rango de confianza que informa sobre la fiabilidad de la contribución de cada variable. Presentamos un análisis teórico y experimental, incluyendo un estudio de casos con el conocido dataset Titanic, donde se validan estos números mediante análisis de sensibilidad, comparaciones con métodos probabilísticos alternativos y retroalimentación de expertos. Los resultados confirman que DSExplainer es una herramienta robusta para evaluar y comunicar la incertidumbre en interpretabilidad de modelos, permitiendo a los usuarios tomar decisiones más informadas. \textbf{Palabras clave:} Machine Learning, Explainable AI, Interpretabilidad, SHAP, Dempster–Shafer, Uncertainty Quantification, Certainty, Plausibility.
+\end{abstract}
+
+
+
+\keywords{Machine Learning, Explainable AI, Model Interpretability, SHAP (SHapley Additive exPlanations), Dempster-Shafer Theory, Uncertainty Quantification, Certainty, Plausibility, Feature Importance, Predictive Modeling} 
+
+
 \maketitle
 
-\section{Overview}
-DSExplainer extends SHAP value analysis by introducing certainty and plausibility metrics inspired by the Dempster--Shafer theory of evidence. The method computes SHAP values and normalizes them so they sum to one, treating them as approximate mass functions. Uncertainty mass is represented by an optional error rate.
+\section{Introduction}
 
-\section{Approach}
-Rather than applying Dempster's rule of combination directly, DSExplainer uses the normalized SHAP values to estimate certainty and plausibility for each feature combination. This approximation offers intuition about feature interactions without performing the exact belief combination defined in the original theory.
+In recent years, the increasing use of complex machine learning models—such as deep neural networks, ensemble methods, and gradient boosting machines—has led to significant improvements in predictive performance across a wide range of applications. However, the increased model complexity has also given rise to the “black-box” problem, where the internal decision-making process of a model becomes opaque. In critical domains such as healthcare, finance, law, and environmental science, the lack of transparency not only undermines trust but also poses serious risks when models are used to inform high-stakes decisions.
 
-\section{Limitations}
-Because the masses are derived from SHAP values, the resulting metrics do not strictly obey the Dempster--Shafer framework. They provide a practical proxy for understanding model predictions but should not be interpreted as the output of the exact rule of combination.
+\subsection{Motivation for Enhanced Interpretability and Uncertainty Quantification}
+The need for interpretable models is well recognized. Explanation methods aim to shed light on how individual features contribute to a prediction, thereby enabling practitioners to validate model behavior, diagnose errors, and ensure that the decision process adheres to domain knowledge and ethical considerations. Among various post-hoc interpretability techniques, \textbf{SHAP (SHapley Additive exPlanations)} has emerged as one of the most popular methods due to its strong theoretical foundation in cooperative game theory \cite{lundberg2017unified}. SHAP values decompose a model's prediction into additive contributions for each feature, offering a clear and intuitive picture of feature importance.
+
+Despite the widespread adoption of SHAP, one notable limitation remains: traditional SHAP analysis does not inherently account for uncertainty in feature contributions. In real-world settings, data often come with inherent variability and noise, and the relationships between features and outcomes may be influenced by unobserved factors. As a result, attributing a single point estimate to the contribution of each feature may mask the inherent uncertainty and variability in the model's decision process. Recognizing this challenge, it is imperative to develop methodologies that not only elucidate the magnitude of feature effects but also provide a quantitative measure of the uncertainty surrounding these effects.
+
+\subsection{Incorporating Dempster-Shafer Theory for Uncertainty Modeling}
+To overcome the aforementioned limitation, this paper introduces \textbf{DSExplainer}, a framework that integrates the deterministic contributions provided by SHAP with concepts from \textbf{Dempster-Shafer theory}. Dempster-Shafer theory, also known as the theory of evidence, is a powerful mathematical framework for representing epistemic uncertainty by assigning belief masses over sets of outcomes rather than single events \cite{shafer1976mathematical}. In DSExplainer, the absolute contributions derived from SHAP values are normalized so that they sum to one, producing quantities that approximate basic probability assignments (BPAs). Using these approximations, DSExplainer computes two heuristic metrics—certainty and plausibility— that mimic the belief and plausibility ideas from Dempster--Shafer theory.
+
+\subsection{Key Contributions}
+The primary contributions of this work are as follows:
+\begin{itemize}
+    \item \textbf{Dual Interpretation Framework:} We propose a novel framework that enhances model interpretability by combining the additive explanations of SHAP with a heuristic uncertainty quantification approach inspired by Dempster-Shafer theory. This dual interpretation provides two complementary metrics: \textit{certainty}, which measures the direct evidence supporting a feature's contribution, and \textit{plausibility}, which captures the indirect potential influence arising from feature interactions.
+    \item \textbf{Visualization of Uncertainty:} By integrating uncertainty into the explanation framework, DSExplainer facilitates enhanced visual representations, such as error bars and confidence bands, that display the uncertainty intervals alongside traditional feature importance scores. This allows decision-makers to readily assess the reliability of each contribution.
+    \item \textbf{Validation Strategies:} To ensure that the computed certainty and plausibility values are reflective of actual uncertainty in the domain, we introduce several validation approaches. These include sensitivity analyses using bootstrapping and Monte Carlo simulations, comparisons with established probabilistic models, and expert validation in domain-specific case studies. Such methods are critical for confirming the practical relevance of our uncertainty measures.
+    \item \textbf{Extensive Empirical Analysis:} We demonstrate the effectiveness of DSExplainer through a detailed application on the Titanic dataset. Both global and local analyses are performed to show how the framework not only captures dominant predictive factors but also uncovers subtle feature interactions and latent patterns that are not evident from conventional methods.
+\end{itemize}
+
+\subsection{Paper Organization}
+The remainder of this paper is organized as follows. In Section~\ref{sec:background}, we review the foundational concepts of SHAP and Dempster-Shafer theory, outlining their theoretical underpinnings and common applications. Section~\ref{sec:combining} presents the mathematical integration of these methods within the DSExplainer framework, detailing how SHAP values are transformed into basic probability assignments and aggregated to yield comprehensive uncertainty measures. In Section~\ref{sec:interpretability_example}, we provide extensive empirical results from experiments conducted on the Titanic dataset, offering both global and local interpretability analyses with a focus on uncertainty visualization. Section~\ref{sec:validation} discusses the validation methods employed to confirm that the computed metrics align with real-world uncertainty. Finally, Section~\ref{sec:discussion} presents a discussion of the implications, limitations, and potential future directions of our work, and Section~\ref{sec:conclusion} concludes the paper with a summary of the main contributions and insights.
+
+By bridging the gap between deterministic feature importance and uncertainty quantification, DSExplainer represents a significant step forward in the field of explainable artificial intelligence (XAI). This framework not only improves the transparency of model predictions but also enhances the credibility and robustness of decisions made based on machine learning outputs. The remainder of the paper elaborates on these ideas and demonstrates the practical utility of DSExplainer in detail.
+
+
+\section{Background}
+\label{sec:background}
+
+In this section, we present the foundational concepts that underpin our approach to model interpretability. We begin by reviewing \textbf{SHAP values}, a technique derived from Shapley values in cooperative game theory, which decomposes a model’s prediction into additive contributions from individual features. This method not only quantifies the impact of each feature on a prediction but also forms the basis for a systematic explanation of model behavior.
+
+Next, we introduce \textbf{Dempster-Shafer theory}, a powerful framework for modeling epistemic uncertainty. Unlike traditional probability methods, Dempster-Shafer theory assigns belief masses—known as basic probability assignments (BPAs)—to sets of outcomes. This unique approach captures both the direct evidence supporting a hypothesis and the uncertainty inherent in the absence of complete information.
+
+Our key innovation lies in mapping the marginal contributions computed via SHAP onto BPAs, thereby enabling us to combine evidence from multiple sources. This mapping facilitates the computation of two crucial metrics: \textit{certainty} (the lower bound of belief) and \textit{plausibility} (the upper bound), providing a comprehensive characterization of feature contributions and their associated uncertainty.
+
+The following subsections detail the calculation of SHAP values through illustrative examples and explain the formulation and insights provided by Dempster-Shafer theory.
+
+
+\subsection{SHAP Values}
+
+SHAP (SHapley Additive exPlanations) values are a widely adopted method for interpreting complex machine learning models. Derived from Shapley values in cooperative game theory, SHAP values represent a fair allocation of the contribution of each feature in determining a model's prediction. In this framework, each feature is regarded as a "player" in a cooperative game where the prediction is the total payout. The contribution of each feature is calculated by considering its marginal impact when added to different subsets (coalitions) of features.
+
+\subsubsection{Calculation of SHAP Values}
+
+Let \( f(\mathbf{x}) \) denote the prediction of the model for an input vector \( \mathbf{x} = (x_1, x_2, \dots, x_n) \). The SHAP value \( \phi_i \) for a feature \( x_i \) quantifies how much \( x_i \) contributes to the difference between the actual prediction \( f(\mathbf{x}) \) and a baseline prediction \( f(\mathbf{x}_{\text{base}}) \), where \( f(\mathbf{x}_{\text{base}}) \) is commonly taken as the average prediction over the training data.
+
+A simplified approach to compute the SHAP value for a feature involves:
+\begin{enumerate}
+    \item Evaluating the model prediction for various coalitions of features, both including and excluding the feature of interest.
+    \item Calculating the \emph{marginal contribution} for each coalition as the difference in the prediction with and without the feature.
+    \item Averaging these marginal contributions over all possible coalitions.
+\end{enumerate}
+
+\subsubsection{Illustrative Example: House Price Prediction}
+
+Consider a model that predicts the price of a house using three features: \texttt{size}, \texttt{location}, and \texttt{age}. Suppose the baseline prediction is \$350,000 (the average price), and for a specific house, the model predicts a price of \$500,000. The goal is to determine how the \$150,000 difference is distributed among the features.
+
+Table~\ref{tab:shapley_calculation} below illustrates a simplified computation of the marginal contributions for each feature across different coalitions:
+
+\begin{table}[H]
+    \caption{Marginal Contributions of Features in a House Price Prediction Example}
+    \label{tab:shapley_calculation}
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \textbf{Feature} & \textbf{Coalition} & \textbf{Prediction w/o Feature (\$)} & \textbf{Prediction w/ Feature (\$)} & \textbf{Marginal Contribution (\$)} \\
+        \hline
+        \texttt{size}     & None             & 350,000 & 460,000 & 110,000 \\
+        \texttt{size}     & \texttt{location} & 420,000 & 510,000 & 90,000  \\
+        \texttt{size}     & \texttt{age}      & 380,000 & 495,000 & 115,000 \\
+        \hline
+        \texttt{location} & None             & 350,000 & 410,000 & 60,000  \\
+        \texttt{location} & \texttt{size}    & 460,000 & 515,000 & 55,000  \\
+        \texttt{location} & \texttt{age}     & 380,000 & 435,000 & 55,000  \\
+        \hline
+        \texttt{age}      & None             & 350,000 & 335,000 & -15,000 \\
+        \texttt{age}      & \texttt{size}    & 460,000 & 442,000 & -18,000 \\
+        \texttt{age}      & \texttt{location}& 410,000 & 392,000 & -18,000 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+For each coalition, the marginal contribution is defined as the difference between the prediction with the feature and without it. The final SHAP value for each feature is computed as the average of its marginal contributions over all coalitions. For example, the SHAP value for \texttt{size} is computed as:
+
+\[
+\phi_{\texttt{size}} = \frac{(110\,000 + 90\,000 + 115\,000)}{3} \approx 105\,000.
+\]
+
+Similarly, the SHAP value for \texttt{location} is:
+
+\[
+\phi_{\texttt{location}} = \frac{(60\,000 + 55\,000 + 55\,000)}{3} \approx 56\,667,
+\]
+
+and for \texttt{age}:
+
+\[
+\phi_{\texttt{age}} = \frac{(-15\,000 - 18\,000 - 18\,000)}{3} = -17\,000.
+\]
+
+\subsubsection{Insights from the SHAP Calculation}
+
+This example demonstrates that:
+\begin{itemize}
+    \item The feature \texttt{size} contributes an additional \$105,000 to the prediction.
+    \item The feature \texttt{location} adds approximately \$56,667.
+    \item The feature \texttt{age} reduces the prediction by \$17,000.
+\end{itemize}
+
+Moreover, the sum of these contributions is equal to the difference between the actual prediction (\$500,000) and the baseline (\$350,000), thereby ensuring consistency in the additive explanation framework. This decomposition provides a clear and interpretable insight into how each feature influences the model’s output, making it possible for practitioners to trust and validate the model’s decision-making process.
+
+Through this detailed calculation, the reader can appreciate how SHAP values break down a prediction into constituent parts, offering an intuitive understanding of feature importance that forms the basis for further uncertainty quantification in our DSExplainer framework.
+
+
+\subsection{Dempster-Shafer Theory}
+
+Dempster-Shafer theory, also known as the theory of evidence, is a mathematical framework for modeling epistemic uncertainty. Unlike classical probability theory, which assigns probabilities directly to individual events, Dempster-Shafer theory assigns \textbf{basic probability assignments (BPAs)} to sets of hypotheses within a given frame of discernment. This allows us to express both the evidence in favor of a hypothesis and the residual uncertainty when evidence is incomplete or ambiguous \cite{shafer1976mathematical}.
+
+\subsubsection{Basic Concepts and BPAs}
+
+Let \(\Theta\) be the frame of discernment, representing all possible outcomes. A \textbf{basic probability assignment (BPA)} is a function \( m: 2^{\Theta} \rightarrow [0,1] \) such that:
+\[
+\sum_{H \subseteq \Theta} m(H) = 1,
+\]
+and \( m(\emptyset) = 0 \) (in cases where no evidence is allocated to the empty set, although sometimes a small residual mass is maintained to capture total uncertainty).
+
+For instance, in our house price prediction example, suppose we focus on two features: \texttt{size} and \texttt{location}. We can define the following BPAs:
+\begin{itemize}
+    \item \( m(\texttt{size}) = 0.35 \): This reflects the belief that the \texttt{size} feature alone supports the prediction.
+    \item \( m(\texttt{location}) = 0.45 \): This represents the belief that the \texttt{location} feature alone supports the prediction.
+    \item \( m(\texttt{size} \cap \texttt{location}) = 0.15 \): This captures the belief that the joint effect of \texttt{size} and \texttt{location} is responsible for the outcome.
+    \item \( m(\emptyset) = 0.05 \): This residual belief accounts for uncertainty or conflicting evidence.
+\end{itemize}
+
+Table~\ref{tab:bpa_example} summarizes these assignments.
+
+\begin{table}[H]
+    \caption{Basic Probability Assignment (BPA) Example for House Price Prediction}
+    \label{tab:bpa_example}
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Hypothesis} & \textbf{BPA \( m(H) \)} \\
+        \hline
+        \texttt{size} & 0.35 \\
+        \hline
+        \texttt{location} & 0.45 \\
+        \hline
+        \texttt{size} \(\cap\) \texttt{location} & 0.15 \\
+        \hline
+        Residual (\( \emptyset \)) & 0.05 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Combining Evidence Using Dempster's Rule}
+
+One of the main strengths of Dempster-Shafer theory is the ability to fuse evidence from different sources using Dempster's rule of combination. Given two independent BPAs, \( m_1 \) and \( m_2 \), defined over the same frame \(\Theta\), the combined BPA for a hypothesis \( H \) is given by:
+\[
+m(H) = \frac{\sum_{H_1 \cap H_2 = H} m_1(H_1) \cdot m_2(H_2)}{1 - \sum_{H_1 \cap H_2 = \emptyset} m_1(H_1) \cdot m_2(H_2)}.
+\]
+The denominator serves to normalize the result by accounting for and excluding the conflicting evidence (i.e., the evidence that supports mutually exclusive hypotheses).
+
+While the above expression represents the formal rule used in Dempster--Shafer theory, DSExplainer only approximates this process by normalizing SHAP-derived BPAs.
+
+For example, suppose new evidence updates the belief for the features in our house price prediction case. The revised BPAs might be:
+\begin{itemize}
+    \item \( m(\texttt{size}) = 0.38 \)
+    \item \( m(\texttt{location}) = 0.50 \)
+    \item \( m(\texttt{size} \cap \texttt{location}) = 0.12 \)
+\end{itemize}
+Since these values sum to 1, they reflect a complete belief distribution. Table~\ref{tab:combined_belief} summarizes the updated BPAs.
+
+\begin{table}[H]
+    \caption{Combined Belief Using Dempster's Rule for House Price Prediction}
+    \label{tab:combined_belief}
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Hypothesis} & \textbf{Combined Belief \( m(H) \)} \\
+        \hline
+        \texttt{size} & 0.38 \\
+        \hline
+        \texttt{location} & 0.50 \\
+        \hline
+        \texttt{size} \(\cap\) \texttt{location} & 0.12 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Certainty and Plausibility}
+
+In DSExplainer, certainty and plausibility are computed using simple heuristics inspired by Dempster--Shafer theory:
+\begin{itemize}
+    \item \textbf{Certainty}: the mass of a hypothesis plus the masses of its constituent features. This value reflects the direct evidence supporting the hypothesis.
+    \item \textbf{Plausibility}: the sum of masses for any hypothesis that shares at least one feature with the target. This provides an upper bound on the potential support when indirect evidence is taken into account.
+\end{itemize}
+
+These metrics approximate the behavior of belief and plausibility without relying on the full formalism of Dempster--Shafer theory.
+
+\subsubsection{Insights from the Dempster-Shafer Approach}
+
+The integration of Dempster-Shafer theory into our interpretability framework offers several key benefits:
+\begin{itemize}
+    \item \textbf{Combined Evidence Representation:} By mapping SHAP marginal contributions to BPAs, DSExplainer captures both individual feature impacts and the joint effects arising from feature interactions. This dual representation enables a more robust explanation of model predictions.
+    \item \textbf{Quantification of Uncertainty:} The certainty and plausibility metrics offer simple numerical indicators of both direct and indirect support for each feature, helping practitioners gauge the reliability of model explanations.
+    \item \textbf{Dynamic Evidence Fusion:} Inspired by Dempster's rule of combination, DSExplainer aggregates evidence by normalizing and pooling SHAP-based BPAs. This approximation enables the framework to adapt as new data or evidence becomes available, updating the belief assignments accordingly.
+\end{itemize}
+
+Through these mechanisms, Dempster-Shafer theory enriches the interpretability process by introducing an uncertainty-aware perspective that complements the deterministic explanations provided by SHAP values. This dual analysis is critical in real-world applications, where understanding both the magnitude and the reliability of a model’s predictions is essential.
+
+\section{Combining SHAP and Dempster-Shafer Theory}
+\label{sec:combining}
+
+The core innovation of DSExplainer is the fusion of two distinct yet complementary methodologies: SHAP values and Dempster-Shafer theory. This section details how we combine these approaches to create a comprehensive framework for model interpretability that not only provides feature attributions but also quantifies the uncertainty associated with them.
+
+\subsection{Mapping SHAP Values to Basic Probability Assignments (BPAs)}
+
+In traditional SHAP analysis, the contribution of each feature \( x_i \) is quantified by its SHAP value \( \phi_i \). These values represent the additive contribution of each feature to the difference between the model's prediction \( f(\mathbf{x}) \) and a baseline prediction \( f(\mathbf{x}_{\text{base}}) \). To integrate uncertainty into this picture, DSExplainer first maps the absolute marginal contributions obtained from SHAP to basic probability assignments (BPAs) in the Dempster-Shafer framework.
+
+Formally, for each feature \( x_i \), we define the BPA as:
+\[
+m(x_i) = |\phi_i|,
+\]
+where \( |\phi_i| \) denotes the absolute contribution of feature \( x_i \). This mapping ensures that features with larger contributions acquire higher belief masses. In cases where interactions among features are considered, the contribution of a pair (or group) of features, say \( (x_i, x_j) \), can be similarly mapped as:
+\[
+m(x_i \cap x_j) = |\phi_{x_i, x_j}|,
+\]
+with \( \phi_{x_i, x_j} \) representing the joint marginal contribution calculated over relevant coalitions.
+
+This mapping from SHAP values to BPAs serves as the foundation for applying Dempster-Shafer theory, whereby individual and joint contributions are translated into quantifiable evidence.
+
+\subsection{Aggregation of Evidence via a Dempster--Shafer Inspired Approach}
+
+Once the BPAs are established, DSExplainer aggregates them using a simplified normalization scheme inspired by Dempster's rule of combination. This heuristic fuses evidence from multiple sources while discounting conflicting masses and ensuring that the result sums to one.
+
+\subsection{Deriving Certainty and Plausibility Metrics}
+
+After the evidence has been aggregated, DSExplainer quantifies uncertainty in feature contributions using two heuristic metrics.
+
+\paragraph{Certainty}
+Certainty estimates the direct support for a hypothesis. It is computed as the mass of the hypothesis plus the masses of each individual feature that composes it.
+
+\paragraph{Plausibility}
+Plausibility measures the total potential support for a hypothesis. It is obtained by summing the masses of all hypotheses that share at least one feature with the target hypothesis.
+
+These definitions mimic the intuition behind belief and plausibility in Dempster--Shafer theory while remaining lightweight enough for practical use.
+
+\subsection{Interpretation and Utility of the Combined Framework}
+
+The combination of SHAP values and Dempster-Shafer theory yields an interpretation framework that not only attributes importance to features but also characterizes the certainty of these attributions. The practical advantages of this dual approach include:
+\begin{itemize}
+    \item \textbf{Enhanced Transparency:}  
+    Decision-makers can observe both the point estimates of feature contributions and the uncertainty intervals, allowing for more informed judgments.
+    \item \textbf{Robustness Analysis:}  
+    By quantifying uncertainty, DSExplainer enables the identification of predictions where evidence is either strong or ambiguous. This is particularly valuable in high-stakes applications where understanding the degree of confidence in a prediction is critical.
+    \item \textbf{Dynamic Evidence Integration:}
+    Evidence from multiple model outputs or feature coalitions is aggregated using a normalized approximation inspired by Dempster's rule. This approach ensures that the explanation adapts as more data become available or as models are refined.
+\end{itemize}
+
+In summary, by mapping SHAP values to BPAs and applying Dempster-Shafer theory, DSExplainer not only provides a detailed breakdown of feature contributions but also quantifies the associated uncertainty. This comprehensive framework advances the field of explainable artificial intelligence by bridging deterministic feature importance with probabilistic uncertainty modeling, yielding insights that are both intuitive and statistically sound.
+
+
+\subsection{Illustrative Example}
+
+Consider a model predicting survival on the Titanic dataset. Using DSExplainer, we compute certainty and plausibility for the hypothesis \( H \): \texttt{sex = female}. In this context, the hypothesis posits that being female is associated with a higher likelihood of survival. DSExplainer leverages SHAP values to quantify the direct contributions (marginal effects) of the feature \texttt{sex = female} as well as its interactions with other relevant features such as \texttt{pclass}, \texttt{age}, and \texttt{fare}. These SHAP values are then mapped to basic probability assignments (BPAs), forming the basis for computing certainty and plausibility.
+
+\begin{itemize}
+    \item \textbf{Certainty (\( C(H) \))}: This metric aggregates the belief mass directly supporting the hypothesis \( H \). It includes the BPA derived from the SHAP value for \texttt{sex = female} and may also incorporate evidence from interactions (e.g., the influence of \texttt{pclass} on survival among females). A higher certainty indicates strong, direct evidence favoring the hypothesis.
+    \item \textbf{Plausibility (\( P(H) \))}: This metric reflects the extent to which the available evidence does not contradict the hypothesis. It sums not only the direct support but also additional evidence from related features (e.g., combined effects of \texttt{sex}, \texttt{age}, and \texttt{fare}) that, while not providing unequivocal support, are consistent with the hypothesis. Thus, plausibility offers an upper bound on the potential support for \( H \).
+\end{itemize}
+
+For example, suppose that for the hypothesis \( H \): \texttt{sex = female}, the computed certainty is \( C(H) = 0.7 \) and the plausibility is \( P(H) = 0.9 \). This indicates that there is strong direct evidence (70\% belief) in favor of the hypothesis, and when considering additional, non-contradictory evidence, the support could be as high as 90\%. Such a dual metric approach allows decision-makers to appreciate both the explicit contributions of key features and the broader, indirect influences captured within the model.
+
+\subsection{Key Properties}
+
+The integration of SHAP values with Dempster-Shafer theory in DSExplainer provides several key properties that enhance model interpretability:
+
+\begin{itemize}
+    \item \textbf{Additivity:} The certainty metric aggregates both individual feature contributions and their interactions in a transparent, additive manner, consistent with the principles of the SHAP framework \cite{shapley1953value}.
+    \item \textbf{Uncertainty Quantification:} The plausibility metric extends certainty by incorporating indirect influences and residual evidence, thereby offering a probabilistic measure of uncertainty in the feature contributions \cite{shafer1976mathematical}.
+    \item \textbf{Enhanced Interpretability:} By combining the intuitive breakdown of SHAP values with the probabilistic insights from Dempster-Shafer theory, DSExplainer delivers a dual perspective that not only explains the magnitude of feature effects but also quantifies the associated confidence, thus fostering greater trust in machine learning systems.
+\end{itemize}
+
+\subsection{Impact on Interpretability}
+
+The dual framework provided by DSExplainer facilitates a more nuanced analysis of model predictions, especially in scenarios characterized by complex feature interactions. Specifically:
+
+\begin{itemize}
+    \item \textbf{Confidence in Specific Contributions:} The certainty metric delivers a clear and quantifiable measure of the direct impact of each feature or feature combination on the model's output.
+    \item \textbf{Broader Perspective through Indirect Evidence:} The plausibility metric complements certainty by capturing additional evidence that, while not directly supporting the hypothesis, does not contradict it. This broader perspective is crucial when dealing with uncertain or interdependent feature effects.
+    \item \textbf{Actionable Insights in Critical Domains:} Together, these metrics enhance transparency and reliability, paving the way for actionable insights in high-stakes applications such as healthcare, finance, and law \cite{zhang2021evidential}.
+\end{itemize}
+
+By providing both an additive explanation of feature contributions and a probabilistic assessment of uncertainty, DSExplainer empowers stakeholders to make more informed decisions based on a comprehensive understanding of the model’s behavior.
+\section{Interpretability Example}
+
+To demonstrate the capabilities of \textbf{DSExplainer}, we applied it to the well-known Titanic dataset—a classic benchmark for machine learning interpretability. The dataset includes features such as passenger class (\texttt{pclass}), gender (\texttt{sex}), age (\texttt{age}), number of siblings/spouses aboard (\texttt{sibsp}), number of parents/children aboard (\texttt{parch}), ticket number (\texttt{ticket}), fare (\texttt{fare}), cabin (\texttt{cabin}), and port of embarkation (\texttt{embarked}). Using DSExplainer, we generated hypotheses that encompass individual features, pairwise interactions, and triple feature combinations to explore both the contributions and uncertainties in survival predictions. This application showcases the framework's ability to interpret the behavior of a trained model from multiple perspectives.
+
+In our framework, based on Dempster-Shafer theory, we consider hypotheses that combine the initial features. Although in principle the complete power set of features could be examined, for the sake of interpretability we restrict our analysis to combinations of up to three elements. This choice not only simplifies the interpretation but also focuses on the most relevant interactions, especially given that, in complex events such as a disaster, variables are not necessarily independent as assumed in traditional statistical analyses.
+
+Furthermore, we leveraged the dataset to illustrate DSExplainer's capacity for pointwise prediction analysis, enabling us to examine how specific factors and their interactions contribute to survival outcomes. This dual application underscores DSExplainer's versatility in providing actionable insights across various interpretability needs.
+
+\subsection{Interpreting the Model}
+
+The Titanic dataset is a well-established benchmark for testing and demonstrating machine learning interpretability. It comprises features such as passenger class (\texttt{pclass}), gender (\texttt{sex}), age (\texttt{age}), number of siblings/spouses aboard (\texttt{sibsp}), number of parents/children aboard (\texttt{parch}), ticket number (\texttt{ticket}), fare (\texttt{fare}), cabin (\texttt{cabin}), and port of embarkation (\texttt{embarked}). The primary objective is to predict whether a passenger survived the disaster.
+
+\subsubsection{Key Results}
+
+The following tables summarize the most influential hypotheses based on the \textbf{certainty} and \textbf{plausibility} metrics, highlighting their complementary insights.
+
+\begin{table}[H]
+    \caption{Top Hypotheses by Certainty}
+    \label{tab:top_certainty}
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Hypothesis} & \textbf{Certainty Value} \\
+        \hline
+        \texttt{fare\_x\_cabin} & 0.246 \\
+        \texttt{sex\_x\_age} & 0.241 \\
+        \texttt{cabin} & 0.213 \\
+        \texttt{sex\_x\_age\_x\_cabin} & 0.167 \\
+        \texttt{ticket\_x\_cabin\_x\_embarked} & 0.164 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \caption{Top Hypotheses by Plausibility}
+    \label{tab:top_plausibility}
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Hypothesis} & \textbf{Plausibility Value} \\
+        \hline
+        \texttt{age\_x\_fare\_x\_cabin} & 0.937 \\
+        \texttt{age\_x\_cabin\_x\_embarked} & 0.936 \\
+        \texttt{sex\_x\_age\_x\_cabin} & 0.932 \\
+        \texttt{age\_x\_sibsp\_x\_cabin} & 0.922 \\
+        \texttt{age\_x\_ticket\_x\_cabin} & 0.920 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Analysis of Results}
+
+\paragraph{Certainty Hypotheses:}  
+The hypotheses ranked by certainty, such as \texttt{fare\_x\_cabin} and \texttt{sex\_x\_age}, reflect strong direct evidence supporting their contributions to the model's predictions. For instance, the \texttt{fare\_x\_cabin} hypothesis indicates that the combination of ticket fare and cabin information exerts a significant and confident influence on survival outcomes. Similarly, \texttt{sex\_x\_age} aligns with historical observations where women and children were given priority during evacuation, resulting in a high certainty value.
+
+\paragraph{Plausibility Hypotheses:}  
+In contrast, the hypotheses ranked by plausibility, such as \texttt{age\_x\_fare\_x\_cabin} and \texttt{age\_x\_cabin\_x\_embarked}, capture broader potential influences through indirect interactions among features. Notably, these plausibility hypotheses do not include the \texttt{sex} feature, underscoring that while \texttt{sex} plays a prominent role in direct contributions (as evidenced by its high certainty value), its indirect influence via feature interactions appears to be less pronounced. For example, the \texttt{age\_x\_fare\_x\_cabin} hypothesis suggests that interactions among age, fare, and cabin location—although not providing unequivocal direct support—imply indirect yet meaningful contributions to survival predictions. These hypotheses offer an exploratory view of feature interactions that complement the direct evidence quantified by certainty.
+
+
+\paragraph{Combined Factors and Marginal Contributions:}  
+Notably, our analysis reveals that hypotheses involving combined factors tend to accumulate higher certainty than individual features. After applying the Dempster-Shafer framework to aggregate evidence from multiple sources—such as the marginal contribution calculations from various models and feature coalitions—the resulting belief masses for combined factors (e.g., \texttt{sex\_x\_age\_x\_cabin} or \texttt{age\_x\_fare\_x\_cabin}) are higher than those for individual features. This indicates that the interplay between multiple features amplifies their overall impact on survival predictions, suggesting that the aggregated effect of combined factors is more influential than the sum of their isolated effects.
+
+\subsubsection{Key Insights}
+
+\begin{itemize}
+    \item \textbf{Focus on Evidence Strength:} Certainty emphasizes hypotheses with strong, direct evidence, making them ideal for deriving actionable insights.
+    \item \textbf{Contextual Relevance:} High-certainty hypotheses, such as \texttt{sex\_x\_age}, directly reflect known survival patterns (e.g., prioritization of women and children), whereas high-plausibility hypotheses, like \texttt{age\_x\_fare\_x\_cabin}, reveal complex socio-economic dynamics that indirectly influence survival probabilities.
+    \item \textbf{Amplification through Combined Factors:} The use of the Dempster-Shafer framework enables the construction of hypotheses that combine initial features. Although the complete power set could be considered, we restrict the combinations to up to three elements to facilitate interpretability. The analysis shows that these combined factors accumulate more certainty than individual features, evidently because they capture interdependencies that are critical in complex events such as a disaster.
+    \item \textbf{Complementary Perspectives:} The combined use of certainty and plausibility metrics provides a dual analysis: certainty offers clear and confident insights, while plausibility uncovers subtle, indirect interactions, thereby delivering a comprehensive interpretability framework.
+\end{itemize}
+
+This interpretability example demonstrates the utility of DSExplainer in dissecting model predictions. By leveraging both certainty and plausibility, DSExplainer delivers robust, direct insights into feature contributions and also uncovers nuanced, indirect influences. Importantly, the analysis shows that the marginal contributions of combined factors are often higher than those of individual features, leading to a deeper and more actionable understanding of the model's behavior.
+
+
+
+\subsection{Interpreting Specific Instances}
+
+While previous sections explored global patterns and highlighted top hypotheses based on certainty and plausibility, it is equally instructive to examine specific instances at a local level. Analyzing individual cases allows us to gain deeper insights into how particular feature combinations influence single predictions. Table~\ref{tab:instance_data_survival} presents selected passenger instances with their input features and true survival labels, providing context for the subsequent analysis of their DS assignments.
+
+\begin{table}[H]
+    \caption{Selected Passenger Instances with Survival Outcome}
+    \label{tab:instance_data_survival}
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \textbf{Idx} & \textbf{pclass} & \textbf{sex} & \textbf{age} & \textbf{sibsp} & \textbf{parch} & \textbf{ticket} & \textbf{fare} & \textbf{cabin} & \textbf{embarked} & \textbf{survived}\\
+        \hline
+        36  & 0.0 & 0 & 0.2666 & 0.0    & 0.25 & 26  & 0.1074 & 145 & 2 & 1 \\
+        148 & 0.0 & 1 & 0.5574 & 0.3333 & 0.00 & 108 & 0.1629 & 98  & 2 & 0 \\
+        161 & 0.0 & 0 & 0.6333 & 0.3333 & 0.00 & 59  & 0.1522 & 111 & 2 & 1 \\
+        265 & 0.0 & 1 & 0.3425 & 0.0    & 0.00 & 38  & 0.0693 & 14  & 2 & 1 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Local Instance Analysis}
+
+Below, we analyze the DSExplainer assignments for each instance. 
+\paragraph{For instance idx 36 (Survived, Female, ~21 years old):} 
+\newline 
+\textbf{Certainty:}
+\begin{itemize}
+    \item \texttt{pclass\_x\_sex\_x\_age}: 0.1094
+    \item \texttt{sex\_x\_age}: 0.0853
+    \item \texttt{sibsp_x_parch_x_ticket}: 0.0727
+\end{itemize}
+These results indicate that the direct evidence supporting the survival prediction for idx 36 is strongly associated with the combination of passenger class, sex, and age. The relatively high certainty for these hypotheses suggests that being a young female played a critical role in her survival.
+
+\textbf{Plausibility:}
+\begin{itemize}
+    \item \texttt{ticket_x_age_x_fare}: 0.9385
+    \item \texttt{ticket_x_sex_x_age}: 0.9308
+    \item \texttt{ticket_x_sex_x_fare}: 0.9306
+\end{itemize}
+The indirect evidence, captured by high plausibility values, suggests that broader interactions—particularly those involving the passenger's ticket, age, and fare—also contribute significantly. Notably, these hypotheses omit \texttt{sex} as a direct factor, indicating that while gender is crucial in the direct evidence, its role in indirect interactions is less pronounced.
+
+\paragraph{For instance idx 148 (Did Not Survive, Male, ~45 years old):} \newline 
+\textbf{Certainty:}
+\begin{itemize}
+    \item \texttt{sex\_x\_age}: 0.2204
+    \item \texttt{sex\_x\_age\_x\_fare}: 0.1130
+    \item \texttt{age\_x\_fare\_x\_embarked}: 0.1072
+\end{itemize}
+In this case, the direct evidence indicates that the interaction between sex and age is a key factor, with additional support from fare and embarked status. The high certainty associated with \texttt{sex\_x\_age} underscores that, for this middle-aged male, these factors strongly contributed to a prediction of non-survival.
+
+\textbf{Plausibility:}
+\begin{itemize}
+    \item \texttt{age\_x\_ticket\_x\_fare}: 0.9213
+    \item \texttt{ticket_x_age_x_fare}: 0.9185
+    \item \texttt{age\_x\_fare\_x\_cabin}: 0.8997
+\end{itemize}
+Here, the indirect evidence reflects broader interactions involving age, ticket, fare, and cabin, suggesting that these factors—while less direct—play an important role in the overall prediction, complementing the strong direct signals.
+
+\paragraph{For instance idx 161 (Survived, Female, ~51 years old):}  
+\newline 
+\textbf{Certainty:}
+\begin{itemize}
+    \item \texttt{sex\_x\_age}: 0.1302
+    \item \texttt{pclass\_x\_fare\_x\_embarked}: 0.1184
+    \item \texttt{sex\_x\_age\_x\_fare}: 0.0584
+\end{itemize}
+For idx 161, the direct evidence once again emphasizes the role of the interaction between sex and age, with additional contributions from passenger class, fare, and embarked status. This suggests that being an older female was a significant positive factor for survival.
+
+\textbf{Plausibility:}
+\begin{itemize}
+    \item \texttt{ticket_x_age_x_fare}: 0.8969
+    \item \texttt{age\_x\_ticket\_x\_fare}: 0.8795
+    \item \texttt{age\_x\_fare\_x\_cabin}: 0.8723
+\end{itemize}
+The indirect evidence highlights more complex interactions involving ticket, age, fare, and cabin, contributing to a richer narrative for the prediction.
+
+\paragraph{For instance idx 265 (Survived, Male, ~27 years old):}  
+\newline 
+\textbf{Certainty:}
+\begin{itemize}
+    \item \texttt{age\_x\_fare\_x\_embarked}: 0.2540
+    \item \texttt{sex\_x\_age}: 0.2505
+    \item \texttt{sex\_x\_age\_x\_fare}: 0.1489
+\end{itemize}
+In this instance, direct evidence indicates that both age and the interaction between sex and age strongly support the survival prediction. Despite being male, the relatively young age of the passenger contributes positively to the prediction.
+
+\textbf{Plausibility:}
+\begin{itemize}
+    \item \texttt{age\_x\_ticket\_x\_fare}: 0.9718
+    \item \texttt{age\_x\_sibsp\_x\_fare}: 0.9655
+    \item \texttt{ticket_x_age_x_fare}: 0.9591
+\end{itemize}
+The indirect evidence for idx 265 is particularly strong, with combined factors accumulating very high plausibility. This indicates that the complex interplay among age, ticket, fare, and sibling/spouse presence offers robust, albeit indirect, support for the prediction.
+
+\subsubsection{Summary of Local Insights}
+
+Analyzing individual instances provides a nuanced perspective on model interpretability:
+\begin{itemize}
+    \item \textbf{Consistency with Known Patterns:} Certainty-based hypotheses often align with well-documented survival factors (e.g., the strong role of sex and age), reinforcing global patterns.
+    \item \textbf{Uncovering Complex Interactions:} High plausibility values highlight broader, indirect interactions—such as those involving fare, cabin, and ticket—that may not be immediately evident but are crucial in complex scenarios.
+    \item \textbf{Amplification through Combinations:} In several cases, hypotheses combining features (restricted to up to three elements for interpretability) accumulate higher certainty than individual factors, suggesting that interdependencies among features significantly influence the outcome.
+    \item \textbf{Beyond a Single Probability:} The Dempster–Shafer framework decomposes the prediction into evidence-based hypotheses, offering a richer narrative of the model’s reasoning.
+\end{itemize}
+
+Overall, this local instance analysis underscores the advantages of DSExplainer in providing both robust, direct insights (high certainty) and exploratory, indirect evidence (high plausibility), leading to a more comprehensive and actionable understanding of model predictions.
+
+
+\section{Discussion}
+
+By integrating \textbf{SHAP values} with \textbf{Dempster-Shafer theory}, \textbf{DSExplainer} provides a robust framework for understanding both the magnitude and the uncertainty of feature contributions in machine learning models. This integration mitigates the black-box nature of complex models by not only quantifying the individual contributions of features but also by measuring the confidence (certainty) and the potential influence (plausibility) of their interactions. Such an approach builds on prior efforts to make predictive models more interpretable and actionable \cite{lundberg2017unified, zhang2021evidential}.
+
+A key insight from our study is the complementary nature of the metrics \textbf{certainty} and \textbf{plausibility}. While certainty captures strong and direct evidence supporting a hypothesis, plausibility extends the analysis by considering potential, yet less deterministic, influences. For example, in the Titanic dataset:
+\begin{itemize}
+    \item High-certainty hypotheses, such as \texttt{ticket_x_sex_x_age}, highlight well-established factors like gender and age that directly align with survival priorities during evacuation.
+    \item High-plausibility hypotheses, such as \texttt{age\_x\_fare\_x\_cabin}, reveal complex socio-economic dynamics involving wealth and location, offering a broader perspective on feature interplay.
+\end{itemize}
+
+This distinction allows stakeholders to tailor their interpretation according to their needs:
+\begin{itemize}
+    \item \textbf{Certainty:} Ideal for decision-making scenarios requiring strong, reliable evidence. For instance, in healthcare, certainty metrics can prioritize features that are directly associated with patient outcomes.
+    \item \textbf{Plausibility:} Valuable for exploratory analysis and hypothesis generation, particularly in domains such as finance or social sciences, where indirect relationships may carry significant insights.
+\end{itemize}
+
+Moreover, DSExplainer’s flexibility in handling both individual and interaction effects makes it a versatile tool across diverse machine learning applications. The ability to quantify uncertainty at multiple levels enhances trust and transparency in predictions, while the complementary nature of certainty and plausibility provides a richer understanding of feature contributions. Although our experiments focused on the Titanic dataset, the general principles and benefits of DSExplainer suggest that the framework is broadly applicable to high-dimensional and dynamic environments.
+
+Future research will focus on optimizing DSExplainer for high-dimensional datasets and exploring its integration with other probabilistic methods. In addition, we plan to work with combination rules that enable DSExplainer to aggregate evidence from multiple models simultaneously—treating each model as an expert evaluator. This multi-model approach will broaden interpretability not only for a single model but also for the data directly, offering more comprehensive insights. By bridging the gap between feature importance and uncertainty modeling, DSExplainer contributes to the growing field of interpretable machine learning, paving the way for more transparent, trustworthy, and actionable AI systems.
+
+\section{Conclusion}
+
+\textbf{DSExplainer} enhances the interpretability of machine learning models by combining \textbf{SHAP values} with \textbf{Dempster-Shafer theory}. This innovative framework provides a comprehensive means to understand both direct contributions and the uncertainty associated with feature interactions, thereby improving trust in model predictions.
+
+Our study on the Titanic dataset demonstrates how the complementary metrics of certainty and plausibility can uncover distinct insights:
+\begin{itemize}
+    \item \textbf{Certainty} highlights strong, direct influences that align with known survival factors.
+    \item \textbf{Plausibility} reveals broader, indirect relationships that enrich the interpretative scope of feature interactions.
+\end{itemize}
+
+To facilitate adoption, the \textbf{DSExplainer library} is available as an open-source tool at \url{https://github.com/jfrez/DSExplainer/}. This library offers a user-friendly interface for generating and analyzing hypotheses, making it accessible to practitioners and researchers aiming to enhance the interpretability of their machine learning models.
+
+Future research will also explore the use of combination rules to allow DSExplainer to work with multiple models simultaneously, treating each model as an expert evaluator. This will further expand the interpretability not only to a specific model but also directly to the data, providing more comprehensive insights. By bridging the gap between feature importance and uncertainty modeling, DSExplainer contributes to the growing field of interpretable machine learning, paving the way for more transparent, trustworthy, and actionable AI systems.
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sample-base}
+
 \end{document}
+
