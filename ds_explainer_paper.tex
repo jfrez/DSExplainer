@@ -1,0 +1,17 @@
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+\title{DSExplainer: Approximating Dempster--Shafer Metrics with SHAP Values}
+\author{}
+\date{}
+\maketitle
+
+\section{Overview}
+DSExplainer extends SHAP value analysis by introducing certainty and plausibility metrics inspired by the Dempster--Shafer theory of evidence. The method computes SHAP values and normalizes them so they sum to one, treating them as approximate mass functions. Uncertainty mass is represented by an optional error rate.
+
+\section{Approach}
+Rather than applying Dempster's rule of combination directly, DSExplainer uses the normalized SHAP values to estimate certainty and plausibility for each feature combination. This approximation offers intuition about feature interactions without performing the exact belief combination defined in the original theory.
+
+\section{Limitations}
+Because the masses are derived from SHAP values, the resulting metrics do not strictly obey the Dempster--Shafer framework. They provide a practical proxy for understanding model predictions but should not be interpreted as the output of the exact rule of combination.
+\end{document}
