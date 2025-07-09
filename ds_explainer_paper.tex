@@ -72,7 +72,8 @@ The need for interpretable models is well recognized. Explanation methods aim to
 Despite the widespread adoption of SHAP, one notable limitation remains: traditional SHAP analysis does not inherently account for uncertainty in feature contributions. In real-world settings, data often come with inherent variability and noise, and the relationships between features and outcomes may be influenced by unobserved factors. As a result, attributing a single point estimate to the contribution of each feature may mask the inherent uncertainty and variability in the model's decision process. Recognizing this challenge, it is imperative to develop methodologies that not only elucidate the magnitude of feature effects but also provide a quantitative measure of the uncertainty surrounding these effects.
 
 \subsection{Incorporating Dempster-Shafer Theory for Uncertainty Modeling}
-To overcome the aforementioned limitation, this paper introduces \textbf{DSExplainer}, a framework that integrates the deterministic contributions provided by SHAP with the probabilistic uncertainty modeling capabilities of \textbf{Dempster-Shafer theory}. Dempster-Shafer theory, also known as the theory of evidence, is a powerful mathematical framework for representing epistemic uncertainty by assigning belief masses over sets of outcomes rather than single events \cite{shafer1976mathematical}. By mapping the absolute contributions derived from SHAP values onto basic probability assignments (BPAs), DSExplainer quantifies not only a point estimate for feature contributions but also constructs an interval $[Bel(H), Pl(H)]$ that reflects the confidence (certainty) and the potential spread (plausibility) of these contributions.
+To overcome the aforementioned limitation, this paper introduces \textbf{DSExplainer}, a framework that integrates the deterministic contributions provided by SHAP with concepts from \textbf{Dempster-Shafer theory}. Dempster-Shafer theory, also known as the theory of evidence, is a powerful mathematical framework for representing epistemic uncertainty by assigning belief masses over sets of outcomes rather than single events \cite{shafer1976mathematical}. In DSExplainer, the absolute contributions derived from SHAP values are normalized so that they sum to one, producing quantities that approximate basic probability assignments (BPAs). These approximations are then used to compute an interval $[Bel(H), Pl(H)]$ that reflects the confidence (certainty) and the potential spread (plausibility) of feature contributions.
+
 
 \subsection{Key Contributions}
 The primary contributions of this work are as follows:
@@ -226,6 +227,8 @@ m(H) = \frac{\sum_{H_1 \cap H_2 = H} m_1(H_1) \cdot m_2(H_2)}{1 - \sum_{H_1 \cap
 \]
 The denominator serves to normalize the result by accounting for and excluding the conflicting evidence (i.e., the evidence that supports mutually exclusive hypotheses).
 
+While the above expression represents the formal rule used in Dempster--Shafer theory, DSExplainer only approximates this process by normalizing SHAP-derived BPAs.
+
 For example, suppose new evidence updates the belief for the features in our house price prediction case. The revised BPAs might be:
 \begin{itemize}
     \item \( m(\texttt{size}) = 0.38 \)
@@ -282,7 +285,8 @@ The integration of Dempster-Shafer theory into our interpretability framework of
 \begin{itemize}
     \item \textbf{Combined Evidence Representation:} By mapping SHAP marginal contributions to BPAs, DSExplainer captures both individual feature impacts and the joint effects arising from feature interactions. This dual representation enables a more robust explanation of model predictions.
     \item \textbf{Quantification of Uncertainty:} The belief interval \([Bel(H), Pl(H)]\) provides a clear, quantitative measure of the uncertainty associated with each feature's contribution. This not only helps in understanding how strongly a feature influences the prediction but also indicates potential areas of model uncertainty.
-    \item \textbf{Dynamic Evidence Fusion:} Using Dempster's rule of combination, evidence from various models or different coalitions of features can be aggregated. This dynamic fusion allows the DSExplainer framework to adapt as new data or evidence becomes available, updating the belief assignments accordingly.
+    \item \textbf{Dynamic Evidence Fusion:} Inspired by Dempster's rule of combination, DSExplainer aggregates evidence by normalizing and pooling SHAP-based BPAs. This approximation enables the framework to adapt as new data or evidence becomes available, updating the belief assignments accordingly.
+
 \end{itemize}
 
 Through these mechanisms, Dempster-Shafer theory enriches the interpretability process by introducing an uncertainty-aware perspective that complements the deterministic explanations provided by SHAP values. This dual analysis is critical in real-world applications, where understanding both the magnitude and the reliability of a model’s predictions is essential.
@@ -308,9 +312,10 @@ with \( \phi_{x_i, x_j} \) representing the joint marginal contribution calculat
 
 This mapping from SHAP values to BPAs serves as the foundation for applying Dempster-Shafer theory, whereby individual and joint contributions are translated into quantifiable evidence.
 
-\subsection{Aggregation of Evidence via Dempster's Rule of Combination}
+\subsection{Aggregation of Evidence via a Dempster--Shafer Inspired Approach}
 
-Once the BPAs are established, DSExplainer employs Dempster's rule of combination to fuse evidence from multiple sources. This step is crucial for situations where evidence about a hypothesis (e.g., the contribution of a specific feature or interaction) is derived from several coalitions or even different models.
+Once the BPAs are established, DSExplainer aggregates them using a simplified normalization scheme inspired by Dempster's rule of combination. This approach serves to fuse evidence from multiple sources when information about a hypothesis (e.g., the contribution of a specific feature or interaction) is derived from several coalitions or different models.
+
 
 Given two independent BPA functions \( m_1 \) and \( m_2 \) defined on the same frame \( \Theta \), the combined BPA \( m \) for a hypothesis \( H \) is computed as:
 \[
@@ -351,8 +356,9 @@ The combination of SHAP values and Dempster-Shafer theory yields an interpretati
     Decision-makers can observe both the point estimates of feature contributions and the uncertainty intervals, allowing for more informed judgments.
     \item \textbf{Robustness Analysis:}  
     By quantifying uncertainty, DSExplainer enables the identification of predictions where evidence is either strong or ambiguous. This is particularly valuable in high-stakes applications where understanding the degree of confidence in a prediction is critical.
-    \item \textbf{Dynamic Evidence Integration:}  
-    The use of Dempster's rule facilitates the aggregation of evidence from multiple model outputs or feature coalitions, ensuring that the explanation adapts as more data become available or as models are refined.
+    \item \textbf{Dynamic Evidence Integration:}
+    Evidence from multiple model outputs or feature coalitions is aggregated using a normalized approximation inspired by Dempster's rule. This approach ensures that the explanation adapts as more data become available or as models are refined.
+
 \end{itemize}
 
 In summary, by mapping SHAP values to BPAs and applying Dempster-Shafer theory, DSExplainer not only provides a detailed breakdown of feature contributions but also quantifies the associated uncertainty. This comprehensive framework advances the field of explainable artificial intelligence by bridging deterministic feature importance with probabilistic uncertainty modeling, yielding insights that are both intuitive and statistically sound.
