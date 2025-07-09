@@ -49,16 +49,39 @@ np.random.seed(int(time.time()) % 2**32)
 subset = X_scaled.sample(n=1, random_state=np.random.randint(0, 10000))
 orig_subset = original_features.loc[subset.index]
 
-shap_values_df, mass_values_df, certainty_df, plausibility_df = explainer.ds_values(
+DATASET_DESCRIPTION = dedent(
+    """
+    The Iris dataset contains measurements of iris flowers and the species to
+    which each sample belongs.
+    """
+)
+
+OBJECTIVE_SHAP = (
+    "briefly conclude which species the sample belongs to based on SHAP features."
+)
+
+OBJECTIVE_DEMPSTER = (
+    "briefly conclude which species the sample belongs to. Only provide the final conclusion based on Certainty and Plausibility."
+)
+
+(
+    shap_prompts,
+    demp_prompts,
+    shap_values_df,
+    mass_values_df,
+    certainty_df,
+    plausibility_df,
+) = explainer.ds_prompts(
     subset,
+    orig_subset,
+    DATASET_DESCRIPTION,
+    OBJECTIVE_SHAP,
+    OBJECTIVE_DEMPSTER,
+    top_n=TOP_N,
     error_rate=model_error,
 )
 
-# Generate predictions for the selected rows using the fitted scaler
-X_pred = explainer.generate_combinations(subset, scaler=explainer.scaler)
-raw_preds = model.predict(X_pred)
-pred_labels = [target_names[int(round(p))] for p in raw_preds]
-
+pred_labels = [target_names[int(round(p))] for p in shap_values_df["prediction"]]
 for df in (mass_values_df, certainty_df, plausibility_df):
     df["prediction"] = pred_labels
 
@@ -89,55 +112,8 @@ print_top_columns(mass_values_df, "mass_values_df")
 print_top_columns(certainty_df, "certainty_df")
 print_top_columns(plausibility_df, "plausibility_df")
 
-# ----- LLM Interpretation -----
-DATASET_DESCRIPTION = dedent(
-    """
-    The Iris dataset contains measurements of iris flowers and the species to
-    which each sample belongs.
-    """
-)
 
-OBJECTIVE_DESCRIPTION = (
-    "briefly conclude which species the sample belongs to. Only provide the final conclusion based on Certainty and Plausibility."
-)
-
-
-def resumen_fila(row_idx: int, top_n: int = TOP_N) -> str:
-    pred = mass_values_df.loc[row_idx, "prediction"]
-    uncertainty = mass_values_df.loc[row_idx, "uncertainty"]
-
-    cert_series = pd.to_numeric(
-        certainty_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
-    )
-    top_cert = cert_series.nlargest(top_n)
-    cert_vals = ", ".join(top_cert.index)
-
-    plaus_series = pd.to_numeric(
-        plausibility_df.drop(columns="prediction").iloc[row_idx], errors="coerce"
-    )
-    top_plaus = plaus_series.nlargest(top_n)
-    plaus_vals = ", ".join(top_plaus.index)
-
-    resumen = [
-        f"Prediction for row {row_idx}: {pred}",
-        f"Uncertainty value: {uncertainty}",
-        f"Certainty values: {cert_vals}",
-        f"Plausibility values: {plaus_vals}",
-    ]
-
-    return "\n".join(resumen)
-
-for idx in range(len(mass_values_df)):
-    # Include column names and their values in the LLM prompt
-    feature_pairs = [f"{col}={orig_subset.iloc[idx][col]}" for col in orig_subset.columns]
-    features_text = ", ".join(feature_pairs)
-
-    prompt = (
-        DATASET_DESCRIPTION
-        + f"\nObjective: {OBJECTIVE_DESCRIPTION}"
-        + f"\nColumns: {features_text}\n"
-        + resumen_fila(idx)
-    )
+for idx, prompt in demp_prompts.items():
     print(prompt)
     try:
         response = llm_client.chat(
