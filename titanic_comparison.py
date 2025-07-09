@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
 from DSExplainer import DSExplainer
+from sklearn.metrics import mean_absolute_error
 import numpy as np
 from sklearn.datasets import fetch_openml
 import shap
@@ -43,14 +44,26 @@ y = target
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 
 max_comb = 3
+
 explainer = DSExplainer(model, comb=max_comb, X=X, Y=y)
 model = explainer.getModel()
+
+# Calculate model error on the training data
+train_features = explainer.generate_combinations(X, scaler=explainer.scaler)
+y_numeric = pd.to_numeric(y)
+train_preds = model.predict(train_features)
+target_range = y_numeric.max() - y_numeric.min()
+model_error = mean_absolute_error(y_numeric, train_preds) / target_range
+print(f"Model error rate: {model_error:.4f}")
 
 np.random.seed(int(time.time()) % 2**32)
 subset = X.sample(n=20, random_state=np.random.randint(0, 100000))
 orig_subset = original_features.loc[subset.index]
 
-shap_values_df, mass_values_df, certainty_df, plausibility_df = explainer.ds_values(subset)
+shap_values_df, mass_values_df, certainty_df, plausibility_df = explainer.ds_values(
+    subset,
+    error_rate=model_error,
+)
 
 # Use the stored scaler for prediction features
 X_pred = explainer.generate_combinations(subset, scaler=explainer.scaler)

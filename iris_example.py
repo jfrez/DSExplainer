@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error
 from DSExplainer import DSExplainer
 import numpy as np
 import ollama
@@ -36,13 +37,21 @@ max_comb = 3
 explainer = DSExplainer(model, comb=max_comb, X=X_scaled, Y=y)
 model = explainer.getModel()
 
+# Calculate model error on the training data
+train_features = explainer.generate_combinations(X_scaled, scaler=explainer.scaler)
+train_preds = model.predict(train_features)
+target_range = y.max() - y.min()
+model_error = mean_absolute_error(y, train_preds) / target_range
+print(f"Model error rate: {model_error:.4f}")
+
 # Generate DSExplainer outputs for a random sample from the full dataset
 np.random.seed(int(time.time()) % 2**32)
 subset = X_scaled.sample(n=1, random_state=np.random.randint(0, 10000))
 orig_subset = original_features.loc[subset.index]
 
 shap_values_df, mass_values_df, certainty_df, plausibility_df = explainer.ds_values(
-    subset
+    subset,
+    error_rate=model_error,
 )
 
 # Generate predictions for the selected rows using the fitted scaler
