@@ -100,9 +100,17 @@ class DSExplainer:
             self.scaler = scaler
 
         if hasattr(scaler, "n_samples_seen_"):
-            new_dataset = pd.DataFrame(scaler.transform(new_dataset), columns=new_dataset.columns)
+            new_dataset = pd.DataFrame(
+                scaler.transform(new_dataset),
+                columns=new_dataset.columns,
+                index=new_dataset.index,
+            )
         else:
-            new_dataset = pd.DataFrame(scaler.fit_transform(new_dataset), columns=new_dataset.columns)
+            new_dataset = pd.DataFrame(
+                scaler.fit_transform(new_dataset),
+                columns=new_dataset.columns,
+                index=new_dataset.index,
+            )
         
 
 
@@ -199,3 +207,128 @@ class DSExplainer:
         ]).set_index('Index')
 
         return shap_values_df, mass_values_df, certainty_df, plausibility_df
+
+    def ds_prompts(
+        self,
+        X,
+        original_X,
+        dataset_description,
+        objective_shap,
+        objective_dempster,
+        top_n=3,
+        error_rate=0.0,
+    ):
+        """Generate natural language prompts summarizing model explanations.
+
+        This method computes the same SHAP, certainty and plausibility metrics
+        as :py:meth:`ds_values` and then builds textual prompts that can be fed
+        to a language model. The prompts include the original (unscaled) feature
+        values and a short summary based on the most relevant features.
+
+        Parameters
+        ----------
+        X : pandas.DataFrame
+            Dataset for which the explanations are generated. It should contain
+            the scaled features used to train the model.
+        original_X : pandas.DataFrame
+            Unscaled version of ``X``. The values from this dataframe are
+            embedded in the generated prompts for readability.
+        dataset_description : str
+            A short sentence describing the dataset.
+        objective_shap : str
+            Text describing the objective when summarising SHAP values.
+        objective_dempster : str
+            Text describing the objective when summarising certainty and
+            plausibility metrics.
+        top_n : int, optional
+            Number of top features or combinations to include in the summary.
+            Defaults to ``3``.
+        error_rate : float, optional
+            Passed directly to :py:meth:`ds_values`.
+
+        Returns
+        -------
+        tuple
+            ``(shap_prompts, dempster_prompts, shap_values_df, mass_values_df,``
+            ``certainty_df, plausibility_df)`` where ``*_prompts`` are
+            dictionaries keyed by row index.
+        """
+
+        shap_values_df, mass_values_df, certainty_df, plausibility_df = self.ds_values(
+            X, error_rate=error_rate
+        )
+
+        X_pred = self.generate_combinations(X, scaler=self.scaler)
+        preds = self.model.predict(X_pred)
+
+        for df in (shap_values_df, certainty_df, plausibility_df):
+            df["prediction"] = preds
+
+        def _get_top_features(df):
+            top_dict = {}
+            for idx, row in df.iterrows():
+                numeric_row = row.drop(labels=["prediction"], errors="ignore")
+                numeric_row = pd.to_numeric(numeric_row, errors="coerce")
+                top_series = numeric_row.abs().nlargest(top_n)
+                top_dict[idx] = [(col, row[col]) for col in top_series.index]
+            return top_dict
+
+        shap_top = _get_top_features(shap_values_df[original_X.columns])
+        combo_cols = [c for c in certainty_df.columns if "_x_" in c]
+        certainty_top = _get_top_features(certainty_df[combo_cols])
+        plausibility_top = _get_top_features(plausibility_df[combo_cols])
+
+        def resumen_shap(row_idx):
+            pred = shap_values_df.loc[row_idx, "prediction"]
+            shap_vals = ", ".join(name for name, _ in shap_top[row_idx])
+            resumen = [
+                f"Prediction for row {row_idx}: {pred}",
+                f"Top SHAP features: {shap_vals}",
+            ]
+            return "\n".join(resumen)
+
+        def resumen_dempster(row_idx):
+            pred = shap_values_df.loc[row_idx, "prediction"]
+            uncertainty = mass_values_df.loc[row_idx, "uncertainty"]
+            cert_vals = ", ".join(name for name, _ in certainty_top[row_idx])
+            plaus_vals = ", ".join(name for name, _ in plausibility_top[row_idx])
+            resumen = [
+                f"Prediction for row {row_idx}: {pred}",
+                f"Uncertainty value: {uncertainty}",
+                f"Certainty triples: {cert_vals}",
+                f"Plausibility triples: {plaus_vals}",
+            ]
+            return "\n".join(resumen)
+
+        shap_prompts = {}
+        demp_prompts = {}
+
+        for idx in shap_values_df.index:
+            feature_pairs = [f"{col}={original_X.loc[idx, col]}" for col in original_X.columns]
+            features_text = ", ".join(feature_pairs)
+
+            shap_prompt = (
+                dataset_description
+                + f"\nObjective: {objective_shap}"
+                + f"\nColumns: {features_text}\n"
+                + resumen_shap(idx)
+            )
+
+            demp_prompt = (
+                dataset_description
+                + f"\nObjective: {objective_dempster}"
+                + f"\nColumns: {features_text}\n"
+                + resumen_dempster(idx)
+            )
+
+            shap_prompts[idx] = shap_prompt
+            demp_prompts[idx] = demp_prompt
+
+        return (
+            shap_prompts,
+            demp_prompts,
+            shap_values_df,
+            mass_values_df,
+            certainty_df,
+            plausibility_df,
+        )
