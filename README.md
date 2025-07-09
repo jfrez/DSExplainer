@@ -107,6 +107,8 @@ print_top_columns(plausibility_df, "plausibility_df")
   - **Returns**: Four pandas DataFrames: `shap_values_df`,
     `mass_values_df` (normalized masses with an `"uncertainty"` column),
     `certainty_df`, and `plausibility_df`.
+- `ds_prompts(X, original_X, dataset_description, objective_shap, objective_dempster, top_n=3, error_rate=0.0)`: Builds natural language prompts summarizing the SHAP and Dempster\u2013Shafer metrics for each row. `original_X` should contain the unscaled feature values used in the prompts.
+  - **Returns**: Two dictionaries of prompts (`shap_prompts` and `dempster_prompts`) and the four DataFrames produced by `ds_values`.
 
 ## Theory Behind DSExplainer
 
