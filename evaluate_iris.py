@@ -40,7 +40,8 @@ DATASET_DESCRIPTION = dedent(
 )
 OBJECTIVE_SHAP = "briefly conclude which species the sample belongs to based on SHAP features."
 OBJECTIVE_DEMPSTER = (
-    "briefly conclude which species the sample belongs to based on Certainty and Plausibility."
+    "Explain which species the sample belongs to using the Certainty and "
+    "Plausibility metrics as key evidence."
 )
 
 (
