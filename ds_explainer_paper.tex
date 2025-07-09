@@ -370,6 +370,10 @@ In our framework, based on Dempster-Shafer theory, we consider hypotheses that c
 
 Furthermore, we leveraged the dataset to illustrate DSExplainer's capacity for pointwise prediction analysis, enabling us to examine how specific factors and their interactions contribute to survival outcomes. This dual application underscores DSExplainer's versatility in providing actionable insights across various interpretability needs.
 
+\subsection{Iris Dataset Example}
+
+While the Titanic dataset serves as our primary benchmark, we also evaluated DSExplainer on the classic Iris dataset, which contains sepal and petal measurements for three iris species. After training a RandomForest classifier, DSExplainer was used to compute certainty and plausibility for each sample. The analysis revealed that hypotheses combining petal length and petal width consistently yielded the highest certainty, whereas sepal measurements contributed less. This compact example demonstrates that DSExplainer is equally applicable to simpler classification problems and provides an easily reproducible reference case.
+
 \subsection{Interpreting the Model}
 
 The Titanic dataset is a well-established benchmark for testing and demonstrating machine learning interpretability. It comprises features such as passenger class (\texttt{pclass}), gender (\texttt{sex}), age (\texttt{age}), number of siblings/spouses aboard (\texttt{sibsp}), number of parents/children aboard (\texttt{parch}), ticket number (\texttt{ticket}), fare (\texttt{fare}), cabin (\texttt{cabin}), and port of embarkation (\texttt{embarked}). The primary objective is to predict whether a passenger survived the disaster.
@@ -544,6 +548,10 @@ Analyzing individual instances provides a nuanced perspective on model interpret
 \end{itemize}
 
 Overall, this local instance analysis underscores the advantages of DSExplainer in providing both robust, direct insights (high certainty) and exploratory, indirect evidence (high plausibility), leading to a more comprehensive and actionable understanding of model predictions.
+
+\subsection{LLM-Assisted Interpretation}
+
+Numerical metrics can be difficult to convey to non-experts. To bridge this gap we experimented with a lightweight large language model (LLM) that receives the top certainty and plausibility hypotheses as a prompt and returns a concise narrative explaining each prediction. We use the open-source \texttt{mannix/jan-nano} model via the \texttt{ollama} interface, allowing DSExplainer to produce a short textual rationale that complements the quantitative tables. This automatic description greatly facilitates communication of the results in both the Iris and Titanic case studies.
 
 
 \section{Discussion}
