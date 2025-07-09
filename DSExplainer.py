@@ -100,9 +100,17 @@ class DSExplainer:
             self.scaler = scaler
 
         if hasattr(scaler, "n_samples_seen_"):
-            new_dataset = pd.DataFrame(scaler.transform(new_dataset), columns=new_dataset.columns)
+            new_dataset = pd.DataFrame(
+                scaler.transform(new_dataset),
+                columns=new_dataset.columns,
+                index=new_dataset.index,
+            )
         else:
-            new_dataset = pd.DataFrame(scaler.fit_transform(new_dataset), columns=new_dataset.columns)
+            new_dataset = pd.DataFrame(
+                scaler.fit_transform(new_dataset),
+                columns=new_dataset.columns,
+                index=new_dataset.index,
+            )
         
 
 

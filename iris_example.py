@@ -64,6 +64,8 @@ OBJECTIVE_DEMPSTER = (
     "briefly conclude which species the sample belongs to. Only provide the final conclusion based on Certainty and Plausibility."
 )
 
+TOP_N = 3
+
 (
     shap_prompts,
     demp_prompts,
@@ -97,7 +99,6 @@ print("Original features with actual vs. predicted labels:")
 print(comparison_df)
 
 # Helper to print top values per row
-TOP_N = 3
 
 def print_top_columns(df, df_name):
     for idx, row in df.iterrows():
