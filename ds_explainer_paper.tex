@@ -74,6 +74,7 @@ Despite the widespread adoption of SHAP, one notable limitation remains: traditi
 \subsection{Incorporating Dempster-Shafer Theory for Uncertainty Modeling}
 To overcome the aforementioned limitation, this paper introduces \textbf{DSExplainer}, a framework that integrates the deterministic contributions provided by SHAP with concepts from \textbf{Dempster-Shafer theory}. Dempster-Shafer theory, also known as the theory of evidence, is a powerful mathematical framework for representing epistemic uncertainty by assigning belief masses over sets of outcomes rather than single events \cite{shafer1976mathematical}. In DSExplainer, the absolute contributions derived from SHAP values are normalized so that they sum to one, producing quantities that approximate basic probability assignments (BPAs). These approximations are then used to compute an interval $[Bel(H), Pl(H)]$ that reflects the confidence (certainty) and the potential spread (plausibility) of feature contributions.
 
+
 \subsection{Key Contributions}
 The primary contributions of this work are as follows:
 \begin{itemize}
@@ -285,6 +286,7 @@ The integration of Dempster-Shafer theory into our interpretability framework of
     \item \textbf{Combined Evidence Representation:} By mapping SHAP marginal contributions to BPAs, DSExplainer captures both individual feature impacts and the joint effects arising from feature interactions. This dual representation enables a more robust explanation of model predictions.
     \item \textbf{Quantification of Uncertainty:} The belief interval \([Bel(H), Pl(H)]\) provides a clear, quantitative measure of the uncertainty associated with each feature's contribution. This not only helps in understanding how strongly a feature influences the prediction but also indicates potential areas of model uncertainty.
     \item \textbf{Dynamic Evidence Fusion:} Inspired by Dempster's rule of combination, DSExplainer aggregates evidence by normalizing and pooling SHAP-based BPAs. This approximation enables the framework to adapt as new data or evidence becomes available, updating the belief assignments accordingly.
+
 \end{itemize}
 
 Through these mechanisms, Dempster-Shafer theory enriches the interpretability process by introducing an uncertainty-aware perspective that complements the deterministic explanations provided by SHAP values. This dual analysis is critical in real-world applications, where understanding both the magnitude and the reliability of a model’s predictions is essential.
@@ -313,6 +315,7 @@ This mapping from SHAP values to BPAs serves as the foundation for applying Demp
 \subsection{Aggregation of Evidence via a Dempster--Shafer Inspired Approach}
 
 Once the BPAs are established, DSExplainer aggregates them using a simplified normalization scheme inspired by Dempster's rule of combination. This approach serves to fuse evidence from multiple sources when information about a hypothesis (e.g., the contribution of a specific feature or interaction) is derived from several coalitions or different models.
+
 
 Given two independent BPA functions \( m_1 \) and \( m_2 \) defined on the same frame \( \Theta \), the combined BPA \( m \) for a hypothesis \( H \) is computed as:
 \[
@@ -355,6 +358,7 @@ The combination of SHAP values and Dempster-Shafer theory yields an interpretati
     By quantifying uncertainty, DSExplainer enables the identification of predictions where evidence is either strong or ambiguous. This is particularly valuable in high-stakes applications where understanding the degree of confidence in a prediction is critical.
     \item \textbf{Dynamic Evidence Integration:}
     Evidence from multiple model outputs or feature coalitions is aggregated using a normalized approximation inspired by Dempster's rule. This approach ensures that the explanation adapts as more data become available or as models are refined.
+
 \end{itemize}
 
 In summary, by mapping SHAP values to BPAs and applying Dempster-Shafer theory, DSExplainer not only provides a detailed breakdown of feature contributions but also quantifies the associated uncertainty. This comprehensive framework advances the field of explainable artificial intelligence by bridging deterministic feature importance with probabilistic uncertainty modeling, yielding insights that are both intuitive and statistically sound.
