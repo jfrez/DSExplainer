@@ -574,6 +574,7 @@ To examine how DSExplainer aggregates evidence, we contrasted the three highest-
 \end{table}
 
 To further validate the approach, we conducted an ablation study comparing three settings: \textbf{(i) raw SHAP values only}, \textbf{(ii) SHAP values with bootstrapped noise} to estimate quantile bands, and \textbf{(iii) our full DSExplainer}. The bootstrapped variant computes 5th and 95th percentile intervals, while calibration was assessed with the Brier score. DSExplainer achieved the lowest Brier error, indicating better calibrated predictions alongside richer uncertainty information.
+These results can be reproduced with the \texttt{ablation\_study.py} script included in the public repository.
 
 \paragraph{Example Prompt}
 Before generating the explanations, DSExplainer assembles a short prompt for each instance. A fragment for one Titanic passenger is shown below:

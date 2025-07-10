@@ -55,22 +55,40 @@ def main(n_samples: int = 5):
 
     for idx in subset.index:
         print(f"\nRow {idx} top SHAP features vs DS hypotheses:")
-        shap_lines = [ln for ln in shap_prompts[idx].splitlines() if ln.startswith("Top SHAP")]  # -> 'Top SHAP features: a, b, c'
+        shap_lines = [ln for ln in shap_prompts[idx].splitlines() if ln.startswith("Top SHAP")]
         ds_lines = [ln for ln in demp_prompts[idx].splitlines() if ln.startswith("Certainty")]
         if shap_lines:
             print(shap_lines[0])
         if ds_lines:
             print(ds_lines[0])
 
-        # Query LLM with the SHAP prompt
+        # Query LLM with SHAP-only prompt
         try:
-            resp = llm_client.chat(model="mannix/jan-nano", messages=[{"role": "user", "content": shap_prompts[idx]}])
-            clean = re.sub(r"<think>.*?</think>", "", resp.message.content, flags=re.DOTALL).strip()
-            print("LLM Response:")
-            print(clean)
+            resp_shap = llm_client.chat(
+                model="mannix/jan-nano",
+                messages=[{"role": "user", "content": shap_prompts[idx]}],
+            )
+            clean_shap = re.sub(
+                r"<think>.*?</think>", "", resp_shap.message.content, flags=re.DOTALL
+            ).strip()
+            print("LLM (SHAP):")
+            print(clean_shap)
         except Exception as e:
-            print(f"LLM error: {e}")
+            print(f"LLM error (SHAP): {e}")
 
+        # Query LLM with Dempster prompt
+        try:
+            resp_demp = llm_client.chat(
+                model="mannix/jan-nano",
+                messages=[{"role": "user", "content": demp_prompts[idx]}],
+            )
+            clean_demp = re.sub(
+                r"<think>.*?</think>", "", resp_demp.message.content, flags=re.DOTALL
+            ).strip()
+            print("LLM (Dempster):")
+            print(clean_demp)
+        except Exception as e:
+            print(f"LLM error (Dempster): {e}")
 
 if __name__ == "__main__":
     main()
