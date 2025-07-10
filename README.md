@@ -120,6 +120,13 @@ The `DSExplainer` aims to extend the concept of feature importance using combina
 
 These metrics can help uncover not just which features are important, but also how their combinations influence outcomes, offering deeper insights into the decision-making process of the model.
 
+## Additional Scripts
+
+Several helper scripts demonstrate DSExplainer in practice:
+
+- `feature_comparison.py` prints a side-by-side view of the top SHAP features and the leading DS hypotheses for a subset of Titanic passengers.
+- `ablation_study.py` runs a small ablation comparing raw SHAP, bootstrapped SHAP and the full DSExplainer using the breast cancer dataset. Brier scores are printed for calibration reference.
+
 ## Contributing
 
 If you'd like to contribute to `DSExplainer`, feel free to submit issues or create pull requests. Contributions are always welcome!
