@@ -331,7 +331,7 @@ In summary, by mapping SHAP values to BPAs and applying Dempster-Shafer theory, 
 
 \subsection{Illustrative Example}
 
-Consider a model predicting survival on the Titanic dataset. Using DSExplainer, we compute certainty and plausibility for the hypothesis \( H \): \texttt{sex = female}. In this context, the hypothesis posits that being female is associated with a higher likelihood of survival. DSExplainer leverages SHAP values to quantify the direct contributions (marginal effects) of the feature \texttt{sex = female} as well as its interactions with other relevant features such as \texttt{pclass}, \texttt{age}, and \texttt{fare}. These SHAP values are then mapped to basic probability assignments (BPAs), forming the basis for computing certainty and plausibility.
+Consider a model predicting survival on the Titanic dataset. Using DSExplainer, we compute certainty and plausibility for the hypothesis \( H \): \texttt{sex = female}. In this context, the hypothesis posits that being female is associated with better survival outcomes. DSExplainer leverages SHAP values to quantify the direct contributions (marginal effects) of the feature \texttt{sex = female} as well as its interactions with other relevant features such as \texttt{pclass}, \texttt{age}, and \texttt{fare}. These SHAP values are then mapped to basic probability assignments (BPAs), forming the basis for computing certainty and plausibility.
 
 \begin{itemize}
     \item \textbf{Certainty (\( C(H) \))}: This metric aggregates the belief mass directly supporting the hypothesis \( H \). It includes the BPA derived from the SHAP value for \texttt{sex = female} and may also incorporate evidence from interactions (e.g., the influence of \texttt{pclass} on survival among females). A higher certainty indicates strong, direct evidence favoring the hypothesis.
@@ -432,7 +432,7 @@ Notably, our analysis reveals that hypotheses involving combined factors tend to
 
 \begin{itemize}
     \item \textbf{Focus on Evidence Strength:} Certainty emphasizes hypotheses with strong, direct evidence, making them ideal for deriving actionable insights.
-    \item \textbf{Contextual Relevance:} High-certainty hypotheses, such as \texttt{sex\_x\_age}, directly reflect known survival patterns (e.g., prioritization of women and children), whereas high-plausibility hypotheses, like \texttt{age\_x\_fare\_x\_cabin}, reveal complex socio-economic dynamics that indirectly influence survival probabilities.
+    \item \textbf{Contextual Relevance:} High-certainty hypotheses, such as \texttt{sex\_x\_age}, directly reflect known survival patterns (e.g., prioritization of women and children), whereas high-plausibility hypotheses, like \texttt{age\_x\_fare\_x\_cabin}, reveal complex socio-economic dynamics that indirectly influence survival outcomes.
     \item \textbf{Amplification through Combined Factors:} The use of the Dempster-Shafer framework enables the construction of hypotheses that combine initial features. Although the complete power set could be considered, we restrict the combinations to up to three elements to facilitate interpretability. The analysis shows that these combined factors accumulate more certainty than individual features, evidently because they capture interdependencies that are critical in complex events such as a disaster.
     \item \textbf{Complementary Perspectives:} The combined use of certainty and plausibility metrics provides a dual analysis: certainty offers clear and confident insights, while plausibility uncovers subtle, indirect interactions, thereby delivering a comprehensive interpretability framework.
 \end{itemize}
@@ -572,14 +572,15 @@ To illustrate the model reasoning, we highlight four explanations from each data
 \begin{quote}
 \textbf{Titanic}\\
 
-``LLM: Row~161 --- a 51-year-old first-class woman paying 77.96 appears likely to survive.''\\
-``LLM: Row~148 --- a 45-year-old man in first class is unlikely to survive; male sex and age outweigh his high fare.''\\
-``LLM: Row~178 --- fare 52.6 and a first-class cabin make survival plausible for a 45-year-old woman, though some uncertainty remains.''\\
-``LLM: Row~490 --- a second-class woman aged~57 is not expected to survive. Ticket and fare offer some support, but overall the model is doubtful.''
-These messages often begin with statements such as ``The passenger's survival can be evaluated using the Certainty and Plausibility metrics, which provide insights into the confidence and likelihood of survival based on their attributes.''
-\vspace{0.5em}
-\textbf{Iris}\\
-
+``LLM: Row~161 --- The passenger's survival is uncertain, as the certainty metrics indicate a low probability of survival based on the given features. Specifically, the sex\_x\_age triple suggests a 34.37\% chance of survival, while the pclass\_x\_sex\_x\_age triple reduces this to 24.82\%. However, plausibility metrics such as sex\_x\_age\_x\_fare at 87.63\% show the passenger's profile is realistic. In short, certainty is low but plausibility is high, so survival is possible though not guaranteed.''\\
+``LLM: Row~148 --- The passenger's survival can be assessed using Certainty and Plausibility metrics. The sex\_x\_age triple yields 28.48\% certainty, while pclass\_x\_sex\_x\_age is only 12.98\%. Plausibility triples including age\_x\_fare\_x\_cabin (86.43\%) indicate the passenger's characteristics are statistically plausible. Overall the survival scenario is plausible but not certain.''\\
+``LLM: Row~178 --- The metrics show sex\_x\_age with 34.32\% certainty and age\_x\_ticket\_x\_fare with 87.52\% plausibility. Although uncertainty is 10.16\%, the high plausibility of these feature combinations suggests survival is likely even if certainty is modest.''\\
+``LLM: Row~490 --- Certainty triples such as sex\_x\_age (17.80\%) are moderate, whereas plausibility triples like age\_x\_ticket\_x\_fare (85.32\%) dominate. With low uncertainty (10.16\%), the passenger's profile supports a plausible and likely survival outcome, though it is not definitively certain.''
+These messages often begin with statements such as ``The passenger's survival can be evaluated using the Certainty and Plausibility metrics, which provide insights into confidence regarding survival based on their attributes.''
+``LLM: Row~118 --- The sample with sepal length 7.7~cm, sepal width 2.6~cm, petal length 6.9~cm, and petal width 2.3~cm is predicted to be Virginica. Certainty triples like petal length \times petal width give 70.84\% confidence, while plausibility triples exceed 99\%. The low uncertainty of 0.82\% further confirms this classification.''\\
+``LLM: Row~18 --- Measurements of sepal length 5.7~cm, sepal width 3.8~cm, petal length 1.7~cm, and petal width 0.3~cm strongly match Setosa. Plausibility for sepal width \times petal length \times petal width reaches 99.17\%, and certainty for petal length \times petal width is 60.76\%. The model is 99.18\% certain this sample is Setosa.''\\
+``LLM: Row~76 --- With sepal length 6.8~cm, sepal width 2.8~cm, petal length 4.8~cm, and petal width 1.4~cm, the model identifies Versicolor. Plausibility values around 99\% and certainty above 60\% indicate high confidence, and uncertainty is only 0.82\%.''\\
+``LLM: Row~31 --- Sepal length 5.4~cm, sepal width 3.4~cm, petal length 1.5~cm, and petal width 0.4~cm correspond to Setosa. Plausibility for sepal width \times petal length \times petal width is 99.17\% and uncertainty is extremely low at 0.82\%.''
 ``LLM: Row~118 --- long petals (6.9~cm) and narrow sepals confirm Virginica with high confidence.''\\
 ``LLM: Row~18 --- short petals (1.7~cm~$\times$~0.3~cm) clearly indicate Setosa.''\\
 ``LLM: Row~76 --- sepal length 6.8~cm with petals 4.8~cm suggests Versicolor with near-zero uncertainty.''\\
