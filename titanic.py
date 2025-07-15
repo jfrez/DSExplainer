@@ -41,7 +41,7 @@ llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
 
 # Language used to translate the LLM output. Can be overridden with the
 # TRANSLATION_LANGUAGE environment variable.
-TRANSLATION_LANGUAGE = os.getenv("TRANSLATION_LANGUAGE", "español")
+TRANSLATION_LANGUAGE = os.getenv("TRANSLATION_LANGUAGE", "Spanish")
 
     
 
@@ -56,7 +56,7 @@ train_preds = model.predict(train_features)
 target_range = y_numeric.max() - y_numeric.min()
 model_error = mean_absolute_error(y_numeric, train_preds) / target_range
 print(f"Model error rate: {model_error:.4f}")
-np.random.seed(int(time.time()) % 2**32)  # Cambia semilla en cada ejecución
+np.random.seed(int(time.time()) % 2**32)  # Change seed for every run
 subset = X.sample(n=1, random_state=np.random.randint(0, 10000))
 orig_subset = original_features.loc[subset.index]
 
@@ -121,7 +121,7 @@ def print_top_columns(df, df_name):
         numeric_row = pd.to_numeric(numeric_row, errors="coerce")
 
         top_values = numeric_row.nlargest(top_n)
-        print(f"\n{df_name}, Fila {idx}:")
+        print(f"\n{df_name}, Row {idx}:")
         for col, val in top_values.items():
             print(f"    {col}: {val}")
 

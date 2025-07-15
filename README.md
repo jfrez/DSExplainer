@@ -86,7 +86,7 @@ top_n = 3
 def print_top_columns(df, df_name):
     for idx, row in df.iterrows():
         top_values = row.nlargest(top_n)
-        print(f"\n{df_name}, Fila {idx}:")
+        print(f"\n{df_name}, Row {idx}:")
         for col, val in top_values.items():
             print(f"    {col}: {val}")
 
