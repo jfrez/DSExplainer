@@ -16,7 +16,7 @@ llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
 
 # Language used to translate the LLM output. Can be overridden with the
 # TRANSLATION_LANGUAGE environment variable.
-TRANSLATION_LANGUAGE = os.getenv("TRANSLATION_LANGUAGE", "español")
+TRANSLATION_LANGUAGE = os.getenv("TRANSLATION_LANGUAGE", "Spanish")
 
 # Load Iris dataset as pandas DataFrame
 iris = load_iris(as_frame=True)
