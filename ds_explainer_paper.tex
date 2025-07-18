@@ -593,19 +593,19 @@ To illustrate the model reasoning, we highlight four explanations from each data
 \begin{quote}
 \textbf{Titanic}\\
 
-``LLM: Row~161 --- The passenger's survival is uncertain. Certainty metrics show limited support: the sex_x_age triple has 34.37% certainty and pclass_x_sex_x_age drops to 24.82%. Plausibility metrics such as sex_x_age_x_fare at 87.63% indicate the passenger's profile is realistic. In short, certainty is low but plausibility is high, so survival is possible though not guaranteed.''\\
+``LLM: Row~161 --- The passenger's survival is uncertain. Certainty metrics show limited support: the sex\_x\_age triple has 34.37% certainty and pclass\_x\_sex\_x\_age drops to 24.82%. Plausibility metrics such as sex\_x\_age\_x\_fare at 87.63% indicate the passenger's profile is realistic. In short, certainty is low but plausibility is high, so survival is possible though not guaranteed.''\\
 ``LLM: Row~148 --- The passenger's survival can be assessed using Certainty and Plausibility metrics. The sex\_x\_age triple yields 28.48\% certainty, while pclass\_x\_sex\_x\_age is only 12.98\%. Plausibility triples including age\_x\_fare\_x\_cabin (86.43\%) indicate the passenger's characteristics are statistically plausible. Overall the survival scenario is plausible but not certain.''\\
 ``LLM: Row~178 --- The metrics show sex\_x\_age with 34.32\% certainty and age\_x\_ticket\_x\_fare with 87.52\% plausibility. Although uncertainty is 10.16\%, the high plausibility of these feature combinations suggests survival is plausible even if certainty is modest.''\\
-``LLM: Row~490 --- Certainty triples such as sex\_x\_age (17.80\%) are moderate, whereas plausibility triples like age\_x\_ticket\_x\_fare (85.32\%) dominate. With low uncertainty (10.16\%), the passenger's profile supports a plausible survival outcome, though it is not definitively certain.''
+``LLM: Row~490 --- Certainty triples such as sex\_x\_age (17.80\%) are moderate, whereas plausibility triples like age\_x\_ticket\_x\_fare (85.32\%) dominate. With low uncertainty (10.16\%), the passenger's profile supports a plausible survival outcome, though it is not definitively certain.''\\
 These messages often begin with statements such as ``The passenger's survival can be evaluated using the Certainty and Plausibility metrics, which provide insights into confidence regarding survival based on their attributes.''
-``LLM: Row~118 --- The sample with sepal length 7.7~cm, sepal width 2.6~cm, petal length 6.9~cm, and petal width 2.3~cm is predicted to be Virginica. Certainty triples like petal length \times petal width give 70.84\% confidence, while plausibility triples exceed 99\%. The low uncertainty of 0.82\% further confirms this classification.''\\
-``LLM: Row~18 --- Measurements of sepal length 5.7~cm, sepal width 3.8~cm, petal length 1.7~cm, and petal width 0.3~cm strongly match Setosa. Plausibility for sepal width \times petal length \times petal width reaches 99.17\%, and certainty for petal length \times petal width is 60.76\%. The model is 99.18\% certain this sample is Setosa.''\\
+``LLM: Row~118 --- The sample with sepal length 7.7~cm, sepal width 2.6~cm, petal length 6.9~cm, and petal width 2.3~cm is predicted to be Virginica. Certainty triples like petal length $\times$ petal width give 70.84\% confidence, while plausibility triples exceed 99\%. The low uncertainty of 0.82\% further confirms this classification.''\\
+``LLM: Row~18 --- Measurements of sepal length 5.7~cm, sepal width 3.8~cm, petal length 1.7~cm, and petal width 0.3~cm strongly match Setosa. Plausibility for sepal width $\times$ petal length $\times$ petal width reaches 99.17\%, and certainty for petal length $\times$ petal width is 60.76\%. The model is 99.18\% certain this sample is Setosa.''\\
 ``LLM: Row~76 --- With sepal length 6.8~cm, sepal width 2.8~cm, petal length 4.8~cm, and petal width 1.4~cm, the model identifies Versicolor. Plausibility values around 99\% and certainty above 60\% indicate high confidence, and uncertainty is only 0.82\%.''\\
-``LLM: Row~31 --- Sepal length 5.4~cm, sepal width 3.4~cm, petal length 1.5~cm, and petal width 0.4~cm correspond to Setosa. Plausibility for sepal width \times petal length \times petal width is 99.17\% and uncertainty is extremely low at 0.82\%.''
+``LLM: Row~31 --- Sepal length 5.4~cm, sepal width 3.4~cm, petal length 1.5~cm, and petal width 0.4~cm correspond to Setosa. Plausibility for sepal width $\times$ petal length $\times$ petal width is 99.17\% and uncertainty is extremely low at 0.82\%.''\\
 ``LLM: Row~118 --- long petals (6.9~cm) and narrow sepals confirm Virginica with high confidence.''\\
 ``LLM: Row~18 --- short petals (1.7~cm~$\times$~0.3~cm) clearly indicate Setosa.''\\
 ``LLM: Row~76 --- sepal length 6.8~cm with petals 4.8~cm suggests Versicolor with near-zero uncertainty.''\\
-``LLM: Row~31 --- small petals (1.5~cm~$\times$~0.4~cm) again point to Setosa with high certainty.''
+``LLM: Row~31 --- small petals (1.5~cm~$\times$~0.4~cm) again point to Setosa with high certainty.''\\
 \end{quote}
 \subsection{LLM-Assisted Interpretation}
 
