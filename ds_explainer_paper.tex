@@ -19,6 +19,8 @@
 \acmArticle{111}
 \acmMonth{8}
 \usepackage{float} % Place this in the preamble
+% Ensure scalable fonts for microtype
+\usepackage{lmodern}
 
 \title{DSExplainer: Increasing interpretability in complex scenarios through Certainty and Plausibility Metrics}
 
@@ -362,6 +364,7 @@ The dual framework provided by DSExplainer facilitates a more nuanced analysis o
 
 By providing both an additive explanation of feature contributions and a probabilistic assessment of uncertainty, DSExplainer empowers stakeholders to make more informed decisions based on a comprehensive understanding of the model’s behavior.
 \section{Interpretability Example}
+\label{sec:interpretability_example}
 
 To demonstrate the capabilities of textbf{DSExplainer}, we applied it to the well-known Titanic dataset—a classic benchmark for machine learning interpretability. The dataset includes features such as passenger class (\texttt{pclass}), gender (\texttt{sex}), age (\texttt{age}), number of siblings/spouses aboard (\texttt{sibsp}), number of parents/children aboard (\texttt{parch}), ticket number (\texttt{ticket}), fare (\texttt{fare}), cabin (\texttt{cabin}), and port of embarkation (\texttt{embarked}). Using DSExplainer, we generated hypotheses that encompass individual features, pairwise interactions, and triple feature combinations to explore both the contributions and uncertainties in survival predictions. This application showcases the framework's ability to interpret the behavior of a trained model from multiple perspectives.
 
@@ -558,6 +561,7 @@ Analyzing individual instances provides a nuanced perspective on model interpret
 
 Overall, this local instance analysis underscores the advantages of DSExplainer in providing both robust, direct insights (high certainty) and exploratory, indirect evidence (high plausibility), leading to a more comprehensive and actionable understanding of model predictions.
 \subsubsection{Evaluation Summary}
+\label{sec:validation}
 
 To gauge the predictive performance of the underlying models, we generated explanations for random subsets of 10 samples in both datasets. For the Titanic experiment, the RandomForest regressor exhibited a mean absolute error of $0.1016$, which DSExplainer treats as the Dempster--Shafer ``uncertainty'' mass. Within this subset, only 2 of the 10 survival predictions matched the ground truth (20\% accuracy). Conversely, on the Iris dataset, the model error was just $0.0082$ and all 10 predictions were correct, yielding 100\% accuracy. The detailed outputs are provided in the supplementary files \texttt{titanic\_evaluation.txt} and \texttt{iris\_evaluation.txt}.
 We also evaluated DSExplainer on the Breast Cancer dataset, where all sampled tumors were correctly classified with a consistent uncertainty of 2.08%. The corresponding prompts and DS assignments are available in \texttt{cancer_output.txt}.
@@ -629,6 +633,7 @@ Across both datasets, the LLM focused on the same features highlighted by DSExpl
 
 
 \section{Discussion}
+\label{sec:discussion}
 
 By integrating textbf{SHAP values} with textbf{Dempster-Shafer theory}, textbf{DSExplainer} provides a robust framework for understanding both the magnitude and the uncertainty of feature contributions in machine learning models. This integration mitigates the black-box nature of complex models by not only quantifying the individual contributions of features but also by measuring the confidence (certainty) and the potential influence (plausibility) of their interactions. Such an approach builds on prior efforts to make predictive models more interpretable and actionable \cite{lundberg2017unified, zhang2021evidential}.
 
@@ -650,6 +655,7 @@ Moreover, DSExplainer’s flexibility in handling both individual and interactio
 Future research will focus on optimizing DSExplainer for high-dimensional datasets and exploring its integration with other probabilistic methods. In addition, we plan to work with combination rules that enable DSExplainer to aggregate evidence from multiple models simultaneously—treating each model as an expert evaluator. This multi-model approach will broaden interpretability not only for a single model but also for the data directly, offering more comprehensive insights. By bridging the gap between feature importance and uncertainty modeling, DSExplainer contributes to the growing field of interpretable machine learning, paving the way for more transparent, trustworthy, and actionable AI systems.
 
 \section{Conclusion}
+\label{sec:conclusion}
 
 textbf{DSExplainer} enhances the interpretability of machine learning models by combining textbf{SHAP values} with textbf{Dempster-Shafer theory}. This innovative framework provides a comprehensive means to understand both direct contributions and the uncertainty associated with feature interactions, thereby improving trust in model predictions.
 
