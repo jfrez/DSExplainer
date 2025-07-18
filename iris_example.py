@@ -56,13 +56,20 @@ DATASET_DESCRIPTION = dedent(
     """
 )
 
-OBJECTIVE_SHAP = (
-    "briefly conclude which species the sample belongs to based on SHAP features."
-)
 
-OBJECTIVE_DEMPSTER = (
-    "briefly conclude which species the sample belongs to. Only provide the final conclusion based on Certainty and Plausibility."
-)
+OBJECTIVE_SHAP = dedent("""
+    Write a single descriptive paragraph that explains which species the sample belongs to, using the SHAP metrics as the main sources of evidence.
+    Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+    Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+    End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+""")
+OBJECTIVE_DEMPSTER = dedent("""
+    Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+    Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+    Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+    End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+""")
+
 
 TOP_N = 3
 
