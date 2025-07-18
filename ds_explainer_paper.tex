@@ -390,6 +390,13 @@ Furthermore, we leveraged the dataset to illustrate DSExplainer's capacity for p
 
 While the Titanic dataset serves as our primary benchmark, we also evaluated DSExplainer on the classic Iris dataset, which contains sepal and petal measurements for three iris species. After training a RandomForest classifier, DSExplainer was used to compute certainty and plausibility for each sample. The analysis revealed that hypotheses combining petal length and petal width consistently yielded the highest certainty, whereas sepal measurements contributed less. This compact example demonstrates that DSExplainer is equally applicable to simpler classification problems and provides an easily reproducible reference case. The full outputs are included in \texttt{iris\_output.txt}.
 
+\paragraph{Example LLM Outputs}
+\begin{quote}
+``LLM: Row~73 --- With 64.67\% certainty for \texttt{petal length \times petal width} and 99.09\% plausibility for \texttt{sepal width \times petal length \times petal width}, the instance is confidently classified as versicolor.''\\
+``LLM: Row~118 --- A certainty of 70.84\% for \texttt{petal length \times petal width} and plausibility above 99\% for \texttt{sepal length \times petal length \times petal width} strongly support the virginica label.''\\
+``LLM: Row~18 --- Certainty metrics (60.76\% for \texttt{petal length \times petal width}) and 99.17\% plausibility for \texttt{sepal width \times petal length \times petal width} yield a reliable setosa prediction.''\\
+\end{quote}
+
 \subsection{Breast Cancer Dataset Example}
 
 To further demonstrate DSExplainer's versatility, we applied it to the Breast Cancer Wisconsin (Diagnostic) dataset. This medical dataset comprises numerical measurements of cell nuclei, with each instance labeled as malignant or benign. Using DSExplainer with a RandomForest regressor, we generated explanations for 10 random samples, all of which were correctly classified with an overall uncertainty mass of only 2.08\%. An excerpt from the output file \texttt{cancer\_output.txt} is shown below:
@@ -398,6 +405,13 @@ Prediction for row 204: 1.0\\
 Uncertainty value: 2.08\%\\
 Certainty triples: mean concave points\_x\_worst radius\_x\_worst texture: 19.48\%, worst radius\_x\_worst perimeter\_x\_worst smoothness: 10.73\%, mean concave points\_x\_worst texture\_x\_worst perimeter: 8.38\%\\
 Plausibility triples: worst radius\_x\_worst perimeter\_x\_worst concave points: 85.53\%, worst radius\_x\_worst perimeter\_x\_worst area: 85.51\%, worst radius\_x\_worst texture\_x\_worst perimeter: 85.33\%
+\end{quote}
+
+\paragraph{Example LLM Outputs}
+\begin{quote}
+``LLM: Row~204 --- Certainty of 19.48\% for \texttt{mean concave points \times worst radius \times worst texture} and 85.53\% plausibility for \texttt{worst radius \times worst perimeter \times worst concave points} confirm a malignant prediction.''\\
+``LLM: Row~70 --- With certainty 10.55\% for \texttt{mean concave points \times worst radius \times worst texture} and plausibility 78.04\% for \texttt{worst radius \times worst perimeter \times worst concave points}, the model indicates a benign case.''\\
+``LLM: Row~567 --- The features yield 10.58\% certainty for \texttt{mean concave points \times worst radius \times worst texture} but 76.90\% plausibility for \texttt{worst radius \times worst texture \times worst area}, supporting a benign assessment despite low certainty.''\\
 \end{quote}
 
 \subsection{Interpreting the Model}
