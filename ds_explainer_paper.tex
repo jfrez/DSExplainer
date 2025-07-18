@@ -179,6 +179,13 @@ Moreover, the sum of these contributions is equal to the difference between the 
 
 Through this detailed calculation, the reader can appreciate how SHAP values break down a prediction into constituent parts, offering an intuitive understanding of feature importance that forms the basis for further uncertainty quantification in our DSExplainer framework.
 
+\paragraph{Example LLM Outputs}
+\begin{quote}
+``LLM~1 --- The model attributes about \$105,000 of the predicted price to the house's size and roughly \$56,000 to its location. The older age subtracts around \$17,000, yielding a plausible final price near \$500,000.''\\
+``LLM~2 --- High certainty in the size and location features explains most of the value increase from the \$350,000 baseline, while age slightly lowers the estimate. Overall the prediction appears reliable.''\\
+``LLM~3 --- Given the strong positive influence of size and location and only a modest penalty from age, the estimated price of \$500,000 is consistent with market expectations.''\\
+\end{quote}
+
 
 \subsection{Dempster-Shafer Theory}
 
@@ -341,6 +348,13 @@ Consider a model predicting survival on the Titanic dataset. Using DSExplainer, 
 \end{itemize}
 
 For example, suppose that for the hypothesis \( H \): \texttt{sex = female}, the computed certainty is \( C(H) = 0.7 \) and the plausibility is \( P(H) = 0.9 \). This indicates that there is strong direct evidence (70\% belief) in favor of the hypothesis, and when considering additional, non-contradictory evidence, the support could be as high as 90\%. Such a dual metric approach allows decision-makers to appreciate both the explicit contributions of key features and the broader, indirect influences captured within the model.
+
+\paragraph{Example LLM Outputs}
+\begin{quote}
+``LLM: Row~161 --- The passenger's survival is uncertain. Certainty metrics show limited support: the sex\_x\_age triple has 34.37\% certainty and pclass\_x\_sex\_x\_age drops to 24.82\%. Plausibility metrics such as sex\_x\_age\_x\_fare at 87.63\% indicate the passenger's profile is realistic.''\\
+``LLM: Row~148 --- The passenger's survival can be assessed using Certainty and Plausibility metrics. The sex\_x\_age triple yields 28.48\% certainty, while pclass\_x\_sex\_x\_age is only 12.98\%. Plausibility triples including age\_x\_fare\_x\_cabin (86.43\%) indicate the passenger's characteristics are statistically plausible.''\\
+``LLM: Row~178 --- The metrics show sex\_x\_age with 34.32\% certainty and age\_x\_ticket\_x\_fare with 87.52\% plausibility. Although uncertainty is 10.16\%, the high plausibility of these feature combinations suggests survival is plausible even if certainty is modest.''\\
+\end{quote}
 
 \subsection{Key Properties}
 
