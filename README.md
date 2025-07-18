@@ -126,6 +126,7 @@ Several helper scripts demonstrate DSExplainer in practice:
 
 - `feature_comparison.py` prints a side-by-side view of the top SHAP features and the leading DS hypotheses for a subset of Titanic passengers.
 - `ablation_study.py` runs a small ablation comparing raw SHAP, bootstrapped SHAP and the full DSExplainer using the breast cancer dataset. Brier scores are printed for calibration reference.
+- `evaluate_breast_cancer.py` showcases DSExplainer on the breast cancer dataset, printing the generated prompts and classification summaries.
 
 ## Contributing
 
