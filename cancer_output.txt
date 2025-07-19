@@ -13,11 +13,14 @@
 [10 rows x 32 columns]
 Prompt 204:
 
-The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-measurements of cell nuclei derived from digitized images of breast masses.
-Each sample is labeled as malignant or benign.
+The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
 
-Objective: Explain whether the tumor is malignant using the Certainty and Plausibility metrics.
+Objective: 
+Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+Use a technical and concise tone. Do not include bullet points or section titles.
+Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+
 Columns: mean radius=12.47, mean texture=18.6, mean perimeter=81.09, mean area=481.9, mean smoothness=0.09965, mean compactness=0.1058, mean concavity=0.08005, mean concave points=0.03821, mean symmetry=0.1925, mean fractal dimension=0.06373, radius error=0.3961, texture error=1.044, perimeter error=2.497, area error=30.29, smoothness error=0.006953, compactness error=0.01911, concavity error=0.02701, concave points error=0.01037, symmetry error=0.01782, fractal dimension error=0.003586, worst radius=14.97, worst texture=24.64, worst perimeter=96.05, worst area=677.9, worst smoothness=0.1426, worst compactness=0.2378, worst concavity=0.2671, worst concave points=0.1015, worst symmetry=0.3014, worst fractal dimension=0.0875
 Prediction for row 204: 1.0
 Uncertainty value: 2.08%
@@ -26,11 +29,14 @@ Plausibility triples: worst radius_x_worst perimeter_x_worst concave points: 85.
 
 Prompt 70:
 
-The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-measurements of cell nuclei derived from digitized images of breast masses.
-Each sample is labeled as malignant or benign.
+The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
 
-Objective: Explain whether the tumor is malignant using the Certainty and Plausibility metrics.
+Objective: 
+Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+Use a technical and concise tone. Do not include bullet points or section titles.
+Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+
 Columns: mean radius=18.94, mean texture=21.31, mean perimeter=123.6, mean area=1130.0, mean smoothness=0.09009, mean compactness=0.1029, mean concavity=0.108, mean concave points=0.07951, mean symmetry=0.1582, mean fractal dimension=0.05461, radius error=0.7888, texture error=0.7975, perimeter error=5.486, area error=96.05, smoothness error=0.004444, compactness error=0.01652, concavity error=0.02269, concave points error=0.0137, symmetry error=0.01386, fractal dimension error=0.001698, worst radius=24.86, worst texture=26.58, worst perimeter=165.9, worst area=1866.0, worst smoothness=0.1193, worst compactness=0.2336, worst concavity=0.2687, worst concave points=0.1789, worst symmetry=0.2551, worst fractal dimension=0.06589
 Prediction for row 70: 0.0
 Uncertainty value: 2.08%
@@ -39,11 +45,14 @@ Plausibility triples: worst radius_x_worst perimeter_x_worst concave points: 78.
 
 Prompt 131:
 
-The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-measurements of cell nuclei derived from digitized images of breast masses.
-Each sample is labeled as malignant or benign.
+The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
 
-Objective: Explain whether the tumor is malignant using the Certainty and Plausibility metrics.
+Objective: 
+Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+Use a technical and concise tone. Do not include bullet points or section titles.
+Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+
 Columns: mean radius=15.46, mean texture=19.48, mean perimeter=101.7, mean area=748.9, mean smoothness=0.1092, mean compactness=0.1223, mean concavity=0.1466, mean concave points=0.08087, mean symmetry=0.1931, mean fractal dimension=0.05796, radius error=0.4743, texture error=0.7859, perimeter error=3.094, area error=48.31, smoothness error=0.00624, compactness error=0.01484, concavity error=0.02813, concave points error=0.01093, symmetry error=0.01397, fractal dimension error=0.002461, worst radius=19.26, worst texture=26.0, worst perimeter=124.9, worst area=1156.0, worst smoothness=0.1546, worst compactness=0.2394, worst concavity=0.3791, worst concave points=0.1514, worst symmetry=0.2837, worst fractal dimension=0.08019
 Prediction for row 131: 0.0
 Uncertainty value: 2.08%
@@ -52,11 +61,14 @@ Plausibility triples: worst radius_x_worst texture_x_worst perimeter: 86.13%, wo
 
 Prompt 431:
 
-The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-measurements of cell nuclei derived from digitized images of breast masses.
-Each sample is labeled as malignant or benign.
+The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
 
-Objective: Explain whether the tumor is malignant using the Certainty and Plausibility metrics.
+Objective: 
+Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+Use a technical and concise tone. Do not include bullet points or section titles.
+Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+
 Columns: mean radius=12.4, mean texture=17.68, mean perimeter=81.47, mean area=467.8, mean smoothness=0.1054, mean compactness=0.1316, mean concavity=0.07741, mean concave points=0.02799, mean symmetry=0.1811, mean fractal dimension=0.07102, radius error=0.1767, texture error=1.46, perimeter error=2.204, area error=15.43, smoothness error=0.01, compactness error=0.03295, concavity error=0.04861, concave points error=0.01167, symmetry error=0.02187, fractal dimension error=0.006005, worst radius=12.88, worst texture=22.91, worst perimeter=89.61, worst area=515.8, worst smoothness=0.145, worst compactness=0.2629, worst concavity=0.2403, worst concave points=0.0737, worst symmetry=0.2556, worst fractal dimension=0.09359
 Prediction for row 431: 1.0
 Uncertainty value: 2.08%
@@ -65,11 +77,14 @@ Plausibility triples: worst radius_x_worst perimeter_x_worst area: 84.29%, worst
 
 Prompt 540:
 
-The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-measurements of cell nuclei derived from digitized images of breast masses.
-Each sample is labeled as malignant or benign.
+The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
 
-Objective: Explain whether the tumor is malignant using the Certainty and Plausibility metrics.
+Objective: 
+Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+Use a technical and concise tone. Do not include bullet points or section titles.
+Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+
 Columns: mean radius=11.54, mean texture=14.44, mean perimeter=74.65, mean area=402.9, mean smoothness=0.09984, mean compactness=0.112, mean concavity=0.06737, mean concave points=0.02594, mean symmetry=0.1818, mean fractal dimension=0.06782, radius error=0.2784, texture error=1.768, perimeter error=1.628, area error=20.86, smoothness error=0.01215, compactness error=0.04112, concavity error=0.05553, concave points error=0.01494, symmetry error=0.0184, fractal dimension error=0.005512, worst radius=12.26, worst texture=19.68, worst perimeter=78.78, worst area=457.8, worst smoothness=0.1345, worst compactness=0.2118, worst concavity=0.1797, worst concave points=0.06918, worst symmetry=0.2329, worst fractal dimension=0.08134
 Prediction for row 540: 1.0
 Uncertainty value: 2.08%
@@ -78,11 +93,14 @@ Plausibility triples: worst radius_x_worst perimeter_x_worst area: 79.86%, worst
 
 Prompt 567:
 
-The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-measurements of cell nuclei derived from digitized images of breast masses.
-Each sample is labeled as malignant or benign.
+The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
 
-Objective: Explain whether the tumor is malignant using the Certainty and Plausibility metrics.
+Objective: 
+Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+Use a technical and concise tone. Do not include bullet points or section titles.
+Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+
 Columns: mean radius=20.6, mean texture=29.33, mean perimeter=140.1, mean area=1265.0, mean smoothness=0.1178, mean compactness=0.277, mean concavity=0.3514, mean concave points=0.152, mean symmetry=0.2397, mean fractal dimension=0.07016, radius error=0.726, texture error=1.595, perimeter error=5.772, area error=86.22, smoothness error=0.006522, compactness error=0.06158, concavity error=0.07117, concave points error=0.01664, symmetry error=0.02324, fractal dimension error=0.006185, worst radius=25.74, worst texture=39.42, worst perimeter=184.6, worst area=1821.0, worst smoothness=0.165, worst compactness=0.8681, worst concavity=0.9387, worst concave points=0.265, worst symmetry=0.4087, worst fractal dimension=0.124
 Prediction for row 567: 0.0
 Uncertainty value: 2.08%
@@ -91,11 +109,14 @@ Plausibility triples: worst radius_x_worst texture_x_worst area: 76.90%, worst r
 
 Prompt 369:
 
-The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-measurements of cell nuclei derived from digitized images of breast masses.
-Each sample is labeled as malignant or benign.
+The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
 
-Objective: Explain whether the tumor is malignant using the Certainty and Plausibility metrics.
+Objective: 
+Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+Use a technical and concise tone. Do not include bullet points or section titles.
+Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+
 Columns: mean radius=22.01, mean texture=21.9, mean perimeter=147.2, mean area=1482.0, mean smoothness=0.1063, mean compactness=0.1954, mean concavity=0.2448, mean concave points=0.1501, mean symmetry=0.1824, mean fractal dimension=0.0614, radius error=1.008, texture error=0.6999, perimeter error=7.561, area error=130.2, smoothness error=0.003978, compactness error=0.02821, concavity error=0.03576, concave points error=0.01471, symmetry error=0.01518, fractal dimension error=0.003796, worst radius=27.66, worst texture=25.8, worst perimeter=195.0, worst area=2227.0, worst smoothness=0.1294, worst compactness=0.3885, worst concavity=0.4756, worst concave points=0.2432, worst symmetry=0.2741, worst fractal dimension=0.08574
 Prediction for row 369: 0.0
 Uncertainty value: 2.08%
@@ -104,11 +125,14 @@ Plausibility triples: worst radius_x_worst texture_x_worst area: 77.07%, worst r
 
 Prompt 29:
 
-The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-measurements of cell nuclei derived from digitized images of breast masses.
-Each sample is labeled as malignant or benign.
+The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
 
-Objective: Explain whether the tumor is malignant using the Certainty and Plausibility metrics.
+Objective: 
+Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+Use a technical and concise tone. Do not include bullet points or section titles.
+Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+
 Columns: mean radius=17.57, mean texture=15.05, mean perimeter=115.0, mean area=955.1, mean smoothness=0.09847, mean compactness=0.1157, mean concavity=0.09875, mean concave points=0.07953, mean symmetry=0.1739, mean fractal dimension=0.06149, radius error=0.6003, texture error=0.8225, perimeter error=4.655, area error=61.1, smoothness error=0.005627, compactness error=0.03033, concavity error=0.03407, concave points error=0.01354, symmetry error=0.01925, fractal dimension error=0.003742, worst radius=20.01, worst texture=19.52, worst perimeter=134.9, worst area=1227.0, worst smoothness=0.1255, worst compactness=0.2812, worst concavity=0.2489, worst concave points=0.1456, worst symmetry=0.2756, worst fractal dimension=0.07919
 Prediction for row 29: 0.06
 Uncertainty value: 2.08%
@@ -117,11 +141,14 @@ Plausibility triples: area error_x_worst radius_x_worst perimeter: 82.17%, worst
 
 Prompt 81:
 
-The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-measurements of cell nuclei derived from digitized images of breast masses.
-Each sample is labeled as malignant or benign.
+The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
 
-Objective: Explain whether the tumor is malignant using the Certainty and Plausibility metrics.
+Objective: 
+Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+Use a technical and concise tone. Do not include bullet points or section titles.
+Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+
 Columns: mean radius=13.34, mean texture=15.86, mean perimeter=86.49, mean area=520.0, mean smoothness=0.1078, mean compactness=0.1535, mean concavity=0.1169, mean concave points=0.06987, mean symmetry=0.1942, mean fractal dimension=0.06902, radius error=0.286, texture error=1.016, perimeter error=1.535, area error=12.96, smoothness error=0.006794, compactness error=0.03575, concavity error=0.0398, concave points error=0.01383, symmetry error=0.02134, fractal dimension error=0.004603, worst radius=15.53, worst texture=23.19, worst perimeter=96.66, worst area=614.9, worst smoothness=0.1536, worst compactness=0.4791, worst concavity=0.4858, worst concave points=0.1708, worst symmetry=0.3527, worst fractal dimension=0.1016
 Prediction for row 81: 0.72
 Uncertainty value: 2.08%
@@ -130,11 +157,14 @@ Plausibility triples: worst radius_x_worst perimeter_x_worst area: 81.74%, worst
 
 Prompt 477:
 
-The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-measurements of cell nuclei derived from digitized images of breast masses.
-Each sample is labeled as malignant or benign.
+The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
 
-Objective: Explain whether the tumor is malignant using the Certainty and Plausibility metrics.
+Objective: 
+Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+Use a technical and concise tone. Do not include bullet points or section titles.
+Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+
 Columns: mean radius=13.9, mean texture=16.62, mean perimeter=88.97, mean area=599.4, mean smoothness=0.06828, mean compactness=0.05319, mean concavity=0.02224, mean concave points=0.01339, mean symmetry=0.1813, mean fractal dimension=0.05536, radius error=0.1555, texture error=0.5762, perimeter error=1.392, area error=14.03, smoothness error=0.003308, compactness error=0.01315, concavity error=0.009904, concave points error=0.004832, symmetry error=0.01316, fractal dimension error=0.002095, worst radius=15.14, worst texture=21.8, worst perimeter=101.2, worst area=718.9, worst smoothness=0.09384, worst compactness=0.2006, worst concavity=0.1384, worst concave points=0.06222, worst symmetry=0.2679, worst fractal dimension=0.07698
 Prediction for row 477: 1.0
 Uncertainty value: 2.08%
