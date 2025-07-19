@@ -33,17 +33,24 @@ orig_subset = original_features.loc[subset.index]
 
 DATASET_DESCRIPTION = dedent(
     """
-    The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical
-    measurements of cell nuclei derived from digitized images of breast masses.
-    Each sample is labeled as malignant or benign.
+    The Breast Cancer Wisconsin (Diagnostic) dataset contains numerical measurements of cell nuclei obtained from digitized images of breast tissue biopsies. Each observation corresponds to a tumor and includes features such as radius, texture, perimeter, area, smoothness, and concavity, among others. Each sample is labeled as either malignant or benign.
     """
 )
-OBJECTIVE_SHAP = (
-    "briefly conclude whether the tumor is malignant or benign based on SHAP values."
-)
-OBJECTIVE_DEMPSTER = (
-    "Explain whether the tumor is malignant using the Certainty and Plausibility metrics."
-)
+
+OBJECTIVE_SHAP = dedent("""
+    Write a single descriptive paragraph that explains whether the tumor is malignant or benign, using SHAP feature importances as the main source of evidence.
+    Emphasize the most relevant features contributing to the prediction (e.g., worst radius, mean concave points), and refer to input values where appropriate.
+    Maintain a technical tone, avoid bullet points or headings, and keep the explanation concise.
+    Conclude with a clear classification (e.g., 'The tumor is classified as malignant.').
+""")
+
+OBJECTIVE_DEMPSTER = dedent("""
+    Write a single descriptive paragraph that explains whether the tumor is malignant or benign, based on the Certainty and Plausibility metrics.
+    Focus on the most influential feature combinations with high certainty or plausibility scores, and refer to specific input values when relevant.
+    Use a technical and concise tone. Do not include bullet points or section titles.
+    Conclude with a clear statement on the tumor’s classification (e.g., 'The tumor is predicted to be benign.').
+""")
+
 
 (
     shap_prompts,
