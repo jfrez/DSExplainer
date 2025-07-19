@@ -1,0 +1,96 @@
+\paragraph{Example LLM Outputs – Breast Cancer Dataset}
+
+\begin{adjustwidth}{0.5cm}{0.5cm}
+
+\textbf{Row 131}
+\vspace{0.3em}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Prediction} & 0.0 (Benign) \\
+\textbf{Uncertainty} & 2.08\% \\
+\textbf{Certainty} & \texttt{mean concave points\_x\_worst radius\_x\_worst texture} (12.36\%),\\
+& \texttt{worst radius\_x\_worst perimeter\_x\_worst smoothness} (10.82\%),\\
+& \texttt{worst radius\_x\_worst texture\_x\_worst concave points} (6.28\%) \\
+\textbf{Plausibility} & \texttt{worst radius\_x\_worst texture\_x\_worst perimeter} (86.13\%),\\
+& \texttt{worst radius\_x\_worst texture\_x\_worst area} (85.48\%),\\
+& \texttt{worst radius\_x\_worst perimeter\_x\_worst concave points} (84.24\%) \\
+\bottomrule
+\end{tabularx}
+
+\vspace{1.2em}
+\textbf{Row 204}
+\vspace{0.3em}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Prediction} & 1.0 (Malignant) \\
+\textbf{Uncertainty} & 2.08\% \\
+\textbf{Columns} & \begin{tabular}[t]{@{}l@{}}
+mean radius=12.47, mean texture=18.6, mean perimeter=81.09,\\ mean area=481.9, mean concave points=0.03821,\\ worst radius=14.97, worst texture=24.64, worst perimeter=96.05,\\ worst area=677.9, worst smoothness=0.1426
+\end{tabular} \\
+\textbf{Certainty} & \texttt{mean concave points\_x\_worst radius\_x\_worst texture} (19.48\%),\\
+& \texttt{worst radius\_x\_worst perimeter\_x\_worst smoothness} (10.73\%),\\
+& \texttt{mean concave points\_x\_worst texture\_x\_worst perimeter} (8.38\%) \\
+\textbf{Plausibility} & \texttt{worst radius\_x\_worst perimeter\_x\_worst concave points} (85.53\%),\\
+& \texttt{worst radius\_x\_worst perimeter\_x\_worst area} (85.51\%),\\
+& \texttt{worst radius\_x\_worst texture\_x\_worst perimeter} (85.33\%) \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:}
+
+The tumor is predicted to be malignant. High certainty and plausibility scores indicate strong support for malignancy, with influential features including the combination of \texttt{mean concave points}, \texttt{worst radius}, \texttt{texture}, and \texttt{perimeter}. The triple plausibility involving \texttt{worst radius}, \texttt{perimeter}, and \texttt{area} (85.51\%) reflects increased tumor aggressiveness. The low uncertainty (2.08\%) confirms the classification. The tumor is predicted to be malignant.
+
+\vspace{1.2em}
+\textbf{Row 431}
+\vspace{0.3em}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Prediction} & 1.0 (Malignant) \\
+\textbf{Uncertainty} & 2.08\% \\
+\textbf{Columns} & \begin{tabular}[t]{@{}l@{}}
+mean radius=12.4, mean texture=17.68, mean perimeter=81.47,\\ mean area=467.8, mean concave points=0.02799,\\ worst radius=12.88, worst texture=22.91, worst perimeter=89.61,\\ worst area=515.8
+\end{tabular} \\
+\textbf{Certainty} & \texttt{mean concave points\_x\_worst radius\_x\_worst texture} (14.51\%),\\
+& \texttt{worst radius\_x\_worst perimeter\_x\_worst smoothness} (9.08\%),\\
+& \texttt{mean concave points\_x\_worst texture\_x\_worst perimeter} (7.15\%) \\
+\textbf{Plausibility} & \texttt{worst radius\_x\_worst perimeter\_x\_worst area} (84.29\%),\\
+& \texttt{worst radius\_x\_worst texture\_x\_worst area} (81.71\%),\\
+& \texttt{worst radius\_x\_worst texture\_x\_worst perimeter} (81.05\%) \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:}
+
+The tumor is predicted to be malignant. High plausibility (84.29\%) is associated with \texttt{worst radius}, \texttt{worst perimeter}, and \texttt{worst area}, which are elevated compared to their mean counterparts. While certainty scores are moderate, the model's confidence in these worst-case values supports a malignant classification. The low uncertainty further reinforces this result.
+
+\vspace{1.2em}
+\textbf{Row 369}
+\vspace{0.3em}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Prediction} & 0.0 (Benign) \\
+\textbf{Uncertainty} & 2.08\% \\
+\textbf{Columns} & \begin{tabular}[t]{@{}l@{}}
+mean radius=22.01, mean texture=21.9, mean perimeter=147.2,\\ mean area=1482.0, mean concave points=0.1501,\\ worst radius=27.66, worst texture=25.8, worst perimeter=195.0,\\ worst area=2227.0
+\end{tabular} \\
+\textbf{Certainty} & \texttt{mean concave points\_x\_worst radius\_x\_worst texture} (10.46\%),\\
+& \texttt{worst radius\_x\_worst perimeter\_x\_worst smoothness} (9.60\%),\\
+& \texttt{mean concave points\_x\_worst texture\_x\_worst perimeter} (5.00\%) \\
+\textbf{Plausibility} & \texttt{worst radius\_x\_worst texture\_x\_worst area} (77.07\%),\\
+& \texttt{worst radius\_x\_worst perimeter\_x\_worst concave points} (75.63\%),\\
+& \texttt{worst radius\_x\_worst texture\_x\_worst perimeter} (75.28\%) \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:}
+
+The tumor is predicted to be benign. The high plausibility (77.07\%) of the feature combination \texttt{worst radius}, \texttt{worst texture}, and \texttt{worst area} suggests strong alignment with benign patterns. Despite high absolute values, the interactions match known benign distributions. Low certainty in the model is offset by low uncertainty (2.08\%) and high plausibility, confirming the benign prediction.
+
+\end{adjustwidth}

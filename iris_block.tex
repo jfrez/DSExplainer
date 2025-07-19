@@ -1,0 +1,79 @@
+\paragraph{Example LLM Outputs – Iris Dataset}
+
+\begin{adjustwidth}{0.5cm}{0.5cm}
+
+\textbf{Row 73}
+\vspace{0.3em}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Prediction} & 1.0 (versicolor) \\
+\textbf{Uncertainty} & 0.82\% \\
+\textbf{Columns} & \begin{tabular}[t]{@{}l@{}}
+sepal length=6.1, sepal width=2.8, petal length=4.7,\\ petal width=1.2
+\end{tabular} \\
+\textbf{Certainty} & \texttt{petal length\_x\_petal width} (64.67\%),\\
+& \texttt{sepal length\_x\_petal length} (23.38\%),\\
+& \texttt{sepal length\_x\_petal length\_x\_petal width} (21.28\%) \\
+\textbf{Plausibility} & \texttt{sepal width\_x\_petal length\_x\_petal width} (99.09\%),\\
+& \texttt{sepal length\_x\_petal length\_x\_petal width} (98.92\%),\\
+& \texttt{petal length\_x\_petal width} (98.81\%) \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:}
+
+The sample exhibits high plausibility in the combination of sepal width (2.8 cm), petal length (4.7 cm), and petal width (1.2 cm), with a 99.09\% score, strongly aligning with the \textit{versicolor} species. Certainty metrics further support this classification, as the petal length and petal width combination (64.67\%) and the triple feature interaction (21.28\%) are consistent with \textit{versicolor}'s typical measurements. The low uncertainty (0.82\%) and high prediction confidence (1.0) reinforce this conclusion.
+
+\vspace{1em}
+\textbf{Row 78}
+\vspace{0.3em}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Prediction} & 1.0 (versicolor) \\
+\textbf{Uncertainty} & 0.82\% \\
+\textbf{Columns} & \begin{tabular}[t]{@{}l@{}}
+sepal length=6.0, sepal width=2.9, petal length=4.5,\\ petal width=1.5
+\end{tabular} \\
+\textbf{Certainty} & \texttt{petal length\_x\_petal width} (65.10\%),\\
+& \texttt{sepal length\_x\_petal length} (23.61\%),\\
+& \texttt{sepal length\_x\_petal length\_x\_petal width} (21.74\%) \\
+\textbf{Plausibility} & \texttt{sepal width\_x\_petal length\_x\_petal width} (99.08\%),\\
+& \texttt{sepal length\_x\_petal length\_x\_petal width} (98.78\%),\\
+& \texttt{petal length\_x\_petal width} (98.67\%) \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:}
+
+The sample exhibits high plausibility in the combination of sepal width (2.9 cm), petal length (4.5 cm), and petal width (1.5 cm), with a triple plausibility of 99.08\%, strongly aligning with the \textit{versicolor} species. The petal dimensions reinforce this classification. Despite slightly higher sepal measurements, the certainty and plausibility scores support the model's confident prediction. The sample is classified as \textit{versicolor}.
+
+\vspace{1em}
+\textbf{Row 68}
+\vspace{0.3em}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Prediction} & 1.0 (versicolor) \\
+\textbf{Uncertainty} & 0.82\% \\
+\textbf{Columns} & \begin{tabular}[t]{@{}l@{}}
+sepal length=6.2, sepal width=2.2, petal length=4.5,\\ petal width=1.5
+\end{tabular} \\
+\textbf{Certainty} & \texttt{petal length\_x\_petal width} (63.76\%),\\
+& \texttt{sepal length\_x\_petal length} (22.71\%),\\
+& \texttt{sepal length\_x\_petal length\_x\_petal width} (21.13\%) \\
+\textbf{Plausibility} & \texttt{sepal width\_x\_petal length\_x\_petal width} (99.09\%),\\
+& \texttt{sepal length\_x\_petal length\_x\_petal width} (97.73\%),\\
+& \texttt{petal length\_x\_petal width} (97.52\%) \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:}
+
+This sample shows high plausibility for the combination of sepal width (2.2 cm), petal length (4.5 cm), and petal width (1.5 cm), scoring 99.09\%. The strong certainty for petal dimensions and the triple interaction suggests the profile matches the \textit{versicolor} species. The prediction value (1.0) and low uncertainty (0.82\%) confirm this classification. The sample is classified as \textit{versicolor}.
+
+\end{adjustwidth}
