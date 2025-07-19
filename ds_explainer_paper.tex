@@ -11,6 +11,8 @@
 \usepackage{changepage} % en el preámbulo
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{tabularx}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
 \usepackage{changepage}
 \usepackage{enumitem}  % para ajustar márgenes de itemize si lo deseas
 
@@ -134,7 +136,7 @@ Table~\ref{tab:shapley_calculation} below illustrates a simplified computation o
     \caption{Marginal Contributions of Features in a House Price Prediction Example}
     \label{tab:shapley_calculation}
     \centering
-    \begin{tabular}{|c|c|c|c|c|}
+    \begin{tabularx}{\textwidth}{|c|c|Y|Y|Y|}
         \hline
         \textbf{Feature} & \textbf{Coalition} & \textbf{Prediction w/o Feature (\$)} & \textbf{Prediction w/ Feature (\$)} & \textbf{Marginal Contribution (\$)} \\
         \hline
@@ -150,7 +152,7 @@ Table~\ref{tab:shapley_calculation} below illustrates a simplified computation o
         \texttt{age}      & \texttt{size}    & 460,000 & 442,000 & -18,000 \\
         \texttt{age}      & \texttt{location}& 410,000 & 392,000 & -18,000 \\
         \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 For each coalition, the marginal contribution is defined as the difference between the prediction with the feature and without it. The final SHAP value for each feature is computed as the average of its marginal contributions over all coalitions. For example, the SHAP value for \texttt{size} is computed as:
@@ -213,7 +215,7 @@ Table~\ref{tab:bpa_example} summarizes these assignments.
     \caption{Basic Probability Assignment (BPA) Example for House Price Prediction}
     \label{tab:bpa_example}
     \centering
-    \begin{tabular}{|c|c|}
+    \begin{tabularx}{\textwidth}{|Y|Y|}
         \hline
         \textbf{Hypothesis} & \textbf{BPA \( m(H) \)} \\
         \hline
@@ -225,7 +227,7 @@ Table~\ref{tab:bpa_example} summarizes these assignments.
         \hline
         Residual (\( \emptyset \)) & 0.05 \\
         \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \subsubsection{Combining Evidence Using Dempster's Rule}
@@ -250,7 +252,7 @@ Since these values sum to 1, they reflect a complete belief distribution. Table~
     \caption{Combined Belief Using Dempster's Rule for House Price Prediction}
     \label{tab:combined_belief}
     \centering
-    \begin{tabular}{|c|c|}
+    \begin{tabularx}{\textwidth}{|Y|Y|}
         \hline
         \textbf{Hypothesis} & \textbf{Combined Belief \( m(H) \)} \\
         \hline
@@ -260,7 +262,7 @@ Since these values sum to 1, they reflect a complete belief distribution. Table~
         \hline
         \texttt{size} \(\cap\) \texttt{location} & 0.12 \\
         \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \subsubsection{Certainty and Plausibility}
@@ -390,7 +392,7 @@ Furthermore, we leveraged the dataset to illustrate DSExplainer's capacity for p
 \textbf{Row 36}
 \vspace{0.3em}
 
-\begin{tabular}{@{}l l@{}}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Prediction} & 1.0 (Survived) \\
 \textbf{Uncertainty} & 10.16\% \\
@@ -401,7 +403,7 @@ ticket=113505, fare=55.0, cabin=E33, embarked=S
 \textbf{Certainty} & \texttt{sex\_x\_age} (37.21\%), \texttt{pclass\_x\_sex\_x\_age} (19.98\%), \texttt{sex\_x\_age\_x\_fare} (9.22\%) \\
 \textbf{Plausibility} & \texttt{sex\_x\_age\_x\_fare} (87.26\%), \texttt{age\_x\_fare\_x\_cabin} (87.25\%), \texttt{age\_x\_ticket\_x\_fare} (87.14\%) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 
 \vspace{0.5em}
 \noindent\textbf{LLM Response:}
@@ -412,7 +414,7 @@ The model suggests that the passenger survived, with high plausibility attribute
 \textbf{Row 148}
 \vspace{0.3em}
 
-\begin{tabular}{@{}l l@{}}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Prediction} & 0.16 (Did not survive) \\
 \textbf{Uncertainty} & 10.16\% \\
@@ -423,7 +425,7 @@ ticket=36973, fare=83.475, cabin=C83, embarked=S
 \textbf{Certainty} & \texttt{sex\_x\_age} (28.48\%), \texttt{pclass\_x\_sex\_x\_age} (12.98\%), \texttt{sex\_x\_age\_x\_fare} (6.50\%) \\
 \textbf{Plausibility} & \texttt{age\_x\_fare\_x\_cabin} (86.43\%), \texttt{age\_x\_ticket\_x\_fare} (85.52\%), \texttt{sex\_x\_age\_x\_fare} (84.21\%) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 
 \vspace{0.5em}
 \noindent\textbf{LLM Response:}
@@ -434,7 +436,7 @@ The passenger's survival probability is low, as indicated by the model's predict
 \textbf{Row 161}
 \vspace{0.3em}
 
-\begin{tabular}{@{}l l@{}}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Prediction} & 1.0 (Survived) \\
 \textbf{Uncertainty} & 10.16\% \\
@@ -445,7 +447,7 @@ ticket=13502, fare=77.9583, cabin=D11, embarked=S
 \textbf{Certainty} & \texttt{sex\_x\_age} (34.37\%), \texttt{pclass\_x\_sex\_x\_age} (24.82\%), \texttt{sex\_x\_age\_x\_fare} (9.74\%) \\
 \textbf{Plausibility} & \texttt{sex\_x\_age\_x\_fare} (87.63\%), \texttt{age\_x\_ticket\_x\_fare} (87.60\%), \texttt{age\_x\_sibsp\_x\_fare} (87.58\%) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 
 \vspace{0.5em}
 \noindent\textbf{LLM Response:}
@@ -465,7 +467,7 @@ While the Titanic dataset serves as our primary benchmark, we also evaluated DSE
 \textbf{Row 73}
 \vspace{0.3em}
 
-\begin{tabular}{@{}l l@{}}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Prediction} & 1.0 (versicolor) \\
 \textbf{Uncertainty} & 0.82\% \\
@@ -479,7 +481,7 @@ sepal length=6.1, sepal width=2.8, petal length=4.7,\\ petal width=1.2
 & \texttt{sepal length\_x\_petal length\_x\_petal width} (98.92\%),\\
 & \texttt{petal length\_x\_petal width} (98.81\%) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 
 \vspace{0.5em}
 \noindent\textbf{LLM Response:}
@@ -490,7 +492,7 @@ The sample exhibits high plausibility in the combination of sepal width (2.8 cm)
 \textbf{Row 78}
 \vspace{0.3em}
 
-\begin{tabular}{@{}l l@{}}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Prediction} & 1.0 (versicolor) \\
 \textbf{Uncertainty} & 0.82\% \\
@@ -504,7 +506,7 @@ sepal length=6.0, sepal width=2.9, petal length=4.5,\\ petal width=1.5
 & \texttt{sepal length\_x\_petal length\_x\_petal width} (98.78\%),\\
 & \texttt{petal length\_x\_petal width} (98.67\%) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 
 \vspace{0.5em}
 \noindent\textbf{LLM Response:}
@@ -515,7 +517,7 @@ The sample exhibits high plausibility in the combination of sepal width (2.9 cm)
 \textbf{Row 68}
 \vspace{0.3em}
 
-\begin{tabular}{@{}l l@{}}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Prediction} & 1.0 (versicolor) \\
 \textbf{Uncertainty} & 0.82\% \\
@@ -529,7 +531,7 @@ sepal length=6.2, sepal width=2.2, petal length=4.5,\\ petal width=1.5
 & \texttt{sepal length\_x\_petal length\_x\_petal width} (97.73\%),\\
 & \texttt{petal length\_x\_petal width} (97.52\%) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 
 \vspace{0.5em}
 \noindent\textbf{LLM Response:}
@@ -549,7 +551,7 @@ To further demonstrate DSExplainer's versatility, we applied it to the Breast Ca
 \textbf{Row 131}
 \vspace{0.3em}
 
-\begin{tabular}{@{}l l@{}}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Prediction} & 0.0 (Benign) \\
 \textbf{Uncertainty} & 2.08\% \\
@@ -560,13 +562,13 @@ To further demonstrate DSExplainer's versatility, we applied it to the Breast Ca
 & \texttt{worst radius\_x\_worst texture\_x\_worst area} (85.48\%),\\
 & \texttt{worst radius\_x\_worst perimeter\_x\_worst concave points} (84.24\%) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 
 \vspace{1.2em}
 \textbf{Row 204}
 \vspace{0.3em}
 
-\begin{tabular}{@{}l l@{}}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Prediction} & 1.0 (Malignant) \\
 \textbf{Uncertainty} & 2.08\% \\
@@ -580,7 +582,7 @@ mean radius=12.47, mean texture=18.6, mean perimeter=81.09,\\ mean area=481.9, m
 & \texttt{worst radius\_x\_worst perimeter\_x\_worst area} (85.51\%),\\
 & \texttt{worst radius\_x\_worst texture\_x\_worst perimeter} (85.33\%) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 
 \vspace{0.5em}
 \noindent\textbf{LLM Response:}
@@ -591,7 +593,7 @@ The tumor is predicted to be malignant. High certainty and plausibility scores i
 \textbf{Row 431}
 \vspace{0.3em}
 
-\begin{tabular}{@{}l l@{}}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Prediction} & 1.0 (Malignant) \\
 \textbf{Uncertainty} & 2.08\% \\
@@ -605,7 +607,7 @@ mean radius=12.4, mean texture=17.68, mean perimeter=81.47,\\ mean area=467.8, m
 & \texttt{worst radius\_x\_worst texture\_x\_worst area} (81.71\%),\\
 & \texttt{worst radius\_x\_worst texture\_x\_worst perimeter} (81.05\%) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 
 \vspace{0.5em}
 \noindent\textbf{LLM Response:}
@@ -616,7 +618,7 @@ The tumor is predicted to be malignant. High plausibility (84.29\%) is associate
 \textbf{Row 369}
 \vspace{0.3em}
 
-\begin{tabular}{@{}l l@{}}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Prediction} & 0.0 (Benign) \\
 \textbf{Uncertainty} & 2.08\% \\
@@ -630,7 +632,7 @@ mean radius=22.01, mean texture=21.9, mean perimeter=147.2,\\ mean area=1482.0, 
 & \texttt{worst radius\_x\_worst perimeter\_x\_worst concave points} (75.63\%),\\
 & \texttt{worst radius\_x\_worst texture\_x\_worst perimeter} (75.28\%) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 
 \vspace{0.5em}
 \noindent\textbf{LLM Response:}
@@ -653,7 +655,7 @@ The following tables summarize the most influential hypotheses based on the \tex
     \caption{Top Hypotheses by Certainty}
     \label{tab:top_certainty}
     \centering
-    \begin{tabular}{|l|c|}
+    \begin{tabularx}{\textwidth}{|Y|Y|}
         \hline
         \textbf{Hypothesis} & \textbf{Certainty Value} \\
         \hline
@@ -662,14 +664,14 @@ The following tables summarize the most influential hypotheses based on the \tex
         \texttt{cabin} & 0.213 \\
         \texttt{sex\_x\_age\_x\_cabin} & 0.167 \\
         \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[H]
     \caption{Top Hypotheses by Plausibility}
     \label{tab:top_plausibility}
     \centering
-    \begin{tabular}{|l|c|}
+    \begin{tabularx}{\textwidth}{|Y|Y|}
         \hline
         \textbf{Hypothesis} & \textbf{Plausibility Value} \\
         \hline
@@ -679,7 +681,7 @@ The following tables summarize the most influential hypotheses based on the \tex
         \texttt{age\_x\_sibsp\_x\_cabin} & 0.922 \\
         \texttt{age\_x\_ticket\_x\_cabin} & 0.920 \\
         \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \subsubsection{Analysis of Results}
@@ -716,7 +718,7 @@ While previous sections explored global patterns and highlighted top hypotheses 
     \caption{Selected Passenger Instances with Survival Outcome}
     \label{tab:instance_data_survival}
     \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+    \begin{tabularx}{\textwidth}{|*{11}{Y|}}
         \hline
         \textbf{Idx} & \textbf{pclass} & \textbf{sex} & \textbf{age} & \textbf{sibsp} & \textbf{parch} & \textbf{ticket} & \textbf{fare} & \textbf{cabin} & \textbf{embarked} & \textbf{survived}\\
         \hline
@@ -725,7 +727,7 @@ While previous sections explored global patterns and highlighted top hypotheses 
         161 & 0.0 & 0 & 0.6333 & 0.3333 & 0.00 & 59  & 0.1522 & 111 & 2 & 1 \\
         265 & 0.0 & 1 & 0.3425 & 0.0    & 0.00 & 38  & 0.0693 & 14  & 2 & 1 \\
         \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \subsubsection{Local Instance Analysis}
@@ -831,7 +833,7 @@ To examine how DSExplainer aggregates evidence, we contrasted the three highest-
     \caption{Example comparison between SHAP and DSExplainer rankings.}
     \label{tab:shap_vs_ds}
     \centering
-    \begin{tabular}{|l|l|}
+    \begin{tabularx}{\textwidth}{|Y|Y|}
         \hline
         Top SHAP features & Top DS hypotheses \\
         \hline
@@ -839,7 +841,7 @@ To examine how DSExplainer aggregates evidence, we contrasted the three highest-
         age  & fare\_x\_cabin \\
         fare & sex\_x\_fare \\
         \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 To further validate the approach, we conducted an ablation study comparing three settings: \textbf{(i) raw SHAP values only}, \textbf{(ii) SHAP values with bootstrapped noise} to estimate quantile bands, and \textbf{(iii) our full DSExplainer}. The bootstrapped variant computes 5th and 95th percentile intervals, while calibration was assessed with the Brier score. DSExplainer achieved the lowest Brier error, indicating better calibrated predictions alongside richer uncertainty information.
