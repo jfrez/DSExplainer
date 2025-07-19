@@ -94,7 +94,7 @@ The primary contributions of this work are as follows:
 \end{itemize}
 
 \subsection{Paper Organization}
-The remainder of this paper is organized as follows. In Section~\ref{sec:background}, we review the foundational concepts of SHAP and Dempster-Shafer theory, outlining their theoretical underpinnings and common applications. Section~\ref{sec:combining} presents the mathematical integration of these methods within the DSExplainer framework, detailing how SHAP values are transformed into basic probability assignments and aggregated to yield comprehensive uncertainty measures. In Section~\ref{sec:interpretability_example}, we provide extensive empirical results from experiments conducted on the Titanic dataset, offering both global and local interpretability analyses with a focus on uncertainty visualization. Section~\ref{sec:validation} discusses the validation methods employed to confirm that the computed metrics align with real-world uncertainty. Finally, Section~\ref{sec:discussion} presents a discussion of the implications, limitations, and potential future directions of our work, and Section~\ref{sec:conclusion} concludes the paper with a summary of the main contributions and insights.
+The remainder of this paper is organized as follows. In Section~\ref{sec:background}, we review the foundational concepts of SHAP and Dempster-Shafer theory, outlining their theoretical underpinnings and common applications. Section~\ref{sec:combining} presents the mathematical integration of these methods within the DSExplainer framework, detailing how SHAP values are transformed into basic probability assignments and aggregated to yield comprehensive uncertainty measures. Section~\ref{sec:results} reports the main empirical findings, including an interpretability case study based on the Titanic dataset. Section~\ref{sec:validation} discusses the validation methods employed to confirm that the computed metrics align with real-world uncertainty. Finally, Section~\ref{sec:discussion} outlines the implications and limitations of our work, and Section~\ref{sec:conclusion} concludes with a summary of the main contributions and insights.
 
 By bridging the gap between deterministic feature importance and uncertainty quantification, DSExplainer represents a significant step forward in the field of explainable artificial intelligence (XAI). This framework not only improves the transparency of model predictions but also enhances the credibility and robustness of decisions made based on machine learning outputs. The remainder of the paper elaborates on these ideas and demonstrates the practical utility of DSExplainer in detail.
 
@@ -374,7 +374,11 @@ The dual framework provided by DSExplainer facilitates a more nuanced analysis o
 \end{itemize}
 
 By providing both an additive explanation of feature contributions and a probabilistic assessment of uncertainty, DSExplainer empowers stakeholders to make more informed decisions based on a comprehensive understanding of the model’s behavior.
-\section{Interpretability Example}
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Interpretability Example}
 \label{sec:interpretability_example}
 
 To demonstrate the capabilities of \textbf{DSExplainer}, we applied it to the well-known Titanic dataset—a classic benchmark for machine learning interpretability. The dataset includes features such as passenger class (\texttt{pclass}), gender (\texttt{sex}), age (\texttt{age}), number of siblings/spouses aboard (\texttt{sibsp}), number of parents/children aboard (\texttt{parch}), ticket number (\texttt{ticket}), fare (\texttt{fare}), cabin (\texttt{cabin}), and port of embarkation (\texttt{embarked}). Using DSExplainer, we generated hypotheses that encompass individual features, pairwise interactions, and triple feature combinations to explore both the contributions and uncertainties in survival predictions. This application showcases the framework's ability to interpret the behavior of a trained model from multiple perspectives.
@@ -896,7 +900,16 @@ This distinction allows stakeholders to tailor their interpretation according to
     \item \textbf{Plausibility:} Valuable for exploratory analysis and hypothesis generation, particularly in domains such as finance or social sciences, where indirect relationships may carry significant insights.
 \end{itemize}
 
+
 Moreover, DSExplainer’s flexibility in handling both individual and interaction effects makes it a versatile tool across diverse machine learning applications. The ability to quantify uncertainty at multiple levels enhances trust and transparency in predictions, while the complementary nature of certainty and plausibility provides a richer understanding of feature contributions. Although our experiments focused on the Titanic dataset, the general principles and benefits of DSExplainer suggest that the framework is broadly applicable to high-dimensional and dynamic environments.
+
+\subsection{Limitations}
+While DSExplainer offers a comprehensive approach to interpretability, several limitations should be acknowledged:
+\begin{itemize}
+    \item Our empirical evaluation relies on relatively small benchmark datasets, which may limit the generalizability of the observed results.
+    \item To maintain clarity, feature combinations are restricted to at most three variables, potentially overlooking higher-order interactions.
+    \item The approach builds upon SHAP values, so any biases or errors in the underlying model or SHAP computation propagate to the certainty and plausibility metrics.
+\end{itemize}
 
 Future research will focus on optimizing DSExplainer for high-dimensional datasets and exploring its integration with other probabilistic methods. In addition, we plan to work with combination rules that enable DSExplainer to aggregate evidence from multiple models simultaneously—treating each model as an expert evaluator. This multi-model approach will broaden interpretability not only for a single model but also for the data directly, offering more comprehensive insights. By bridging the gap between feature importance and uncertainty modeling, DSExplainer contributes to the growing field of interpretable machine learning, paving the way for more transparent, trustworthy, and actionable AI systems.
 
