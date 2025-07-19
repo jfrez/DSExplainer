@@ -389,15 +389,11 @@ The dual framework provided by DSExplainer facilitates a more nuanced analysis o
 
 By providing both an additive explanation of feature contributions and a probabilistic assessment of uncertainty, DSExplainer empowers stakeholders to make more informed decisions based on a comprehensive understanding of the model’s behavior.
 \section{Experimental Setup}
-
-\subsection{Datasets}
-We evaluate DSExplainer on the Titanic, Iris and Breast Cancer datasets.
-\subsection{Models and Baselines}
-A RandomForestClassifier is paired with SHAP since tree models offer fast explanations and serve as a strong baseline.
-\subsection{Metrics}
-Performance is measured with accuracy while calibration is assessed using the Brier score and Expected Calibration Error (ECE).
-\subsection{Procedure}
-Experiments rely on fixed random seeds with 5-fold cross validation to ensure robust comparisons.
+We evaluate DSExplainer on the Titanic, Iris and Breast Cancer datasets using a
+RandomForestClassifier paired with SHAP as the baseline explainer. Performance
+is reported in terms of accuracy, while calibration is assessed through the
+Brier score and Expected Calibration Error (ECE). All experiments rely on fixed
+random seeds with 5-fold cross validation to ensure robust comparisons.
 
 \section{Results}
 \label{sec:results}
