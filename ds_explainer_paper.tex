@@ -521,6 +521,173 @@ Notably, our analysis reveals that hypotheses involving combined factors tend to
 This interpretability example demonstrates the utility of DSExplainer in dissecting model predictions. By leveraging both certainty and plausibility, DSExplainer delivers robust, direct insights into feature contributions and also uncovers nuanced, indirect influences. Importantly, the analysis shows that the marginal contributions of combined factors are often higher than those of individual features, leading to a deeper and more actionable understanding of the model's behavior.
 
 
+
+
+\subsection{Interpreting Specific Instances}
+
+While previous sections explored global patterns and highlighted top hypotheses based on certainty and plausibility, it is equally instructive to examine specific instances at a local level. Analyzing individual cases allows us to gain deeper insights into how particular feature combinations influence single predictions. Table~\ref{tab:instance_data_survival} presents selected passenger instances with their input features and true survival labels, providing context for the subsequent analysis of their DS assignments.
+
+\begin{table}[H]
+    \caption{Selected Passenger Instances with Survival Outcome}
+    \label{tab:instance_data_survival}
+    \centering
+    \begin{tabularx}{\textwidth}{|*{11}{Y|}}
+        \hline
+        \textbf{Idx} & \textbf{pclass} & \textbf{sex} & \textbf{age} & \textbf{sibsp} & \textbf{parch} & \textbf{ticket} & \textbf{fare} & \textbf{cabin} & \textbf{embarked} & \textbf{survived}\\
+        \hline
+        36  & 0.0 & 0 & 0.2666 & 0.0    & 0.25 & 26  & 0.1074 & 145 & 2 & 1 \\
+        148 & 0.0 & 1 & 0.5574 & 0.3333 & 0.00 & 108 & 0.1629 & 98  & 2 & 0 \\
+        161 & 0.0 & 0 & 0.6333 & 0.3333 & 0.00 & 59  & 0.1522 & 111 & 2 & 1 \\
+        265 & 0.0 & 1 & 0.3425 & 0.0    & 0.00 & 38  & 0.0693 & 14  & 2 & 1 \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\subsubsection{Local Instance Analysis}
+
+Below, we analyze the DSExplainer assignments for each instance. 
+\paragraph{For instance idx 36 (Survived, Female, ~21 years old):} 
+\newline 
+\textbf{Certainty:}
+\begin{itemize}
+    \item \texttt{pclass\_x\_sex\_x\_age}: 0.1094
+    \item \texttt{sex\_x\_age}: 0.0853
+    \item \texttt{sibsp_x_parch_x_ticket}: 0.0727
+\end{itemize}
+These results indicate that the direct evidence supporting the survival prediction for idx 36 is strongly associated with the combination of passenger class, sex, and age. The relatively high certainty for these hypotheses suggests that being a young female played a critical role in her survival.
+
+\textbf{Plausibility:}
+\begin{itemize}
+    \item \texttt{ticket_x_age_x_fare}: 0.9385
+    \item \texttt{ticket_x_sex_x_age}: 0.9308
+    \item \texttt{ticket_x_sex_x_fare}: 0.9306
+\end{itemize}
+The indirect evidence, captured by high plausibility values, suggests that broader interactions—particularly those involving the passenger's ticket, age, and fare—also contribute significantly. Notably, these hypotheses omit \texttt{sex} as a direct factor, indicating that while gender is crucial in the direct evidence, its role in indirect interactions is less pronounced.
+
+\paragraph{For instance idx 148 (Did Not Survive, Male, ~45 years old):} \newline 
+\textbf{Certainty:}
+\begin{itemize}
+    \item \texttt{sex\_x\_age}: 0.2204
+    \item \texttt{sex\_x\_age\_x\_fare}: 0.1130
+    \item \texttt{age\_x\_fare\_x\_embarked}: 0.1072
+\end{itemize}
+In this case, the direct evidence indicates that the interaction between sex and age is a key factor, with additional support from fare and embarked status. The high certainty associated with \texttt{sex\_x\_age} underscores that, for this middle-aged male, these factors strongly contributed to a prediction of non-survival.
+
+\textbf{Plausibility:}
+\begin{itemize}
+    \item \texttt{age\_x\_ticket\_x\_fare}: 0.9213
+    \item \texttt{ticket_x_age_x_fare}: 0.9185
+    \item \texttt{age\_x\_fare\_x\_cabin}: 0.8997
+\end{itemize}
+Here, the indirect evidence reflects broader interactions involving age, ticket, fare, and cabin, suggesting that these factors—while less direct—play an important role in the overall prediction, complementing the strong direct signals.
+
+\paragraph{For instance idx 161 (Survived, Female, ~51 years old):}  
+\newline 
+\textbf{Certainty:}
+\begin{itemize}
+    \item \texttt{sex\_x\_age}: 0.1302
+    \item \texttt{pclass\_x\_fare\_x\_embarked}: 0.1184
+    \item \texttt{sex\_x\_age\_x\_fare}: 0.0584
+\end{itemize}
+For idx 161, the direct evidence once again emphasizes the role of the interaction between sex and age, with additional contributions from passenger class, fare, and embarked status. This suggests that being an older female was a significant positive factor for survival.
+
+\textbf{Plausibility:}
+\begin{itemize}
+    \item \texttt{ticket_x_age_x_fare}: 0.8969
+    \item \texttt{age\_x\_ticket\_x\_fare}: 0.8795
+    \item \texttt{age\_x\_fare\_x\_cabin}: 0.8723
+\end{itemize}
+The indirect evidence highlights more complex interactions involving ticket, age, fare, and cabin, contributing to a richer narrative for the prediction.
+
+\paragraph{For instance idx 265 (Survived, Male, ~27 years old):}  
+\newline 
+\textbf{Certainty:}
+\begin{itemize}
+    \item \texttt{age\_x\_fare\_x\_embarked}: 0.2540
+    \item \texttt{sex\_x\_age}: 0.2505
+    \item \texttt{sex\_x\_age\_x\_fare}: 0.1489
+\end{itemize}
+In this instance, direct evidence indicates that both age and the interaction between sex and age strongly support the survival prediction. Despite being male, the relatively young age of the passenger contributes positively to the prediction.
+
+\textbf{Plausibility:}
+\begin{itemize}
+    \item \texttt{age\_x\_ticket\_x\_fare}: 0.9718
+    \item \texttt{age\_x\_sibsp\_x\_fare}: 0.9655
+    \item \texttt{ticket_x_age_x_fare}: 0.9591
+
+\end{itemize}
+The indirect evidence for idx 265 is particularly strong, with combined factors accumulating very high plausibility. This indicates that the complex interplay among age, ticket, fare, and sibling/spouse presence offers robust, albeit indirect, support for the prediction.
+
+\subsubsection{Summary of Local Insights}
+
+Analyzing individual instances provides a nuanced perspective on model interpretability:
+\begin{itemize}
+    \item \textbf{Consistency with Known Patterns:} Certainty-based hypotheses often align with well-documented survival factors (e.g., the strong role of sex and age), reinforcing global patterns.
+    \item \textbf{Uncovering Complex Interactions:} High plausibility values highlight broader, indirect interactions—such as those involving fare, cabin, and ticket—that may not be immediately evident but are crucial in complex scenarios.
+    \item \textbf{Amplification through Combinations:} In several cases, hypotheses combining features (restricted to up to three elements for interpretability) accumulate higher certainty than individual factors, suggesting that interdependencies among features significantly influence the outcome.
+    \item \textbf{Beyond a Single Probability:} The Dempster–Shafer framework decomposes the prediction into evidence-based hypotheses, offering a richer narrative of the model’s reasoning.
+\end{itemize}
+
+Overall, this local instance analysis underscores the advantages of DSExplainer in providing both robust, direct insights (high certainty) and exploratory, indirect evidence (high plausibility), leading to a more comprehensive and actionable understanding of model predictions.
+\subsubsection{Evaluation Summary}
+\label{sec:validation}
+
+To gauge the predictive performance of the underlying models, we generated explanations for random subsets of 10 samples in both datasets. For the Titanic experiment, the RandomForest regressor exhibited a mean absolute error of $0.1016$, which DSExplainer treats as the Dempster--Shafer ``uncertainty'' mass. Within this subset, only 2 of the 10 survival predictions matched the ground truth (20\% accuracy). Conversely, on the Iris dataset, the model error was just $0.0082$ and all 10 predictions were correct, yielding 100\% accuracy. The detailed outputs are provided in the supplementary files \texttt{titanic\_evaluation.txt} and \texttt{iris\_evaluation.txt}.
+We also evaluated DSExplainer on the Breast Cancer dataset, where all sampled tumors were correctly classified with a consistent uncertainty of 2.08%. The corresponding prompts and DS assignments are available in \texttt{cancer_output.txt}.
+
+In addition to the evaluation scripts, the public repository includes an automated unit test that verifies DSExplainer's ability to generate pair and triple feature combinations. This test ensures that certainty and plausibility metrics are computed over the correct hypotheses and provides extra confidence in the numerical results.
+
+The evaluation logs also contain the complete prompts and LLM answers for each instance. These responses consistently reference the features highlighted by certainty and plausibility, demonstrating that the textual explanations align with the quantitative metrics.
+
+\subsubsection{Top Feature Comparison}
+To examine how DSExplainer aggregates evidence, we contrasted the three highest-magnitude SHAP features with the top certainty hypotheses for each passenger in the evaluation subset. Table~\ref{tab:shap_vs_ds} illustrates one representative case. The SHAP ranking emphasizes individual variables such as \texttt{sex} and \texttt{age}, whereas DSExplainer groups them into interacting hypotheses like \texttt{sex\_x\_age}. We submitted the SHAP-based summary to the LLM and obtained a response consistent with the DS hypotheses, indicating that these aggregated interactions capture the most salient factors.
+
+\begin{table}[H]
+    \caption{Example comparison between SHAP and DSExplainer rankings.}
+    \label{tab:shap_vs_ds}
+    \centering
+    \begin{tabularx}{\textwidth}{|Y|Y|}
+        \hline
+        Top SHAP features & Top DS hypotheses \\
+        \hline
+        sex  & sex\_x\_age \\
+        age  & fare\_x\_cabin \\
+        fare & sex\_x\_fare \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+To further validate the approach, we conducted an ablation study comparing three settings: \textbf{(i) raw SHAP values only}, \textbf{(ii) SHAP values with bootstrapped noise} to estimate quantile bands, and \textbf{(iii) our full DSExplainer}. The bootstrapped variant computes 5th and 95th percentile intervals, while calibration was assessed with the Brier score. DSExplainer achieved the lowest Brier error, indicating better calibrated predictions alongside richer uncertainty information.
+These results can be reproduced with the \texttt{ablation\_study.py} script included in the public repository.
+
+\paragraph{Example Prompt}
+Before generating the explanations, DSExplainer assembles a short prompt for each instance. A fragment for one Titanic passenger is shown below:
+\begin{quote}
+The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
+
+Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.\\
+Columns: pclass=1, sex=female, age=22.0, sibsp=0, parch=1, ticket=113505, fare=55.0, cabin=E33, embarked=S\\
+Prediction for row 36: 1.0\\
+Uncertainty value: 10.16\%
+\end{quote}
+An analogous prompt is created for each Iris sample.
+
+\paragraph{Example Outputs}
+To illustrate the model reasoning, we highlight four explanations from each dataset.
+\begin{quote}
+\textbf{Titanic}\\
+
+``LLM: Row~36 --- Sex and age contribute 37.21\% certainty, and the sex\_x\_age\_x\_fare triple reaches 87.26\% plausibility, so the passenger survived.''\\
+``LLM: Row~265 --- Age, fare and cabin yield 86.03\% plausibility, outweighing the 21.08\% certainty for sex\_x\_age; the passenger did not survive.''\\
+``LLM: Row~490 --- The age\_x\_ticket\_x\_fare combination has 85.32\% plausibility while certainty for sex\_x\_age stays at 17.80\%, indicating non-survival.''\\
+These messages often begin with statements such as ``The passenger's survival can be evaluated using the Certainty and Plausibility metrics, which provide insights into confidence regarding survival based on their attributes.''
+``LLM: Row~76 --- The feature triple sepal length \$\times$ petal length \$\times$ petal width achieves 99.07\% plausibility and confirms Versicolor with 63.17\% certainty.''\\
+``LLM: Row~31 --- Plausibility of 99.17\% for sepal width \$\times$ petal length \$\times$ petal width and 58.76\% certainty classify the flower as Versicolor.''\\
+``LLM: Row~68 --- With 99.09\% plausibility for sepal width \$\times$ petal length \$\times$ petal width and 63.76\% certainty, the model labels it Versicolor.''\\
+\textbf{Breast Cancer}\\
+``DSExplainer: Row~131 --- Prediction benign with uncertainty 2.08\%; plausibility for worst radius\$\times$worst texture\$\times$worst perimeter reaches 86.13\%.''\\
+``DSExplainer: Row~81 --- Prediction malignant with similar uncertainty, supported by plausibility above 81\% for worst radius\$\times$worst perimeter\$\times$worst area.''\\
+\end{quote}
 \subsection{Iris Dataset Example}
 
 While the Titanic dataset serves as our primary benchmark, we also evaluated DSExplainer on the classic Iris dataset, which contains sepal and petal measurements for three iris species. After training a RandomForest classifier, DSExplainer was used to compute certainty and plausibility for each sample. The analysis revealed that hypotheses combining petal length and petal width consistently yielded the highest certainty, whereas sepal measurements contributed less. This compact example demonstrates that DSExplainer is equally applicable to simpler classification problems and provides an easily reproducible reference case. The full outputs are included in \texttt{iris\_output.txt}.
@@ -704,173 +871,6 @@ mean radius=22.01, mean texture=21.9, mean perimeter=147.2,\\ mean area=1482.0, 
 The tumor is predicted to be benign. The high plausibility (77.07\%) of the feature combination \texttt{worst radius}, \texttt{worst texture}, and \texttt{worst area} suggests strong alignment with benign patterns. Despite high absolute values, the interactions match known benign distributions. Low certainty in the model is offset by low uncertainty (2.08\%) and high plausibility, confirming the benign prediction.
 
 \end{adjustwidth}
-
-
-\subsection{Interpreting Specific Instances}
-
-While previous sections explored global patterns and highlighted top hypotheses based on certainty and plausibility, it is equally instructive to examine specific instances at a local level. Analyzing individual cases allows us to gain deeper insights into how particular feature combinations influence single predictions. Table~\ref{tab:instance_data_survival} presents selected passenger instances with their input features and true survival labels, providing context for the subsequent analysis of their DS assignments.
-
-\begin{table}[H]
-    \caption{Selected Passenger Instances with Survival Outcome}
-    \label{tab:instance_data_survival}
-    \centering
-    \begin{tabularx}{\textwidth}{|*{11}{Y|}}
-        \hline
-        \textbf{Idx} & \textbf{pclass} & \textbf{sex} & \textbf{age} & \textbf{sibsp} & \textbf{parch} & \textbf{ticket} & \textbf{fare} & \textbf{cabin} & \textbf{embarked} & \textbf{survived}\\
-        \hline
-        36  & 0.0 & 0 & 0.2666 & 0.0    & 0.25 & 26  & 0.1074 & 145 & 2 & 1 \\
-        148 & 0.0 & 1 & 0.5574 & 0.3333 & 0.00 & 108 & 0.1629 & 98  & 2 & 0 \\
-        161 & 0.0 & 0 & 0.6333 & 0.3333 & 0.00 & 59  & 0.1522 & 111 & 2 & 1 \\
-        265 & 0.0 & 1 & 0.3425 & 0.0    & 0.00 & 38  & 0.0693 & 14  & 2 & 1 \\
-        \hline
-    \end{tabularx}
-\end{table}
-
-\subsubsection{Local Instance Analysis}
-
-Below, we analyze the DSExplainer assignments for each instance. 
-\paragraph{For instance idx 36 (Survived, Female, ~21 years old):} 
-\newline 
-\textbf{Certainty:}
-\begin{itemize}
-    \item \texttt{pclass\_x\_sex\_x\_age}: 0.1094
-    \item \texttt{sex\_x\_age}: 0.0853
-    \item \texttt{sibsp_x_parch_x_ticket}: 0.0727
-\end{itemize}
-These results indicate that the direct evidence supporting the survival prediction for idx 36 is strongly associated with the combination of passenger class, sex, and age. The relatively high certainty for these hypotheses suggests that being a young female played a critical role in her survival.
-
-\textbf{Plausibility:}
-\begin{itemize}
-    \item \texttt{ticket_x_age_x_fare}: 0.9385
-    \item \texttt{ticket_x_sex_x_age}: 0.9308
-    \item \texttt{ticket_x_sex_x_fare}: 0.9306
-\end{itemize}
-The indirect evidence, captured by high plausibility values, suggests that broader interactions—particularly those involving the passenger's ticket, age, and fare—also contribute significantly. Notably, these hypotheses omit \texttt{sex} as a direct factor, indicating that while gender is crucial in the direct evidence, its role in indirect interactions is less pronounced.
-
-\paragraph{For instance idx 148 (Did Not Survive, Male, ~45 years old):} \newline 
-\textbf{Certainty:}
-\begin{itemize}
-    \item \texttt{sex\_x\_age}: 0.2204
-    \item \texttt{sex\_x\_age\_x\_fare}: 0.1130
-    \item \texttt{age\_x\_fare\_x\_embarked}: 0.1072
-\end{itemize}
-In this case, the direct evidence indicates that the interaction between sex and age is a key factor, with additional support from fare and embarked status. The high certainty associated with \texttt{sex\_x\_age} underscores that, for this middle-aged male, these factors strongly contributed to a prediction of non-survival.
-
-\textbf{Plausibility:}
-\begin{itemize}
-    \item \texttt{age\_x\_ticket\_x\_fare}: 0.9213
-    \item \texttt{ticket_x_age_x_fare}: 0.9185
-    \item \texttt{age\_x\_fare\_x\_cabin}: 0.8997
-\end{itemize}
-Here, the indirect evidence reflects broader interactions involving age, ticket, fare, and cabin, suggesting that these factors—while less direct—play an important role in the overall prediction, complementing the strong direct signals.
-
-\paragraph{For instance idx 161 (Survived, Female, ~51 years old):}  
-\newline 
-\textbf{Certainty:}
-\begin{itemize}
-    \item \texttt{sex\_x\_age}: 0.1302
-    \item \texttt{pclass\_x\_fare\_x\_embarked}: 0.1184
-    \item \texttt{sex\_x\_age\_x\_fare}: 0.0584
-\end{itemize}
-For idx 161, the direct evidence once again emphasizes the role of the interaction between sex and age, with additional contributions from passenger class, fare, and embarked status. This suggests that being an older female was a significant positive factor for survival.
-
-\textbf{Plausibility:}
-\begin{itemize}
-    \item \texttt{ticket_x_age_x_fare}: 0.8969
-    \item \texttt{age\_x\_ticket\_x\_fare}: 0.8795
-    \item \texttt{age\_x\_fare\_x\_cabin}: 0.8723
-\end{itemize}
-The indirect evidence highlights more complex interactions involving ticket, age, fare, and cabin, contributing to a richer narrative for the prediction.
-
-\paragraph{For instance idx 265 (Survived, Male, ~27 years old):}  
-\newline 
-\textbf{Certainty:}
-\begin{itemize}
-    \item \texttt{age\_x\_fare\_x\_embarked}: 0.2540
-    \item \texttt{sex\_x\_age}: 0.2505
-    \item \texttt{sex\_x\_age\_x\_fare}: 0.1489
-\end{itemize}
-In this instance, direct evidence indicates that both age and the interaction between sex and age strongly support the survival prediction. Despite being male, the relatively young age of the passenger contributes positively to the prediction.
-
-\textbf{Plausibility:}
-\begin{itemize}
-    \item \texttt{age\_x\_ticket\_x\_fare}: 0.9718
-    \item \texttt{age\_x\_sibsp\_x\_fare}: 0.9655
-    \item \texttt{ticket_x_age_x_fare}: 0.9591
-
-\end{itemize}
-The indirect evidence for idx 265 is particularly strong, with combined factors accumulating very high plausibility. This indicates that the complex interplay among age, ticket, fare, and sibling/spouse presence offers robust, albeit indirect, support for the prediction.
-
-\subsubsection{Summary of Local Insights}
-
-Analyzing individual instances provides a nuanced perspective on model interpretability:
-\begin{itemize}
-    \item \textbf{Consistency with Known Patterns:} Certainty-based hypotheses often align with well-documented survival factors (e.g., the strong role of sex and age), reinforcing global patterns.
-    \item \textbf{Uncovering Complex Interactions:} High plausibility values highlight broader, indirect interactions—such as those involving fare, cabin, and ticket—that may not be immediately evident but are crucial in complex scenarios.
-    \item \textbf{Amplification through Combinations:} In several cases, hypotheses combining features (restricted to up to three elements for interpretability) accumulate higher certainty than individual factors, suggesting that interdependencies among features significantly influence the outcome.
-    \item \textbf{Beyond a Single Probability:} The Dempster–Shafer framework decomposes the prediction into evidence-based hypotheses, offering a richer narrative of the model’s reasoning.
-\end{itemize}
-
-Overall, this local instance analysis underscores the advantages of DSExplainer in providing both robust, direct insights (high certainty) and exploratory, indirect evidence (high plausibility), leading to a more comprehensive and actionable understanding of model predictions.
-\subsubsection{Evaluation Summary}
-\label{sec:validation}
-
-To gauge the predictive performance of the underlying models, we generated explanations for random subsets of 10 samples in both datasets. For the Titanic experiment, the RandomForest regressor exhibited a mean absolute error of $0.1016$, which DSExplainer treats as the Dempster--Shafer ``uncertainty'' mass. Within this subset, only 2 of the 10 survival predictions matched the ground truth (20\% accuracy). Conversely, on the Iris dataset, the model error was just $0.0082$ and all 10 predictions were correct, yielding 100\% accuracy. The detailed outputs are provided in the supplementary files \texttt{titanic\_evaluation.txt} and \texttt{iris\_evaluation.txt}.
-We also evaluated DSExplainer on the Breast Cancer dataset, where all sampled tumors were correctly classified with a consistent uncertainty of 2.08%. The corresponding prompts and DS assignments are available in \texttt{cancer_output.txt}.
-
-In addition to the evaluation scripts, the public repository includes an automated unit test that verifies DSExplainer's ability to generate pair and triple feature combinations. This test ensures that certainty and plausibility metrics are computed over the correct hypotheses and provides extra confidence in the numerical results.
-
-The evaluation logs also contain the complete prompts and LLM answers for each instance. These responses consistently reference the features highlighted by certainty and plausibility, demonstrating that the textual explanations align with the quantitative metrics.
-
-\subsubsection{Top Feature Comparison}
-To examine how DSExplainer aggregates evidence, we contrasted the three highest-magnitude SHAP features with the top certainty hypotheses for each passenger in the evaluation subset. Table~\ref{tab:shap_vs_ds} illustrates one representative case. The SHAP ranking emphasizes individual variables such as \texttt{sex} and \texttt{age}, whereas DSExplainer groups them into interacting hypotheses like \texttt{sex\_x\_age}. We submitted the SHAP-based summary to the LLM and obtained a response consistent with the DS hypotheses, indicating that these aggregated interactions capture the most salient factors.
-
-\begin{table}[H]
-    \caption{Example comparison between SHAP and DSExplainer rankings.}
-    \label{tab:shap_vs_ds}
-    \centering
-    \begin{tabularx}{\textwidth}{|Y|Y|}
-        \hline
-        Top SHAP features & Top DS hypotheses \\
-        \hline
-        sex  & sex\_x\_age \\
-        age  & fare\_x\_cabin \\
-        fare & sex\_x\_fare \\
-        \hline
-    \end{tabularx}
-\end{table}
-
-To further validate the approach, we conducted an ablation study comparing three settings: \textbf{(i) raw SHAP values only}, \textbf{(ii) SHAP values with bootstrapped noise} to estimate quantile bands, and \textbf{(iii) our full DSExplainer}. The bootstrapped variant computes 5th and 95th percentile intervals, while calibration was assessed with the Brier score. DSExplainer achieved the lowest Brier error, indicating better calibrated predictions alongside richer uncertainty information.
-These results can be reproduced with the \texttt{ablation\_study.py} script included in the public repository.
-
-\paragraph{Example Prompt}
-Before generating the explanations, DSExplainer assembles a short prompt for each instance. A fragment for one Titanic passenger is shown below:
-\begin{quote}
-The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
-
-Objective: briefly conclude why the passenger survived or not based on Certainty and Plausibility.\\
-Columns: pclass=1, sex=female, age=22.0, sibsp=0, parch=1, ticket=113505, fare=55.0, cabin=E33, embarked=S\\
-Prediction for row 36: 1.0\\
-Uncertainty value: 10.16\%
-\end{quote}
-An analogous prompt is created for each Iris sample.
-
-\paragraph{Example Outputs}
-To illustrate the model reasoning, we highlight four explanations from each dataset.
-\begin{quote}
-\textbf{Titanic}\\
-
-``LLM: Row~36 --- Sex and age contribute 37.21\% certainty, and the sex\_x\_age\_x\_fare triple reaches 87.26\% plausibility, so the passenger survived.''\\
-``LLM: Row~265 --- Age, fare and cabin yield 86.03\% plausibility, outweighing the 21.08\% certainty for sex\_x\_age; the passenger did not survive.''\\
-``LLM: Row~490 --- The age\_x\_ticket\_x\_fare combination has 85.32\% plausibility while certainty for sex\_x\_age stays at 17.80\%, indicating non-survival.''\\
-These messages often begin with statements such as ``The passenger's survival can be evaluated using the Certainty and Plausibility metrics, which provide insights into confidence regarding survival based on their attributes.''
-``LLM: Row~76 --- The feature triple sepal length \$\times$ petal length \$\times$ petal width achieves 99.07\% plausibility and confirms Versicolor with 63.17\% certainty.''\\
-``LLM: Row~31 --- Plausibility of 99.17\% for sepal width \$\times$ petal length \$\times$ petal width and 58.76\% certainty classify the flower as Versicolor.''\\
-``LLM: Row~68 --- With 99.09\% plausibility for sepal width \$\times$ petal length \$\times$ petal width and 63.76\% certainty, the model labels it Versicolor.''\\
-\textbf{Breast Cancer}\\
-``DSExplainer: Row~131 --- Prediction benign with uncertainty 2.08\%; plausibility for worst radius\$\times$worst texture\$\times$worst perimeter reaches 86.13\%.''\\
-``DSExplainer: Row~81 --- Prediction malignant with similar uncertainty, supported by plausibility above 81\% for worst radius\$\times$worst perimeter\$\times$worst area.''\\
-\end{quote}
 \subsection{LLM-Assisted Interpretation}
 
 Numerical metrics can be difficult to convey to non-experts. To bridge this gap we experimented with a lightweight large language model (LLM) that receives the top certainty and plausibility hypotheses as a prompt and returns a concise narrative explaining each prediction. We use the open-source \texttt{mannix/jan-nano} model via the \texttt{ollama} interface, allowing DSExplainer to produce a short textual rationale that complements the quantitative tables.
