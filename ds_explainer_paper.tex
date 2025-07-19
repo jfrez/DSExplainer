@@ -715,12 +715,12 @@ These messages often begin with statements such as ``The passenger's survival ca
 ``DSExplainer: Row~131 --- Prediction benign with uncertainty 2.08\%; plausibility for worst radius\$\times$worst texture\$\times$worst perimeter reaches 86.13\%.''\\
 ``DSExplainer: Row~81 --- Prediction malignant with similar uncertainty, supported by plausibility above 81\% for worst radius\$\times$worst perimeter\$\times$worst area.''\\
 \end{quote}
-\subsection{Additional Dataset Summaries}
-\label{sec:additional_datasets}
+\subsection{Dataset Summaries}
+\label{sec:dataset_summaries}
 
-On the classic Iris dataset we trained a RandomForest classifier. DSExplainer computed certainty and plausibility for each sample. Feature combinations involving petal length and petal width dominated the top hypotheses, while sepal measurements were less influential. The model achieved 100\% accuracy with an uncertainty mass of only 0.82\%. DSExplainer's summaries align with known morphological traits of the species. Full LLM responses are listed in Appendix~\ref{app:llm}.
+On the classic Iris dataset we trained a RandomForest classifier. DSExplainer computed certainty and plausibility for each sample. Feature combinations involving petal length and petal width dominated the top hypotheses, while sepal measurements were less influential. The model achieved 100\% accuracy with an uncertainty mass of only 0.82\%. DSExplainer's summaries align with known morphological traits of the species. The full LLM responses are available in the supplementary material.
 
-For the Breast Cancer Wisconsin dataset, DSExplainer analyzed ten RandomForest predictions. Each tumor was classified correctly with a consistent uncertainty of 2.08\%. Interactions among worst radius, perimeter and area yielded the highest plausibility for malignancy, while certainty often highlighted concave points and texture. These results demonstrate DSExplainer's ability to interpret medical features reliably. Detailed prompts and LLM explanations are provided in Appendix~\ref{app:llm}.
+For the Breast Cancer Wisconsin dataset, DSExplainer analyzed ten RandomForest predictions. Each tumor was classified correctly with a consistent uncertainty of 2.08\%. Interactions among worst radius, perimeter and area yielded the highest plausibility for malignancy, while certainty often highlighted concave points and texture. These results demonstrate DSExplainer's ability to interpret medical features reliably. Detailed prompts and LLM explanations accompany the supplementary material.
 
 
 \vspace{0.5em}
