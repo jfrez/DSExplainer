@@ -456,6 +456,70 @@ The model's prediction for the passenger is based on a combination of demographi
 
 \end{adjustwidth}
 
+\subsection{Interpreting the Model}
+
+The Titanic dataset is a well-established benchmark for testing and demonstrating machine learning interpretability. It comprises features such as passenger class (\texttt{pclass}), gender (\texttt{sex}), age (\texttt{age}), number of siblings/spouses aboard (\texttt{sibsp}), number of parents/children aboard (\texttt{parch}), ticket number (\texttt{ticket}), fare (\texttt{fare}), cabin (\texttt{cabin}), and port of embarkation (\texttt{embarked}). The primary objective is to predict whether a passenger survived the disaster.
+
+
+\subsubsection{Key Results}
+
+The following tables summarize the most influential hypotheses based on the \textbf{certainty} and \textbf{plausibility} metrics, highlighting their complementary insights.
+
+\begin{table}[H]
+    \caption{Top Hypotheses by Certainty}
+    \label{tab:top_certainty}
+    \centering
+    \begin{tabularx}{\textwidth}{|Y|Y|}
+        \hline
+        \textbf{Hypothesis} & \textbf{Certainty Value} \\
+        \hline
+        \texttt{fare\_x\_cabin} & 0.246 \\
+        \texttt{sex\_x\_age} & 0.241 \\
+        \texttt{cabin} & 0.213 \\
+        \texttt{sex\_x\_age\_x\_cabin} & 0.167 \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+    \caption{Top Hypotheses by Plausibility}
+    \label{tab:top_plausibility}
+    \centering
+    \begin{tabularx}{\textwidth}{|Y|Y|}
+        \hline
+        \textbf{Hypothesis} & \textbf{Plausibility Value} \\
+        \hline
+        \texttt{age\_x\_fare\_x\_cabin} & 0.937 \\
+        \texttt{age\_x\_cabin\_x\_embarked} & 0.936 \\
+        \texttt{sex\_x\_age\_x\_cabin} & 0.932 \\
+        \texttt{age\_x\_sibsp\_x\_cabin} & 0.922 \\
+        \texttt{age\_x\_ticket\_x\_cabin} & 0.920 \\
+        \hline
+    \end{tabularx}
+\end{table}
+
+\subsubsection{Analysis of Results}
+
+\paragraph{Certainty Hypotheses:}
+The hypotheses ranked by certainty, such as \texttt{fare\_x\_cabin} and \texttt{sex\_x\_age}, reflect strong direct evidence supporting their contributions to the model's predictions. For instance, the \texttt{fare\_x\_cabin} hypothesis indicates that the combination of ticket fare and cabin information exerts a significant and confident influence on survival outcomes. Similarly, \texttt{sex\_x\_age} aligns with historical observations where women and children were given priority during evacuation, resulting in a high certainty value.
+
+\paragraph{Plausibility Hypotheses:}
+In contrast, the hypotheses ranked by plausibility, such as \texttt{age\_x\_fare\_x\_cabin} and \texttt{age\_x\_cabin\_x\_embarked}, capture broader potential influences through indirect interactions among features. Notably, these plausibility hypotheses do not include the \texttt{sex} feature, underscoring that while \texttt{sex} plays a prominent role in direct contributions (as evidenced by its high certainty value), its indirect influence via feature interactions appears to be less pronounced. For example, the \texttt{age\_x\_fare\_x\_cabin} hypothesis suggests that interactions among age, fare, and cabin location—although not providing unequivocal direct support—imply indirect yet meaningful contributions to survival predictions. These hypotheses offer an exploratory view of feature interactions that complement the direct evidence quantified by certainty.
+
+\paragraph{Combined Factors and Marginal Contributions:}
+Notably, our analysis reveals that hypotheses involving combined factors tend to accumulate higher certainty than individual features. After applying the Dempster-Shafer framework to aggregate evidence from multiple sources—such as the marginal contribution calculations from various models and feature coalitions—the resulting belief masses for combined factors (e.g., \texttt{sex\_x\_age\_x\_cabin} or \texttt{age\_x\_fare\_x\_cabin}) are higher than those for individual features. This indicates that the interplay between multiple features amplifies their overall impact on survival predictions, suggesting that the aggregated effect of combined factors is more influential than the sum of their isolated effects.
+
+\subsubsection{Key Insights}
+
+\begin{itemize}
+    \item \textbf{Focus on Evidence Strength:} Certainty emphasizes hypotheses with strong, direct evidence, making them ideal for deriving actionable insights.
+    \item \textbf{Contextual Relevance:} High-certainty hypotheses, such as \texttt{sex\_x\_age}, directly reflect known survival patterns (e.g., prioritization of women and children), whereas high-plausibility hypotheses, like \texttt{age\_x\_fare\_x\_cabin}, reveal complex socio-economic dynamics that indirectly influence survival outcomes.
+    \item \textbf{Amplification through Combined Factors:} The use of the Dempster-Shafer framework enables the construction of hypotheses that combine initial features. Although the complete power set could be considered, we restrict the combinations to up to three elements to facilitate interpretability. The analysis shows that these combined factors accumulate more certainty than individual features, evidently because they capture interdependencies that are critical in complex events such as a disaster.
+    \item \textbf{Complementary Perspectives:} The combined use of certainty and plausibility metrics provides a dual analysis: certainty offers clear and confident insights, while plausibility uncovers subtle, indirect interactions, thereby delivering a comprehensive interpretability framework.
+\end{itemize}
+
+This interpretability example demonstrates the utility of DSExplainer in dissecting model predictions. By leveraging both certainty and plausibility, DSExplainer delivers robust, direct insights into feature contributions and also uncovers nuanced, indirect influences. Importantly, the analysis shows that the marginal contributions of combined factors are often higher than those of individual features, leading to a deeper and more actionable understanding of the model's behavior.
+
 
 \subsection{Iris Dataset Example}
 
@@ -640,74 +704,6 @@ mean radius=22.01, mean texture=21.9, mean perimeter=147.2,\\ mean area=1482.0, 
 The tumor is predicted to be benign. The high plausibility (77.07\%) of the feature combination \texttt{worst radius}, \texttt{worst texture}, and \texttt{worst area} suggests strong alignment with benign patterns. Despite high absolute values, the interactions match known benign distributions. Low certainty in the model is offset by low uncertainty (2.08\%) and high plausibility, confirming the benign prediction.
 
 \end{adjustwidth}
-
-
-\subsection{Interpreting the Model}
-
-The Titanic dataset is a well-established benchmark for testing and demonstrating machine learning interpretability. It comprises features such as passenger class (\texttt{pclass}), gender (\texttt{sex}), age (\texttt{age}), number of siblings/spouses aboard (\texttt{sibsp}), number of parents/children aboard (\texttt{parch}), ticket number (\texttt{ticket}), fare (\texttt{fare}), cabin (\texttt{cabin}), and port of embarkation (\texttt{embarked}). The primary objective is to predict whether a passenger survived the disaster.
-
-
-\subsubsection{Key Results}
-
-The following tables summarize the most influential hypotheses based on the \textbf{certainty} and \textbf{plausibility} metrics, highlighting their complementary insights.
-
-\begin{table}[H]
-    \caption{Top Hypotheses by Certainty}
-    \label{tab:top_certainty}
-    \centering
-    \begin{tabularx}{\textwidth}{|Y|Y|}
-        \hline
-        \textbf{Hypothesis} & \textbf{Certainty Value} \\
-        \hline
-        \texttt{fare\_x\_cabin} & 0.246 \\
-        \texttt{sex\_x\_age} & 0.241 \\
-        \texttt{cabin} & 0.213 \\
-        \texttt{sex\_x\_age\_x\_cabin} & 0.167 \\
-        \hline
-    \end{tabularx}
-\end{table}
-
-\begin{table}[H]
-    \caption{Top Hypotheses by Plausibility}
-    \label{tab:top_plausibility}
-    \centering
-    \begin{tabularx}{\textwidth}{|Y|Y|}
-        \hline
-        \textbf{Hypothesis} & \textbf{Plausibility Value} \\
-        \hline
-        \texttt{age\_x\_fare\_x\_cabin} & 0.937 \\
-        \texttt{age\_x\_cabin\_x\_embarked} & 0.936 \\
-        \texttt{sex\_x\_age\_x\_cabin} & 0.932 \\
-        \texttt{age\_x\_sibsp\_x\_cabin} & 0.922 \\
-        \texttt{age\_x\_ticket\_x\_cabin} & 0.920 \\
-        \hline
-    \end{tabularx}
-\end{table}
-
-\subsubsection{Analysis of Results}
-
-\paragraph{Certainty Hypotheses:}  
-The hypotheses ranked by certainty, such as \texttt{fare\_x\_cabin} and \texttt{sex\_x\_age}, reflect strong direct evidence supporting their contributions to the model's predictions. For instance, the \texttt{fare\_x\_cabin} hypothesis indicates that the combination of ticket fare and cabin information exerts a significant and confident influence on survival outcomes. Similarly, \texttt{sex\_x\_age} aligns with historical observations where women and children were given priority during evacuation, resulting in a high certainty value.
-
-\paragraph{Plausibility Hypotheses:}  
-In contrast, the hypotheses ranked by plausibility, such as \texttt{age\_x\_fare\_x\_cabin} and \texttt{age\_x\_cabin\_x\_embarked}, capture broader potential influences through indirect interactions among features. Notably, these plausibility hypotheses do not include the \texttt{sex} feature, underscoring that while \texttt{sex} plays a prominent role in direct contributions (as evidenced by its high certainty value), its indirect influence via feature interactions appears to be less pronounced. For example, the \texttt{age\_x\_fare\_x\_cabin} hypothesis suggests that interactions among age, fare, and cabin location—although not providing unequivocal direct support—imply indirect yet meaningful contributions to survival predictions. These hypotheses offer an exploratory view of feature interactions that complement the direct evidence quantified by certainty.
-
-
-
-\paragraph{Combined Factors and Marginal Contributions:}  
-Notably, our analysis reveals that hypotheses involving combined factors tend to accumulate higher certainty than individual features. After applying the Dempster-Shafer framework to aggregate evidence from multiple sources—such as the marginal contribution calculations from various models and feature coalitions—the resulting belief masses for combined factors (e.g., \texttt{sex\_x\_age\_x\_cabin} or \texttt{age\_x\_fare\_x\_cabin}) are higher than those for individual features. This indicates that the interplay between multiple features amplifies their overall impact on survival predictions, suggesting that the aggregated effect of combined factors is more influential than the sum of their isolated effects.
-
-\subsubsection{Key Insights}
-
-\begin{itemize}
-    \item \textbf{Focus on Evidence Strength:} Certainty emphasizes hypotheses with strong, direct evidence, making them ideal for deriving actionable insights.
-    \item \textbf{Contextual Relevance:} High-certainty hypotheses, such as \texttt{sex\_x\_age}, directly reflect known survival patterns (e.g., prioritization of women and children), whereas high-plausibility hypotheses, like \texttt{age\_x\_fare\_x\_cabin}, reveal complex socio-economic dynamics that indirectly influence survival outcomes.
-    \item \textbf{Amplification through Combined Factors:} The use of the Dempster-Shafer framework enables the construction of hypotheses that combine initial features. Although the complete power set could be considered, we restrict the combinations to up to three elements to facilitate interpretability. The analysis shows that these combined factors accumulate more certainty than individual features, evidently because they capture interdependencies that are critical in complex events such as a disaster.
-    \item \textbf{Complementary Perspectives:} The combined use of certainty and plausibility metrics provides a dual analysis: certainty offers clear and confident insights, while plausibility uncovers subtle, indirect interactions, thereby delivering a comprehensive interpretability framework.
-\end{itemize}
-
-This interpretability example demonstrates the utility of DSExplainer in dissecting model predictions. By leveraging both certainty and plausibility, DSExplainer delivers robust, direct insights into feature contributions and also uncovers nuanced, indirect influences. Importantly, the analysis shows that the marginal contributions of combined factors are often higher than those of individual features, leading to a deeper and more actionable understanding of the model's behavior.
-
 
 
 \subsection{Interpreting Specific Instances}
