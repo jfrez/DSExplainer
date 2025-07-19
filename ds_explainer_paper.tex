@@ -394,11 +394,6 @@ Moreover, the sum of these contributions is equal to the difference between the 
 
 Through this detailed calculation, the reader can appreciate how SHAP values break down a prediction into constituent parts, offering an intuitive understanding of feature importance that forms the basis for further uncertainty quantification in our DSExplainer framework.
 The framework evaluates feature subsets up to size $k$. Explaining $n$ instances thus requires $O(n\,2^k)$ operations in the worst case.
-\begin{enumerate}
-    \item Compute SHAP values for all features and their combinations.
-    \item Normalize the absolute contributions to obtain BPAs.
-    \item Aggregate the masses to derive certainty and plausibility.
-\end{enumerate}
 
 \subsection{Interpretation and Utility of the Combined Framework}
 
