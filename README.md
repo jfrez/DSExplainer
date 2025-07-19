@@ -26,7 +26,7 @@ from DSExplainer import DSExplainer
 
 ### Example Usage
 
-The example below demonstrates how to use `DSExplainer` with the Titanic dataset to train a `RandomForestRegressor` and analyze its predictions. The script also shows how to send a summary of each prediction—including certainty and plausibility metrics—to an LLM using the `ollama` package for natural language interpretation. Each DSExplainer dataframe is augmented with the predicted survival label so the LLM can explain why the passenger survived or not, based on a provided dataset description and objective.
+The example below demonstrates how to use `DSExplainer` with the Titanic dataset to train a `RandomForestClassifier` and analyze its predictions. The script also shows how to send a summary of each prediction—including certainty and plausibility metrics—to an LLM using the `ollama` package for natural language interpretation. Each DSExplainer dataframe is augmented with the predicted survival label so the LLM can explain why the passenger survived or not, based on a provided dataset description and objective.
 
 By default the script queries the `mannix/jan-nano` model. If your Ollama server
 is running on a different machine, set the `OLLAMA_HOST` environment variable to
@@ -36,9 +36,9 @@ the server's address, for example `OLLAMA_HOST="http://1.2.3.4:11434"`.
 ```python
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import accuracy_score, brier_score_loss
 
 from sklearn.datasets import fetch_openml
 titanic = fetch_openml('titanic', version=1, as_frame=True)
@@ -63,19 +63,20 @@ X = features
 y = target
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
-model = RandomForestRegressor(n_estimators=100, random_state=42)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
 
 
 max_comb = 3
 explainer = DSExplainer(model, comb=max_comb,X=X_train,Y=y_train)
 # The fitted MinMaxScaler is stored in the explainer and reused for new data
 model = explainer.getModel()
-train_preds = model.predict(
+train_probs = model.predict_proba(
     explainer.generate_combinations(X_train, scaler=explainer.scaler)
-)
-model_error = mean_absolute_error(y_train, train_preds) / (y_train.max() - y_train.min())
+)[:, 1]
+model_acc = accuracy_score(y_train, (train_probs >= 0.5).astype(int))
+model_brier = brier_score_loss(y_train, train_probs)
 shap_values_df, mass_values_df, certainty_df, plausibility_df = explainer.ds_values(
-    X_test[:2], error_rate=model_error
+    X_test[:2], error_rate=model_brier
 )
  
 

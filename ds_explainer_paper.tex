@@ -233,6 +233,7 @@ Recent works emphasize calibration of explanation methods. Quantus benchmarks ex
 
 
 \section{Methodology (DSExplainer)}
+\label{sec:combining}
 The core innovation of DSExplainer is the fusion of two distinct yet complementary methodologies: SHAP values and Dempster-Shafer theory. This section details how we combine these approaches to create a comprehensive framework for model interpretability that not only provides feature attributions but also quantifies the uncertainty associated with them.
 \subsection{Notation}
 We denote by $X \in \mathbb{R}^{n \times p}$ the feature matrix and by $f$ the fitted model. Hypotheses formed by up to $k$ features are written as $x_{i_1} \cap \dots \cap x_{i_j}$.
@@ -336,64 +337,7 @@ This example demonstrates that:
 Moreover, the sum of these contributions is equal to the difference between the actual prediction (\$500,000) and the baseline (\$350,000), thereby ensuring consistency in the additive explanation framework. This decomposition provides a clear and interpretable insight into how each feature influences the model’s output, making it possible for practitioners to trust and validate the model’s decision-making process.
 
 Through this detailed calculation, the reader can appreciate how SHAP values break down a prediction into constituent parts, offering an intuitive understanding of feature importance that forms the basis for further uncertainty quantification in our DSExplainer framework.
-Consider a model that predicts the price of a house using three features: \texttt{size}, \texttt{location}, and \texttt{age}. Suppose the baseline prediction is \$350,000 (the average price), and for a specific house, the model predicts a price of \$500,000. The goal is to determine how the \$150,000 difference is distributed among the features.
 
-Table~\ref{tab:shapley_calculation} below illustrates a simplified computation of the marginal contributions for each feature across different coalitions:
-
-\begin{table}[H]
-    \caption{Marginal Contributions of Features in a House Price Prediction Example}
-    \label{tab:shapley_calculation}
-    \centering
-    \begin{tabularx}{\textwidth}{|c|c|Y|Y|Y|}
-        \hline
-        \textbf{Feature} & \textbf{Coalition} & \textbf{Prediction w/o Feature (\$)} & \textbf{Prediction w/ Feature (\$)} & \textbf{Marginal Contribution (\$)} \\
-        \hline
-        \texttt{size}     & None             & 350,000 & 460,000 & 110,000 \\
-        \texttt{size}     & \texttt{location} & 420,000 & 510,000 & 90,000  \\
-        \texttt{size}     & \texttt{age}      & 380,000 & 495,000 & 115,000 \\
-        \hline
-        \texttt{location} & None             & 350,000 & 410,000 & 60,000  \\
-        \texttt{location} & \texttt{size}    & 460,000 & 515,000 & 55,000  \\
-        \texttt{location} & \texttt{age}     & 380,000 & 435,000 & 55,000  \\
-        \hline
-        \texttt{age}      & None             & 350,000 & 335,000 & -15,000 \\
-        \texttt{age}      & \texttt{size}    & 460,000 & 442,000 & -18,000 \\
-        \texttt{age}      & \texttt{location}& 410,000 & 392,000 & -18,000 \\
-        \hline
-    \end{tabularx}
-\end{table}
-
-For each coalition, the marginal contribution is defined as the difference between the prediction with the feature and without it. The final SHAP value for each feature is computed as the average of its marginal contributions over all coalitions. For example, the SHAP value for \texttt{size} is computed as:
-
-\[
-\phi_{\texttt{size}} = \frac{(110\,000 + 90\,000 + 115\,000)}{3} \approx 105\,000.
-\]
-
-Similarly, the SHAP value for \texttt{location} is:
-
-\[
-\phi_{\texttt{location}} = \frac{(60\,000 + 55\,000 + 55\,000)}{3} \approx 56\,667,
-\]
-
-and for \texttt{age}:
-
-\[
-\phi_{\texttt{age}} = \frac{(-15\,000 - 18\,000 - 18\,000)}{3} = -17\,000.
-\]
-
-\subsubsection{Insights from the SHAP Calculation}
-
-This example demonstrates that:
-\begin{itemize}
-    \item The feature \texttt{size} contributes an additional \$105,000 to the prediction.
-    \item The feature \texttt{location} adds approximately \$56,667.
-    \item The feature \texttt{age} reduces the prediction by \$17,000.
-\end{itemize}
-
-Moreover, the sum of these contributions is equal to the difference between the actual prediction (\$500,000) and the baseline (\$350,000), thereby ensuring consistency in the additive explanation framework. This decomposition provides a clear and interpretable insight into how each feature influences the model’s output, making it possible for practitioners to trust and validate the model’s decision-making process.
-
-Through this detailed calculation, the reader can appreciate how SHAP values break down a prediction into constituent parts, offering an intuitive understanding of feature importance that forms the basis for further uncertainty quantification in our DSExplainer framework.
-The framework evaluates feature subsets up to size $k$. Explaining $n$ instances thus requires $O(n\,2^k)$ operations in the worst case.
 
 \subsection{Interpretation and Utility of the Combined Framework}
 
@@ -449,9 +393,9 @@ By providing both an additive explanation of feature contributions and a probabi
 \subsection{Datasets}
 We evaluate DSExplainer on the Titanic, Iris and Breast Cancer datasets.
 \subsection{Models and Baselines}
-A RandomForest regressor is paired with SHAP since tree models offer fast explanations and serve as a strong baseline.
+A RandomForestClassifier is paired with SHAP since tree models offer fast explanations and serve as a strong baseline.
 \subsection{Metrics}
-Performance is measured with MAE while calibration is assessed using the Brier score and Expected Calibration Error (ECE).
+Performance is measured with accuracy while calibration is assessed using the Brier score and Expected Calibration Error (ECE).
 \subsection{Procedure}
 Experiments rely on fixed random seeds with 5-fold cross validation to ensure robust comparisons.
 
@@ -715,7 +659,7 @@ Overall, this local instance analysis underscores the advantages of DSExplainer 
 \subsubsection{Evaluation Summary}
 \label{sec:validation}
 
-To gauge the predictive performance of the underlying models, we generated explanations for random subsets of 10 samples in both datasets. For the Titanic experiment, the RandomForest regressor exhibited a mean absolute error of $0.1016$, which DSExplainer treats as the Dempster--Shafer ``uncertainty'' mass. Within this subset, only 2 of the 10 survival predictions matched the ground truth (20\% accuracy). Conversely, on the Iris dataset, the model error was just $0.0082$ and all 10 predictions were correct, yielding 100\% accuracy. The detailed outputs are provided in the supplementary files \texttt{titanic\_evaluation.txt} and \texttt{iris\_evaluation.txt}.
+To gauge the predictive performance of the underlying models, we generated explanations for random subsets of 10 samples in both datasets. For the Titanic experiment, the RandomForestClassifier achieved a Brier score of $0.1016$, which DSExplainer treats as the Dempster--Shafer ``uncertainty'' mass. Within this subset, only 2 of the 10 survival predictions matched the ground truth (20\% accuracy). Conversely, on the Iris dataset, the Brier score was just $0.0082$ and all 10 predictions were correct, yielding 100\% accuracy. The detailed outputs are provided in the supplementary files \texttt{titanic\_evaluation.txt} and \texttt{iris\_evaluation.txt}.
 We also evaluated DSExplainer on the Breast Cancer dataset, where all sampled tumors were correctly classified with a consistent uncertainty of 2.08%. The corresponding prompts and DS assignments are available in \texttt{cancer_output.txt}.
 
 In addition to the evaluation scripts, the public repository includes an automated unit test that verifies DSExplainer's ability to generate pair and triple feature combinations. This test ensures that certainty and plausibility metrics are computed over the correct hypotheses and provides extra confidence in the numerical results.
@@ -857,7 +801,7 @@ This sample shows high plausibility for the combination of sepal width (2.2 cm),
 
 \subsection{Breast Cancer Dataset Example}
 
-To further demonstrate DSExplainer's versatility, we applied it to the Breast Cancer Wisconsin (Diagnostic) dataset. This medical dataset comprises numerical measurements of cell nuclei, with each instance labeled as malignant or benign. Using DSExplainer with a RandomForest regressor, we generated explanations for 10 random samples, all of which were correctly classified with an overall uncertainty mass of only 2.08\%. An excerpt from the output file \texttt{cancer\_output.txt} is shown below:
+To further demonstrate DSExplainer's versatility, we applied it to the Breast Cancer Wisconsin (Diagnostic) dataset. This medical dataset comprises numerical measurements of cell nuclei, with each instance labeled as malignant or benign. Using DSExplainer with a RandomForestClassifier, we generated explanations for 10 random samples, all of which were correctly classified with an overall uncertainty mass of only 2.08\%. An excerpt from the output file \texttt{cancer\_output.txt} is shown below:
 \paragraph{Example LLM Outputs – Breast Cancer Dataset}
 
 \begin{adjustwidth}{0.5cm}{0.5cm}
