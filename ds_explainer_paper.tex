@@ -179,12 +179,7 @@ Moreover, the sum of these contributions is equal to the difference between the 
 
 Through this detailed calculation, the reader can appreciate how SHAP values break down a prediction into constituent parts, offering an intuitive understanding of feature importance that forms the basis for further uncertainty quantification in our DSExplainer framework.
 
-\paragraph{Example LLM Outputs}
-\begin{quote}
-``LLM~1 --- The model attributes about \$105,000 of the predicted price to the house's size and roughly \$56,000 to its location. The older age subtracts around \$17,000, yielding a plausible final price near \$500,000.''\\
-``LLM~2 --- High certainty in the size and location features explains most of the value increase from the \$350,000 baseline, while age slightly lowers the estimate. Overall the prediction appears reliable.''\\
-``LLM~3 --- Given the strong positive influence of size and location and only a modest penalty from age, the estimated price of \$500,000 is consistent with market expectations.''\\
-\end{quote}
+
 
 
 \subsection{Dempster-Shafer Theory}
@@ -351,10 +346,39 @@ For example, suppose that for the hypothesis \( H \): \texttt{sex = female}, the
 
 \paragraph{Example LLM Outputs}
 \begin{quote}
-``LLM: Row~36 --- High plausibility for the sex\_x\_age\_x\_fare triple (87.26\%) and 37.21\% certainty for sex\_x\_age indicate the passenger survived.''\\
-``LLM: Row~265 --- Low certainty for sex\_x\_age (21.08\%) but strong plausibility from age\_x\_fare\_x\_cabin (86.03\%) leads the model to conclude the passenger did not survive.''\\
-``LLM: Row~490 --- With only 17.80\% certainty for sex\_x\_age and 85.32\% plausibility for age\_x\_ticket\_x\_fare, the passenger is predicted not to survive.''\\
+\textbf{Row 36}\\
+Columns: pclass=1, sex=female, age=22.0, sibsp=0, parch=1, ticket=113505, fare=55.0, cabin=E33, embarked=S\\
+Prediction for row 36: 1.0\\
+Uncertainty value: 10.16\%\\
+Certainty triples: \texttt{sex\_x\_age}: 37.21\%, \texttt{pclass\_x\_sex\_x\_age}: 19.98\%, \texttt{sex\_x\_age\_x\_fare}: 9.22\%\\
+Plausibility triples: \texttt{sex\_x\_age\_x\_fare}: 87.26\%, \texttt{age\_x\_fare\_x\_cabin}: 87.25\%, \texttt{age\_x\_ticket\_x\_fare}: 87.14\%
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:} The model suggests that the passenger survived, with high plausibility attributed to the combination of \texttt{sex}, \texttt{age}, and \texttt{fare}. The most influential feature interaction is \texttt{sex\_x\_age\_x\_fare}, which accounts for 87.26\% of plausibility, reflecting that being female (\texttt{sex=female}), young (\texttt{age=22.0}), and paying a higher fare (\texttt{fare=55.0}) collectively increases the likelihood of survival. While \texttt{pclass=1} and \texttt{cabin=E33} may contribute indirectly, the dominant factor remains the interplay of these features, aligning with historical survival trends. The model’s certainty triples further support this conclusion. Given the high plausibility and prediction of 1.0, the passenger is determined to have survived.
+
+\vspace{1em}
+\textbf{Row 148}\\
+Columns: pclass=1, sex=male, age=45.0, sibsp=1, parch=0, ticket=36973, fare=83.475, cabin=C83, embarked=S\\
+Prediction for row 148: 0.16\\
+Uncertainty value: 10.16\%\\
+Certainty triples: \texttt{sex\_x\_age}: 28.48\%, \texttt{pclass\_x\_sex\_x\_age}: 12.98\%, \texttt{sex\_x\_age\_x\_fare}: 6.50\%\\
+Plausibility triples: \texttt{age\_x\_fare\_x\_cabin}: 86.43\%, \texttt{age\_x\_ticket\_x\_fare}: 85.52\%, \texttt{sex\_x\_age\_x\_fare}: 84.21\%
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:} The passenger's survival probability is low, as indicated by the model's prediction of 0.16 and a 10.16\% uncertainty. The most influential factor is \texttt{sex\_x\_age} (28.48\%), correlating with lower survival rates for males in mid-age ranges. The plausibility triple \texttt{age\_x\_fare\_x\_cabin} (86.43\%) highlights the passenger’s age, high fare, and cabin class, suggesting affluence. However, the male sex and first-class status contradict typical survival patterns. Despite high plausibility, the critical influence of sex diminishes the survival likelihood. The model suggests the passenger did not survive.
+
+\vspace{1em}
+\textbf{Row 161}\\
+Columns: pclass=1, sex=female, age=51.0, sibsp=1, parch=0, ticket=13502, fare=77.9583, cabin=D11, embarked=S\\
+Prediction for row 161: 1.0\\
+Uncertainty value: 10.16\%\\
+Certainty triples: \texttt{sex\_x\_age}: 34.37\%, \texttt{pclass\_x\_sex\_x\_age}: 24.82\%, \texttt{sex\_x\_age\_x\_fare}: 9.74\%\\
+Plausibility triples: \texttt{sex\_x\_age\_x\_fare}: 87.63\%, \texttt{age\_x\_ticket\_x\_fare}: 87.60\%, \texttt{age\_x\_sibsp\_x\_fare}: 87.58\%
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:} The model's prediction for the passenger is based on demographic and socioeconomic factors, with highest plausibility from the interaction \texttt{sex\_x\_age\_x\_fare} (87.63\%). Aged 51, female, in first class, and paying a high fare, this profile aligns with historically high survival rates. Certainty contributions from \texttt{sex\_x\_age} and \texttt{pclass\_x\_sex\_x\_age} reinforce the survival prediction. Additional plausible combinations such as \texttt{age\_x\_ticket\_x\_fare} and \texttt{age\_x\_sibsp\_x\_fare} support this pattern. The model suggests the passenger did survive.
 \end{quote}
+
 
 \subsection{Key Properties}
 
@@ -390,12 +414,41 @@ Furthermore, we leveraged the dataset to illustrate DSExplainer's capacity for p
 
 While the Titanic dataset serves as our primary benchmark, we also evaluated DSExplainer on the classic Iris dataset, which contains sepal and petal measurements for three iris species. After training a RandomForest classifier, DSExplainer was used to compute certainty and plausibility for each sample. The analysis revealed that hypotheses combining petal length and petal width consistently yielded the highest certainty, whereas sepal measurements contributed less. This compact example demonstrates that DSExplainer is equally applicable to simpler classification problems and provides an easily reproducible reference case. The full outputs are included in \texttt{iris\_output.txt}.
 
-\paragraph{Example LLM Outputs}
+\paragraph{Example LLM Outputs – Iris Dataset}
 \begin{quote}
-``LLM: Row~76 --- The triple \texttt{sepal length \times petal length \times petal width} reaches 99.07\% plausibility and petal length \times petal width has 63.17\% certainty, confirming a versicolor flower.''\\
-``LLM: Row~31 --- High plausibility (99.17\%) for \texttt{sepal width \times petal length \times petal width} and 58.76\% certainty support the versicolor classification.''\\
-``LLM: Row~68 --- Plausibility of 99.09\% for \texttt{sepal width \times petal length \times petal width} with 63.76\% certainty from petal length \times petal width also indicates versicolor.''\\
+\textbf{Row 73}\\
+Columns: \texttt{sepal length (cm)}=6.1, \texttt{sepal width (cm)}=2.8, \texttt{petal length (cm)}=4.7, \texttt{petal width (cm)}=1.2\\
+Prediction for row 73: 1.0\\
+Uncertainty value: 0.82\%\\
+Certainty triples: \texttt{petal length (cm)\_x\_petal width (cm)}: 64.67\%, \texttt{sepal length (cm)\_x\_petal length (cm)}: 23.38\%, \texttt{sepal length (cm)\_x\_petal length (cm)\_x\_petal width (cm)}: 21.28\%\\
+Plausibility triples: \texttt{sepal width (cm)\_x\_petal length (cm)\_x\_petal width (cm)}: 99.09\%, \texttt{sepal length (cm)\_x\_petal length (cm)\_x\_petal width (cm)}: 98.92\%, \texttt{petal length (cm)\_x\_petal width (cm)}: 98.81\%
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:} The sample exhibits high plausibility in the combination of sepal width (2.8 cm), petal length (4.7 cm), and petal width (1.2 cm), with a 99.09\% score, strongly aligning with the \textit{versicolor} species. Certainty metrics further support this classification, as the petal length and petal width combination (64.67\%) and the triple feature interaction (21.28\%) are consistent with \textit{versicolor}'s typical measurements. The low uncertainty (0.82\%) and high prediction confidence (1.0) reinforce this conclusion.
+
+\vspace{1em}
+\textbf{Row 78}\\
+Columns: \texttt{sepal length (cm)}=6.0, \texttt{sepal width (cm)}=2.9, \texttt{petal length (cm)}=4.5, \texttt{petal width (cm)}=1.5\\
+Prediction for row 78: 1.0\\
+Uncertainty value: 0.82\%\\
+Certainty triples: \texttt{petal length (cm)\_x\_petal width (cm)}: 65.10\%, \texttt{sepal length (cm)\_x\_petal length (cm)}: 23.61\%, \texttt{sepal length (cm)\_x\_petal length (cm)\_x\_petal width (cm)}: 21.74\%\\
+Plausibility triples: \texttt{sepal width (cm)\_x\_petal length (cm)\_x\_petal width (cm)}: 99.08\%, \texttt{sepal length (cm)\_x\_petal length (cm)\_x\_petal width (cm)}: 98.78\%, \texttt{petal length (cm)\_x\_petal width (cm)}: 98.67\%
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:} The sample exhibits high plausibility in the combination of sepal width (2.9 cm), petal length (4.5 cm), and petal width (1.5 cm), with a triple plausibility of 99.08\%, strongly aligning with the \textit{versicolor} species. The petal dimensions reinforce this classification. Despite slightly higher sepal measurements, the certainty and plausibility scores support the model's confident prediction. The sample is classified as \textit{versicolor}.
+
+\vspace{1em}
+\textbf{Row 68}\\
+Columns: \texttt{sepal length (cm)}=6.2, \texttt{sepal width (cm)}=2.2, \texttt{petal length (cm)}=4.5, \texttt{petal width (cm)}=1.5\\
+Prediction for row 68: 1.0\\
+Uncertainty value: 0.82\%\\
+Certainty triples: \texttt{petal length (cm)\_x\_petal width (cm)}: 63.76\%, \texttt{sepal length (cm)\_x\_petal length (cm)}: 22.71\%, \texttt{sepal length (cm)\_x\_petal length (cm)\_x\_petal width (cm)}: 21.13\%\\
+Plausibility triples: \texttt{sepal width (cm)\_x\_petal length (cm)\_x\_petal width (cm)}: 99.09\%, \texttt{sepal length (cm)\_x\_petal length (cm)\_x\_petal width (cm)}: 97.73\%, \texttt{petal length (cm)\_x\_petal width (cm)}: 97.52\%
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:} This sample shows high plausibility for the combination of sepal width (2.2 cm), petal length (4.5 cm), and petal width (1.5 cm), scoring 99.09\%. The strong certainty for petal dimensions and the triple interaction suggests the profile matches the \textit{versicolor} species. The prediction value (1.0) and low uncertainty (0.82\%) confirm this classification. The sample is classified as \textit{versicolor}.
 \end{quote}
+
 
 \subsection{Breast Cancer Dataset Example}
 
@@ -407,12 +460,41 @@ Certainty triples: mean concave points\_x\_worst radius\_x\_worst texture: 12.36
 Plausibility triples: worst radius\_x\_worst texture\_x\_worst perimeter: 86.13\%, worst radius\_x\_worst texture\_x\_worst area: 85.48\%, worst radius\_x\_worst perimeter\_x\_worst concave points: 84.24\%
 \end{quote}
 
-\paragraph{Example LLM Outputs}
+\paragraph{Example LLM Outputs – Breast Cancer Dataset}
 \begin{quote}
-``LLM: Row~131 --- Plausibility of 86.13\% for \texttt{worst radius \times worst texture \times worst perimeter} and 12.36\% certainty confirm a benign diagnosis.''\\
-``LLM: Row~431 --- High plausibility (84.29\%) for \texttt{worst radius \times worst perimeter \times worst area} with 14.51\% certainty indicates malignancy.''\\
-``LLM: Row~81 --- Certainty of 15.36\% for \texttt{mean concave points \times worst radius \times worst texture} and plausibility above 81\% support a malignant assessment.''\\
+\textbf{Row 204}\\
+Columns: \texttt{mean radius}=12.47, \texttt{mean texture}=18.6, \texttt{mean perimeter}=81.09, \texttt{mean area}=481.9, \texttt{mean concave points}=0.03821, \texttt{worst radius}=14.97, \texttt{worst texture}=24.64, \texttt{worst perimeter}=96.05, \texttt{worst area}=677.9, \texttt{worst smoothness}=0.1426\\
+Prediction for row 204: 1.0\\
+Uncertainty value: 2.08\%\\
+Certainty triples: \texttt{mean concave points\_x\_worst radius\_x\_worst texture}: 19.48\%, \texttt{worst radius\_x\_worst perimeter\_x\_worst smoothness}: 10.73\%, \texttt{mean concave points\_x\_worst texture\_x\_worst perimeter}: 8.38\%\\
+Plausibility triples: \texttt{worst radius\_x\_worst perimeter\_x\_worst concave points}: 85.53\%, \texttt{worst radius\_x\_worst perimeter\_x\_worst area}: 85.51\%, \texttt{worst radius\_x\_worst texture\_x\_worst perimeter}: 85.33\%
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:} The tumor is predicted to be malignant. High certainty and plausibility scores indicate strong support for malignancy, with influential features including the combination of \texttt{mean concave points}, \texttt{worst radius}, \texttt{texture}, and \texttt{perimeter}. The triple plausibility involving \texttt{worst radius}, \texttt{perimeter}, and \texttt{area} (85.51\%) reflects increased tumor aggressiveness. The low uncertainty (2.08\%) confirms the classification. The tumor is predicted to be malignant.
+
+\vspace{1em}
+\textbf{Row 431}\\
+Columns: \texttt{mean radius}=12.4, \texttt{mean texture}=17.68, \texttt{mean perimeter}=81.47, \texttt{mean area}=467.8, \texttt{mean concave points}=0.02799, \texttt{worst radius}=12.88, \texttt{worst texture}=22.91, \texttt{worst perimeter}=89.61, \texttt{worst area}=515.8\\
+Prediction for row 431: 1.0\\
+Uncertainty value: 2.08\%\\
+Certainty triples: \texttt{mean concave points\_x\_worst radius\_x\_worst texture}: 14.51\%, \texttt{worst radius\_x\_worst perimeter\_x\_worst smoothness}: 9.08\%, \texttt{mean concave points\_x\_worst texture\_x\_worst perimeter}: 7.15\%\\
+Plausibility triples: \texttt{worst radius\_x\_worst perimeter\_x\_worst area}: 84.29\%, \texttt{worst radius\_x\_worst texture\_x\_worst area}: 81.71\%, \texttt{worst radius\_x\_worst texture\_x\_worst perimeter}: 81.05\%
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:} The tumor is predicted to be malignant. High plausibility (84.29\%) is associated with \texttt{worst radius}, \texttt{worst perimeter}, and \texttt{worst area}, which are elevated compared to their mean counterparts. While certainty scores are moderate, the model's confidence in these worst-case values supports a malignant classification. The low uncertainty further reinforces this result.
+
+\vspace{1em}
+\textbf{Row 369}\\
+Columns: \texttt{mean radius}=22.01, \texttt{mean texture}=21.9, \texttt{mean perimeter}=147.2, \texttt{mean area}=1482.0, \texttt{mean concave points}=0.1501, \texttt{worst radius}=27.66, \texttt{worst texture}=25.8, \texttt{worst perimeter}=195.0, \texttt{worst area}=2227.0\\
+Prediction for row 369: 0.0\\
+Uncertainty value: 2.08\%\\
+Certainty triples: \texttt{mean concave points\_x\_worst radius\_x\_worst texture}: 10.46\%, \texttt{worst radius\_x\_worst perimeter\_x\_worst smoothness}: 9.60\%, \texttt{mean concave points\_x\_worst texture\_x\_worst perimeter}: 5.00\%\\
+Plausibility triples: \texttt{worst radius\_x\_worst texture\_x\_worst area}: 77.07\%, \texttt{worst radius\_x\_worst perimeter\_x\_worst concave points}: 75.63\%, \texttt{worst radius\_x\_worst texture\_x\_worst perimeter}: 75.28\%
+
+\vspace{0.5em}
+\noindent\textbf{LLM Response:} The tumor is predicted to be benign. The high plausibility (77.07\%) of the feature combination \texttt{worst radius}, \texttt{worst texture}, and \texttt{worst area} suggests strong alignment with benign patterns. Despite high absolute values, the interactions match known benign distributions. Low certainty in the model is offset by low uncertainty (2.08\%) and high plausibility, confirming the benign prediction.
 \end{quote}
+
 
 \subsection{Interpreting the Model}
 
