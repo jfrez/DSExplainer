@@ -6,6 +6,12 @@ from sklearn.metrics import mean_absolute_error
 from DSExplainer import DSExplainer
 import numpy as np
 from textwrap import dedent
+import ollama
+import os
+import re
+
+OLLAMA_HOST = os.getenv("OLLAMA_HOST")
+llm_client = ollama.Client(host=OLLAMA_HOST) if OLLAMA_HOST else ollama
 
 # Load dataset
 cancer = load_breast_cancer(as_frame=True)
@@ -78,3 +84,11 @@ print(comparison_df)
 
 for idx, prompt in demp_prompts.items():
     print(f"Prompt {idx}:\n{prompt}\n")
+    try:
+        resp = llm_client.chat(model="mannix/jan-nano", messages=[{"role": "user", "content": prompt}])
+        clean_resp = re.sub(r"<think>.*?</think>", "", resp.message.content, flags=re.DOTALL).strip()
+        print("--- LLM RESPONSE ---")
+        print(clean_resp)
+        print("--------------------\n")
+    except Exception as e:
+        print("LLM error:", e)
