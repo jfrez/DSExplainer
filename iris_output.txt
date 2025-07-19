@@ -13,9 +13,15 @@
 [10 rows x 6 columns]
 Prompt 73:
 
-The Iris dataset contains measurements of iris flowers and the species to which each sample belongs.
+The Iris dataset contains measurements of iris flowers and the species to
+which each sample belongs.
 
-Objective: Explain which species the sample belongs to using the Certainty and Plausibility metrics as key evidence.
+Objective: 
+Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+
 Columns: sepal length (cm)=6.1, sepal width (cm)=2.8, petal length (cm)=4.7, petal width (cm)=1.2
 Prediction for row 73: 1.0
 Uncertainty value: 0.82%
@@ -23,33 +29,20 @@ Certainty triples: petal length (cm)_x_petal width (cm): 64.67%, sepal length (c
 Plausibility triples: sepal width (cm)_x_petal length (cm)_x_petal width (cm): 99.09%, sepal length (cm)_x_petal length (cm)_x_petal width (cm): 98.92%, petal length (cm)_x_petal width (cm): 98.81%
 
 --- LLM RESPONSE ---
-The sample with the measurements **sepal length (6.1 cm), sepal width (2.8 cm), petal length (4.7 cm), and petal width (1.2 cm)** is most likely **versicolor**. Here's the breakdown:
-
-### **Key Evidence:**
-1. **Certainty Metrics:**
-   - The **highest certainty** is from the combination of **petal length (4.7 cm) and petal width (1.2 cm)**, contributing **64.67%** to the prediction. This aligns with versicolor's typical petal dimensions (petal length: 2.0–5.0 cm, petal width: 0.2–1.8 cm).
-   - The **plausibility triple** for **sepal width (2.8 cm), petal length (4.7 cm), and petal width (1.2 cm)** is **99.09%**, indicating strong confidence in this combination being associated with versicolor.
-
-2. **Species-Specific Ranges:**
-   - **Versicolor** has:
-     - Sepal length: 4.5–7.0 cm (6.1 cm is within range).
-     - Sepal width: 2.0–4.4 cm (2.8 cm is within range).
-     - Petal length: 2.0–5.0 cm (4.7 cm is within range).
-     - Petal width: 0.2–1.8 cm (1.2 cm is within range).
-   - **Virginica** has larger petal dimensions (petal length: 4.5–6.9 cm, petal width: 0.5–2.5 cm), but the petal width (1.2 cm) is closer to versicolor's range.
-
-3. **Uncertainty:**
-   - The **uncertainty value (0.82%)** is extremely low, confirming the model's high confidence in the prediction.
-
-### **Conclusion:**
-The sample is **versicolor**, as the combination of sepal width, petal length, and petal width aligns most closely with versicolor's characteristics, supported by the **99.09% plausibility triple** and **64.67% certainty** from petal measurements. The model's **1.0 prediction** and **0.82% uncertainty** further validate this conclusion.
+The sample exhibits high plausibility in the combination of sepal width (2.8 cm), petal length (4.7 cm), and petal width (1.2 cm), with a 99.09% score, strongly aligning with the versicolor species. Certainty metrics further support this classification, as the petal length and petal width combination (64.67%) and the triple feature interaction (sepal length, petal length, petal width) (21.28%) are consistent with versicolor's typical measurements. The low uncertainty (0.82%) and high prediction confidence (1.0) reinforce this conclusion, as the feature values fall within the range characteristic of versicolor, particularly the elevated petal length and moderate sepal length. The sample is classified as versicolor.
 --------------------
 
 Prompt 18:
 
-The Iris dataset contains measurements of iris flowers and the species to which each sample belongs.
+The Iris dataset contains measurements of iris flowers and the species to
+which each sample belongs.
 
-Objective: Explain which species the sample belongs to using the Certainty and Plausibility metrics as key evidence.
+Objective: 
+Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+
 Columns: sepal length (cm)=5.7, sepal width (cm)=3.8, petal length (cm)=1.7, petal width (cm)=0.3
 Prediction for row 18: 0.03
 Uncertainty value: 0.82%
@@ -57,31 +50,20 @@ Certainty triples: petal length (cm)_x_petal width (cm): 60.76%, sepal length (c
 Plausibility triples: sepal width (cm)_x_petal length (cm)_x_petal width (cm): 99.17%, sepal length (cm)_x_petal length (cm)_x_petal width (cm): 98.98%, petal length (cm)_x_petal width (cm): 98.86%
 
 --- LLM RESPONSE ---
-The sample with measurements **sepal length (5.7 cm), sepal width (3.8 cm), petal length (1.7 cm), and petal width (0.3 cm)** is most likely **Setosa** based on the provided Certainty and Plausibility metrics. Here's the breakdown:
-
-1. **Feature Analysis**:
-   - **Petal length (1.7 cm)** and **petal width (0.3 cm)** are within the typical range for Setosa (petal length: 1.0–2.5 cm; petal width: 0.1–0.6 cm). 
-   - **Sepal length (5.7 cm)** and **sepal width (3.8 cm)** align with Setosa's sepal dimensions (sepal length: 4.3–5.8 cm; sepal width: 2.8–3.6 cm). 
-
-2. **Certainty Triples**:
-   - **Petal length × petal width** (60.76%) and **sepal width × petal length × petal width** (99.17%) strongly suggest a high likelihood of Setosa, as these combinations are highly specific to the species. 
-   - The **sepal length × petal length × petal width** (35.06%) and **sepal length × petal length** (23.84%) also support Setosa, though less prominently than the first two.
-
-3. **Plausibility Triples**:
-   - The **sepal width × petal length × petal width** (99.17%) is exceptionally high, indicating that this combination is **extremely plausible** for Setosa. 
-   - Other plausibility triples (e.g., **sepal length × petal length × petal width**: 98.98%) further reinforce this conclusion.
-
-4. **Uncertainty and Prediction**:
-   - The **uncertainty value (0.82%)** and **prediction (0.03)** suggest a **highly confident classification** (0.03 could represent a low probability threshold, but the certainty and plausibility metrics override this). 
-
-**Conclusion**: The sample is **Setosa**. The high plausibility of the **sepal width, petal length, and petal width** combination (99.17%) and the alignment of all features with Setosa's typical ranges confirm this classification. The low uncertainty (0.82%) further supports this conclusion.
+The sample exhibits high plausibility for the combination of sepal width (3.8 cm), petal length (1.7 cm), and petal width (0.3 cm), with 99.17% confidence, indicating a strong association with the setosa species. While the petal length and width are unusually small for setosa, the sepal length (5.7 cm) and sepal width (3.8 cm) align with the species' typical range, particularly when considering the high certainty of the petal length–petal width interaction (60.76%). The low uncertainty (0.82%) and dominant plausibility metrics collectively reinforce the classification. The sample is classified as setosa.
 --------------------
 
 Prompt 118:
 
-The Iris dataset contains measurements of iris flowers and the species to which each sample belongs.
+The Iris dataset contains measurements of iris flowers and the species to
+which each sample belongs.
 
-Objective: Explain which species the sample belongs to using the Certainty and Plausibility metrics as key evidence.
+Objective: 
+Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+
 Columns: sepal length (cm)=7.7, sepal width (cm)=2.6, petal length (cm)=6.9, petal width (cm)=2.3
 Prediction for row 118: 2.0
 Uncertainty value: 0.82%
@@ -89,40 +71,20 @@ Certainty triples: petal length (cm)_x_petal width (cm): 70.84%, sepal length (c
 Plausibility triples: sepal length (cm)_x_petal length (cm)_x_petal width (cm): 99.15%, sepal width (cm)_x_petal length (cm)_x_petal width (cm): 99.14%, petal length (cm)_x_petal width (cm): 99.02%
 
 --- LLM RESPONSE ---
-The sample with the given measurements (sepal length 7.7 cm, sepal width 2.6 cm, petal length 6.9 cm, petal width 2.3 cm) is most likely classified as **virginica** (species index 2.0) based on the provided Certainty and Plausibility metrics. Here's the breakdown:
-
-### Key Evidence:
-1. **Prediction & Uncertainty**:  
-   - **Species Index**: 2.0 (virginica).  
-   - **Uncertainty**: 0.82% (extremely low, indicating high confidence in the classification).
-
-2. **Certainty Triples**:  
-   - **Petal Length × Petal Width**: 70.84% (strong support for the species).  
-   - **Sepal Length × Petal Length × Petal Width**: 25.18% (moderate confidence).  
-   - **Sepal Length × Petal Length**: 19.56% (lower confidence).  
-
-3. **Plausibility Triples**:  
-   - **Sepal Length × Petal Length × Petal Width**: 99.15% (极高, extremely high plausibility for the species).  
-   - **Sepal Width × Petal Length × Petal Width**: 99.14% (极高).  
-   - **Petal Length × Petal Width**: 99.02% (极高).  
-
-### Analysis:  
-- **Feature Consistency**:  
-  - **Petal Length (6.9 cm)** and **Petal Width (2.3 cm)** are unusually long for setosa (small petals) and intermediate for versicolor, aligning closely with virginica (long, broad petals).  
-  - **Sepal Length (7.7 cm)** and **Sepal Width (2.6 cm)** fall within the typical range for virginica (sepal length: 6.5–7.9 cm, sepal width: 2.0–3.0 cm).  
-- **Plausibility Metrics**:  
-  - The **99.15% plausibility** for the combination of sepal length, petal length, and petal width strongly supports virginica, as these features are characteristic of this species.  
-  - The **99.02% plausibility** for petal length and width further reinforces this conclusion.  
-
-### Conclusion:  
-The sample is confidently classified as **virginica** (species index 2.0) with **99.15% plausibility** and **70.84% certainty** for the key features. The extremely low uncertainty (0.82%) confirms the model's high confidence in this classification.
+The sample exhibits high plausibility for the versicolor species, supported by the combination of sepal length (7.7 cm), petal length (6.9 cm), and petal width (2.3 cm), which aligns with the species' typical feature range. Certainty metrics confirm this classification, with the petal length (cm) × petal width (cm) combination (70.84%) and the sepal length (cm) × petal length (cm) × petal width (cm) triple (25.18%) strongly favoring versicolor. Plausibility triples, including the sepal length (cm) × petal length (cm) × petal width (cm) (99.15%) and petal length (cm) × petal width (cm) (99.02%), further validate this conclusion, reflecting high confidence in the classification. The sample is classified as versicolor.
 --------------------
 
 Prompt 78:
 
-The Iris dataset contains measurements of iris flowers and the species to which each sample belongs.
+The Iris dataset contains measurements of iris flowers and the species to
+which each sample belongs.
 
-Objective: Explain which species the sample belongs to using the Certainty and Plausibility metrics as key evidence.
+Objective: 
+Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+
 Columns: sepal length (cm)=6.0, sepal width (cm)=2.9, petal length (cm)=4.5, petal width (cm)=1.5
 Prediction for row 78: 1.0
 Uncertainty value: 0.82%
@@ -130,45 +92,20 @@ Certainty triples: petal length (cm)_x_petal width (cm): 65.10%, sepal length (c
 Plausibility triples: sepal width (cm)_x_petal length (cm)_x_petal width (cm): 99.08%, sepal length (cm)_x_petal length (cm)_x_petal width (cm): 98.78%, petal length (cm)_x_petal width (cm): 98.67%
 
 --- LLM RESPONSE ---
-The sample with the following measurements:  
-- **Sepal length**: 6.0 cm  
-- **Sepal width**: 2.9 cm  
-- **Petal length**: 4.5 cm  
-- **Petal width**: 1.5 cm  
-
-is predicted to belong to the **Versicolor** species (index 1.0). Here's the reasoning based on the provided metrics:
-
-### **Key Evidence:**
-1. **Prediction and Uncertainty**:  
-   - The model predicts the species as **1.0** (Versicolor), with an **uncertainty of 0.82%**, indicating **high confidence** in this classification.
-
-2. **Certainty Triples**:  
-   - **Petal length (cm) × Petal width (cm)**: 65.10% certainty.  
-     - This combination aligns with Versicolor's typical petal measurements (e.g., petal length ~4.26 cm, petal width ~1.46 cm).  
-   - **Sepal length (cm) × Petal length (cm)**: 23.61% certainty.  
-     - Sepal length (6.0 cm) falls within Versicolor's range (5.9–7.0 cm), supporting this classification.  
-   - **Sepal length (cm) × Petal length (cm) × Petal width (cm)**: 21.74% certainty.  
-     - This triple further reinforces the likelihood of Versicolor, as the combined features are consistent with its characteristics.
-
-3. **Plausibility Triples**:  
-   - **Sepal width (cm) × Petal length (cm) × Petal width (cm)**: 99.08% plausibility.  
-     - This triple is **extremely high** and strongly indicates that the sample is most consistent with Versicolor.  
-   - **Sepal length (cm) × Petal length (cm) × Petal width (cm)**: 98.78% plausibility.  
-     - This also aligns with Versicolor, as the sepal length (6.0 cm) and petal measurements fall within its range.  
-   - **Petal length (cm) × Petal width (cm)**: 98.67% plausibility.  
-     - This supports the conclusion that the sample is in the Versicolor class.
-
-### **Conclusion:**
-The **high plausibility** of the triple **sepal width × petal length × petal width** (99.08%) and the **prediction of 1.0** (Versicolor) strongly confirm that the sample belongs to the **Versicolor** species. The **low uncertainty** (0.82%) and **high certainty** values for relevant feature combinations further validate this classification. The sample's measurements are most consistent with Versicolor's typical characteristics, particularly in petal dimensions and sepal length. 
-
-**Final Answer:** The sample is classified as **Versicolor**.
+The sample exhibits high plausibility in the combination of sepal width (2.9 cm), petal length (4.5 cm), and petal width (1.5 cm), with a triple plausibility of 99.08%, strongly aligning with the versicolor species. The petal length and petal width combination (65.10% certainty) further reinforces this classification, as these measurements fall within the typical range for versicolor. While sepal length (6.0 cm) and sepal width (2.9 cm) are slightly higher than versicolor averages, the dominant plausibility metrics and certainty values collectively indicate a high probability of the sample belonging to the versicolor class. The low uncertainty (0.82%) and strong confidence in the feature combinations confirm the classification. The sample is classified as versicolor.
 --------------------
 
 Prompt 76:
 
-The Iris dataset contains measurements of iris flowers and the species to which each sample belongs.
+The Iris dataset contains measurements of iris flowers and the species to
+which each sample belongs.
 
-Objective: Explain which species the sample belongs to using the Certainty and Plausibility metrics as key evidence.
+Objective: 
+Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+
 Columns: sepal length (cm)=6.8, sepal width (cm)=2.8, petal length (cm)=4.8, petal width (cm)=1.4
 Prediction for row 76: 1.01
 Uncertainty value: 0.82%
@@ -176,33 +113,20 @@ Certainty triples: petal length (cm)_x_petal width (cm): 63.17%, sepal length (c
 Plausibility triples: sepal length (cm)_x_petal length (cm)_x_petal width (cm): 99.07%, sepal width (cm)_x_petal length (cm)_x_petal width (cm): 99.03%, petal length (cm)_x_petal width (cm): 98.78%
 
 --- LLM RESPONSE ---
-The sample with sepal length 6.8 cm, sepal width 2.8 cm, petal length 4.8 cm, and petal width 1.4 cm is most likely **virginica**. Here's the breakdown using the provided metrics:
-
-1. **Certainty Metrics**:  
-   - **Petal length (cm) × petal width (cm)**: 63.17% certainty.  
-     - This combination aligns with virginica's typical petal measurements (mean petal length = 4.3 cm, petal width = 1.46 cm).  
-   - **Sepal length (cm) × petal length (cm) × petal width (cm)**: 25.29% certainty.  
-     - The sepal length (6.8 cm) and petal dimensions (4.8 cm, 1.4 cm) closely match virginica's range.  
-
-2. **Plausibility Metrics**:  
-   - **Sepal length (cm) × petal length (cm) × petal width (cm)**: 99.07% plausibility.  
-     - This triple indicates the sample is highly plausible for virginica, as the sepal length and petal measurements fall within the species' typical ranges.  
-   - **Sepal width (cm) × petal length (cm) × petal width (cm)**: 99.03% plausibility.  
-     - The sepal width (2.8 cm) is near virginica's mean (2.77 cm), further supporting the classification.  
-
-3. **Key Observations**:  
-   - **Sepal Length**: 6.8 cm is close to virginica's mean (6.74 cm), indicating a strong association.  
-   - **Petal Length**: 4.8 cm is slightly higher than virginica's mean (4.30 cm), but the petal width (1.4 cm) is very close to virginica's (1.46 cm).  
-   - **Uncertainty**: 0.82% (very low) suggests high confidence in the prediction.  
-
-**Conclusion**: The sample is most confidently classified as **virginica** based on the high plausibility of the sepal length, petal length, and petal width combination (99.07%), along with the strong alignment of petal dimensions with virginica's typical range. The low uncertainty (0.82%) further reinforces this conclusion.
+The sample exhibits a sepal length of 6.8 cm, sepal width of 2.8 cm, petal length of 4.8 cm, and petal width of 1.4 cm, with high plausibility (99.07%) for the combination of sepal length, petal length, and petal width, strongly aligning with the versicolor species. Certainty metrics confirm this classification, as the top feature combination (petal length × petal width) reaches 63.17%, and the sepal length × petal length × petal width triple contributes 25.29% to the confidence. These metrics, alongside the high plausibility of 99.07% for the triple feature set, collectively indicate a strong, unambiguous classification. The sample is classified as versicolor.
 --------------------
 
 Prompt 31:
 
-The Iris dataset contains measurements of iris flowers and the species to which each sample belongs.
+The Iris dataset contains measurements of iris flowers and the species to
+which each sample belongs.
 
-Objective: Explain which species the sample belongs to using the Certainty and Plausibility metrics as key evidence.
+Objective: 
+Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+
 Columns: sepal length (cm)=5.4, sepal width (cm)=3.4, petal length (cm)=1.5, petal width (cm)=0.4
 Prediction for row 31: 0.0
 Uncertainty value: 0.82%
@@ -210,25 +134,20 @@ Certainty triples: petal length (cm)_x_petal width (cm): 58.76%, sepal length (c
 Plausibility triples: sepal width (cm)_x_petal length (cm)_x_petal width (cm): 99.17%, sepal length (cm)_x_petal length (cm)_x_petal width (cm): 98.99%, petal length (cm)_x_petal width (cm): 98.95%
 
 --- LLM RESPONSE ---
-The sample with sepal length (5.4 cm), sepal width (3.4 cm), petal length (1.5 cm), and petal width (0.4 cm) is most likely classified as **Setosa** (species 0) based on the provided Certainty and Plausibility metrics. Here's the reasoning:
-
-1. **Plausibility Evidence**:  
-   - The highest plausibility triple is **sepal width (3.4 cm) × petal length (1.5 cm) × petal width (0.4 cm)** with **99.17%**. This combination strongly aligns with **Setosa** species, as Setosa is characterized by very small petals (petal length < 1.5 cm, petal width < 0.5 cm) and moderate sepal width. The sepal width of 3.4 cm falls within the typical range for Setosa (2.0–3.0 cm), further supporting this classification.
-
-2. **Certainty and Uncertainty**:  
-   - The **Certainty** triples (e.g., 58.76% for petal length × petal width) and **Plausibility** triples (e.g., 99.17% for sepal width × petal length × petal width) collectively reinforce the conclusion. The **low uncertainty value (0.82%)** indicates high confidence in the prediction, aligning with the model's high plausibility for Setosa features.
-
-3. **Species-Specific Features**:  
-   - The **extremely small petal dimensions** (1.5 cm length, 0.4 cm width) are nearly diagnostic of Setosa, which typically has minimal petal size. While the sepal length (5.4 cm) is slightly higher than the average for Setosa (4.3–5.8 cm), it still falls within the species' range, further validating the classification.
-
-**Conclusion**: The sample is confidently classified as **Setosa (species 0)** due to the high plausibility of its feature combination (99.17%) and the low uncertainty (0.82%), which align with the distinct characteristics of Setosa.
+The sample exhibits high plausibility in the combination of sepal width (3.4 cm), petal length (1.5 cm), and petal width (0.4 cm), with a plausibility triple of 99.17%, strongly aligning with the species versicolor. Certainty metrics further support this classification, as the product of petal length and petal width (58.76%) and the triplet of sepal length, petal length, and petal width (34.04%) are consistent with versicolor characteristics. While the sepal length (5.4 cm) and sepal width (3.4 cm) also contribute to the plausibility of versicolor, the high confidence in the feature combinations, coupled with the low uncertainty (0.82%), confirms the sample's classification as versicolor.
 --------------------
 
 Prompt 64:
 
-The Iris dataset contains measurements of iris flowers and the species to which each sample belongs.
+The Iris dataset contains measurements of iris flowers and the species to
+which each sample belongs.
 
-Objective: Explain which species the sample belongs to using the Certainty and Plausibility metrics as key evidence.
+Objective: 
+Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+
 Columns: sepal length (cm)=5.6, sepal width (cm)=2.9, petal length (cm)=3.6, petal width (cm)=1.3
 Prediction for row 64: 1.0
 Uncertainty value: 0.82%
@@ -236,50 +155,20 @@ Certainty triples: petal length (cm)_x_petal width (cm): 64.47%, sepal length (c
 Plausibility triples: sepal width (cm)_x_petal length (cm)_x_petal width (cm): 99.09%, sepal length (cm)_x_petal length (cm)_x_petal width (cm): 98.79%, petal length (cm)_x_petal width (cm): 98.67%
 
 --- LLM RESPONSE ---
-The sample with the following measurements:  
-- **Sepal length (cm): 5.6**  
-- **Sepal width (cm): 2.9**  
-- **Petal length (cm): 3.6**  
-- **Petal width (cm): 1.3**  
-
-is classified as **Versicolor** based on the provided Certainty and Plausibility metrics. Here's the breakdown:
-
----
-
-### **Key Evidence:**
-1. **Certainty Triples**:  
-   - **Petal length (cm) × Petal width (cm)**: 64.47%  
-   - **Sepal length (cm) × Petal length (cm)**: 22.54%  
-   - **Sepal length (cm) × Petal length (cm) × Petal width (cm)**: 21.57%  
-
-   The highest Certainty is for **petal length and petal width (64.47%)**, which aligns with the **Versicolor** species. In the Iris dataset, Versicolor has average petal length ≈ 4.26 cm and petal width ≈ 1.3 cm. The sample's petal measurements (3.6 cm and 1.3 cm) are close to Versicolor's averages, suggesting a high likelihood of classification as Versicolor.
-
-2. **Plausibility Triples**:  
-   - **Sepal width (cm) × Petal length (cm) × Petal width (cm)**: 99.09%  
-   - **Sepal length (cm) × Petal length (cm) × Petal width (cm)**: 98.79%  
-   - **Petal length (cm) × Petal width (cm)**: 98.67%  
-
-   The **highest plausibility (99.09%)** is for the combination of **sepal width, petal length, and petal width**. These features closely match Versicolor's typical values:  
-   - **Sepal width**: 2.9 cm (close to Versicolor's 2.77 cm).  
-   - **Petal length**: 3.6 cm (slightly below Versicolor's 4.26 cm, but closer to it than Virginica's 5.1 cm).  
-   - **Petal width**: 1.3 cm (exactly matches Versicolor's average).  
-
-   The high plausibility for these features strongly supports the **Versicolor** classification.
-
-3. **Uncertainty Value**: 0.82%  
-   - This extremely low uncertainty (less than 1%) indicates **high confidence** in the prediction. The prediction value of **1.0** (assuming species are labeled 0: Setosa, 1: Versicolor, 2: Virginica) further confirms the classification.
-
----
-
-### **Conclusion**:  
-The sample is most likely **Versicolor**. The high plausibility for **sepal width, petal length, and petal width** (99.09%) and the high Certainty for **petal length and width** (64.47%) align with the characteristics of Versicolor. The low uncertainty (0.82%) and the predicted label (1.0) reinforce this conclusion.
+The sample exhibits a sepal length of 5.6 cm, sepal width of 2.9 cm, petal length of 3.6 cm, and petal width of 1.3 cm, with high plausibility in the combination of sepal width, petal length, and petal width (99.09%) and strong certainty in petal length and petal width (64.47%). These feature values align closely with the species versicolor, as evidenced by the dominant plausibility triple and the high confidence in petal measurements, which are characteristic of this species. The low uncertainty (0.82%) and consistent support across key features confirm the classification. The sample is classified as versicolor.
 --------------------
 
 Prompt 141:
 
-The Iris dataset contains measurements of iris flowers and the species to which each sample belongs.
+The Iris dataset contains measurements of iris flowers and the species to
+which each sample belongs.
 
-Objective: Explain which species the sample belongs to using the Certainty and Plausibility metrics as key evidence.
+Objective: 
+Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+
 Columns: sepal length (cm)=6.9, sepal width (cm)=3.1, petal length (cm)=5.1, petal width (cm)=2.3
 Prediction for row 141: 2.0
 Uncertainty value: 0.82%
@@ -287,34 +176,20 @@ Certainty triples: petal length (cm)_x_petal width (cm): 70.80%, sepal length (c
 Plausibility triples: sepal width (cm)_x_petal length (cm)_x_petal width (cm): 99.14%, sepal length (cm)_x_petal length (cm)_x_petal width (cm): 99.05%, petal length (cm)_x_petal width (cm): 98.93%
 
 --- LLM RESPONSE ---
-The sample with measurements **sepal length (6.9 cm), sepal width (3.1 cm), petal length (5.1 cm), and petal width (2.3 cm)** is most likely to belong to the **virginica** species. Here's the reasoning:
-
-### **Key Evidence:**
-1. **Plausibility Metrics:**
-   - The **highest plausibility triple** is **sepal width (cm) × petal length (cm) × petal width (cm)** with **99.14%**. This combination aligns strongly with **virginica**, as:
-     - **Petal length (5.1 cm)** and **petal width (2.3 cm)** are typical for virginica (which has longer petals).
-     - **Sepal width (3.1 cm)** is in the upper range of virginica's sepal width (2.5–4.0 cm).
-
-2. **Certainty Metrics:**
-   - The **highest certainty triple** is **petal length (cm) × petal width (cm)** with **70.80%**, which also supports virginica. This reflects the strong correlation between these features and virginica.
-
-3. **Species Range:**
-   - **Petal length (5.1 cm)** and **petal width (2.3 cm)** fall within virginica's typical ranges (4.0–7.0 cm for petal length, 2.0–4.0 cm for petal width).
-   - **Sepal length (6.9 cm)** and **sepal width (3.1 cm)** are consistent with virginica's larger sepal dimensions (6.5–8.0 cm for sepal length, 2.5–4.0 cm for sepal width).
-
-4. **Prediction and Uncertainty:**
-   - The **prediction value of 2.0** (assuming 0 = setosa, 1 = versicolor, 2 = virginica) directly points to **virginica**.
-   - The **uncertainty of 0.82%** indicates **high confidence** in this classification, supported by the high plausibility and certainty metrics.
-
-### **Conclusion:**
-The sample is most confidently classified as **virginica** based on the high plausibility of the sepal width, petal length, and petal width combination (99.14%), the strong certainty in petal features (70.80%), and the low uncertainty (0.82%). These metrics collectively align with the biological characteristics of **virginica** in the Iris dataset.
+The sample exhibits high plausibility in the combination of sepal width (3.1 cm), petal length (5.1 cm), and petal width (2.3 cm), with a triple plausibility of 99.14%, strongly aligning with the species versicolor. Certainty metrics further reinforce this classification, as the petal length (5.1 cm) and petal width (2.3 cm) combination accounts for 70.80% certainty, while the sepal length (6.9 cm) and petal length (5.1 cm) pair contributes 25.00% certainty. These feature values, particularly the moderate sepal length and distinct petal dimensions, align with the typical characteristics of versicolor, which is most plausible given the 99.05% plausibility of the sepal length, petal length, and petal width triple. The low uncertainty (0.82%) and high confidence in these metrics confirm the classification. The sample is classified as versicolor.
 --------------------
 
 Prompt 68:
 
-The Iris dataset contains measurements of iris flowers and the species to which each sample belongs.
+The Iris dataset contains measurements of iris flowers and the species to
+which each sample belongs.
 
-Objective: Explain which species the sample belongs to using the Certainty and Plausibility metrics as key evidence.
+Objective: 
+Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+
 Columns: sepal length (cm)=6.2, sepal width (cm)=2.2, petal length (cm)=4.5, petal width (cm)=1.5
 Prediction for row 68: 1.01
 Uncertainty value: 0.82%
@@ -322,34 +197,20 @@ Certainty triples: petal length (cm)_x_petal width (cm): 63.76%, sepal length (c
 Plausibility triples: sepal width (cm)_x_petal length (cm)_x_petal width (cm): 99.09%, sepal length (cm)_x_petal length (cm)_x_petal width (cm): 97.73%, petal length (cm)_x_petal width (cm): 97.52%
 
 --- LLM RESPONSE ---
-The sample with sepal length (6.2 cm), sepal width (2.2 cm), petal length (4.5 cm), and petal width (1.5 cm) is most likely **virginica**. Here's the breakdown:
-
-### **Key Evidence:**
-1. **Plausibility Triples**:
-   - **sepal width (cm)_x_petal length (cm)_x_petal width (cm)**: 99.09%  
-     This combination strongly aligns with **virginica**, as these features (2.2, 4.5, 1.5) fall within the typical range for virginica (sepal width: 2.3–2.8 cm, petal length: 5.0–6.5 cm, petal width: 1.5–2.0 cm). The high plausibility (99.09%) indicates the sample is highly consistent with virginica.
-
-2. **Certainty Triples**:
-   - **petal length (cm)_x_petal width (cm)**: 63.76%  
-     This pair (4.5 cm and 1.5 cm) is characteristic of virginica, as setosa has much shorter petals, and versicolor has smaller petal widths. The moderate certainty (63.76%) reinforces the likelihood of virginica.
-
-3. **Uncertainty Value**:
-   - **0.82%**  
-     A negligible uncertainty value confirms the model's high confidence in the prediction.
-
-### **Comparison with Other Species**:
-- **Setosa**: Extremely small petals (typically <1.0 cm in length and <0.2 cm in width), and smaller sepal dimensions. The given data does not match setosa.
-- **Versicolor**: Petal length and width are lower (max 4.0 cm and 1.5 cm, respectively), and sepal width is smaller (2.0–2.5 cm). The sample’s sepal length (6.2 cm) and petal length (4.5 cm) exceed versicolor’s ranges.
-
-### **Conclusion**:
-The **highest plausibility triple (99.09%)** and **lowest uncertainty (0.82%)** strongly indicate that the sample belongs to **virginica**. The features align closely with virginica’s typical measurements, and the high plausibility confirms this classification with confidence.
+The sample exhibits a high plausibility for the combination of sepal width (2.2 cm) × petal length (4.5 cm) × petal width (1.5 cm) at 99.09%, alongside strong Certainty metrics for petal length (4.5 cm) × petal width (1.5 cm) at 63.76% and sepal length (6.2 cm) × petal length (4.5 cm) at 22.71%. These features align closely with the species versicolor, as the petal dimensions (4.5 cm length, 1.5 cm width) and sepal length (6.2 cm) fall within the typical range for this species, while the sepal width (2.2 cm) further supports its classification. The high plausibility of the triple feature combination and the low uncertainty (0.82%) collectively confirm the sample’s classification as versicolor. The sample is classified as versicolor.
 --------------------
 
 Prompt 82:
 
-The Iris dataset contains measurements of iris flowers and the species to which each sample belongs.
+The Iris dataset contains measurements of iris flowers and the species to
+which each sample belongs.
 
-Objective: Explain which species the sample belongs to using the Certainty and Plausibility metrics as key evidence.
+Objective: 
+Write a single descriptive paragraph that explains which species the sample belongs to, using the Certainty and Plausibility metrics as the main sources of evidence.
+Focus on the most significant feature combinations (top values). Refer to the input feature values (e.g., petal width, sepal length) where relevant.
+Do not include bullet points or headings. Be concise but informative, and use a technical tone.
+End with a clear classification of the sample (e.g., 'The sample is classified as versicolor.').
+
 Columns: sepal length (cm)=5.8, sepal width (cm)=2.7, petal length (cm)=3.9, petal width (cm)=1.2
 Prediction for row 82: 1.0
 Uncertainty value: 0.82%
@@ -357,23 +218,6 @@ Certainty triples: petal length (cm)_x_petal width (cm): 64.57%, sepal length (c
 Plausibility triples: sepal width (cm)_x_petal length (cm)_x_petal width (cm): 99.09%, sepal length (cm)_x_petal length (cm)_x_petal width (cm): 98.90%, petal length (cm)_x_petal width (cm): 98.79%
 
 --- LLM RESPONSE ---
-The sample with measurements **sepal length (5.8 cm), sepal width (2.7 cm), petal length (3.9 cm), and petal width (1.2 cm)** is most likely classified as **Versicolor** based on the provided Certainty and Plausibility metrics. Here's the breakdown:
-
-### **Key Evidence:**
-1. **Certainty Triples**:
-   - **Petal Length × Petal Width (64.57%)**: This combination is highly indicative of Versicolor, as petal length (3.9 cm) and width (1.2 cm) align with Versicolor's typical range (petal length: 2.5–4.5 cm, petal width: 0.5–1.8 cm).
-   - **Sepal Length × Petal Length (22.50%)**: Sepal length (5.8 cm) and petal length (3.9 cm) are within Versicolor's range (sepal length: 4.5–6.9 cm, petal length: 2.5–4.5 cm).
-   - **Sepal Length × Petal Length × Petal Width (21.53%)**: This triple further supports Versicolor, as the combination of these features is consistent with the species.
-
-2. **Plausibility Triples**:
-   - **Sepal Width × Petal Length × Petal Width (99.09%)**: This combination is extremely high (99.09%), strongly suggesting Versicolor. The sepal width (2.7 cm) and petal dimensions (3.9 cm, 1.2 cm) are most consistent with Versicolor.
-   - **Sepal Length × Petal Length × Petal Width (98.90%)**: This also aligns with Versicolor, as the features fall within the species' range.
-   - **Petal Length × Petal Width (98.79%)**: This high plausibility further reinforces the classification.
-
-### **Conclusion:**
-The **high plausibility** (99.09%) for the **sepal width, petal length, and petal width** combination, combined with the **low uncertainty (0.82%)** and **high Certainty** values for petal features, strongly indicate that the sample belongs to **Versicolor**. This is consistent with the species' typical measurements and the provided metrics. 
-
-**Final Answer:**  
-The sample is classified as **Versicolor** with high confidence.
+The sample exhibits high plausibility for the versicolor species, supported by the combination of sepal width (2.7 cm), petal length (3.9 cm), and petal width (1.2 cm), which together account for 99.09% of the plausibility triple. The certainty metric further reinforces this classification, with petal length (3.9 cm) and petal width (1.2 cm) contributing 64.57% to the top certainty triple, while the triple involving sepal length (5.8 cm), petal length, and petal width contributes 21.53%. The low uncertainty value of 0.82% and high plausibility scores confirm the model's confidence in this classification. The sample is classified as versicolor.
 --------------------
 
