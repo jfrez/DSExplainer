@@ -86,11 +86,6 @@ OBJECTIVE_DEMPSTER = dedent("""
     error_rate=model_error,
 )
 
-# Remove raw prediction values from the prompts to avoid
-# conveying survival percentages directly.
-for idx, text in demp_prompts.items():
-    lines = [ln for ln in text.splitlines() if not ln.startswith("Prediction for row")]
-    demp_prompts[idx] = "\n".join(lines)
 
 pred_labels = ["survived" if p >= 0.5 else "did not survive" for p in shap_df["prediction"]]
 true_labels = ["survived" if t == 1 else "did not survive" for t in y.loc[subset.index]]
