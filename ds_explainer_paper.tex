@@ -336,69 +336,7 @@ This example demonstrates that:
 Moreover, the sum of these contributions is equal to the difference between the actual prediction (\$500,000) and the baseline (\$350,000), thereby ensuring consistency in the additive explanation framework. This decomposition provides a clear and interpretable insight into how each feature influences the model’s output, making it possible for practitioners to trust and validate the model’s decision-making process.
 
 Through this detailed calculation, the reader can appreciate how SHAP values break down a prediction into constituent parts, offering an intuitive understanding of feature importance that forms the basis for further uncertainty quantification in our DSExplainer framework.
-Consider a model that predicts the price of a house using three features: \texttt{size}, \texttt{location}, and \texttt{age}. Suppose the baseline prediction is \$350,000 (the average price), and for a specific house, the model predicts a price of \$500,000. The goal is to determine how the \$150,000 difference is distributed among the features.
 
-Table~\ref{tab:shapley_calculation} below illustrates a simplified computation of the marginal contributions for each feature across different coalitions:
-
-\begin{table}[H]
-    \caption{Marginal Contributions of Features in a House Price Prediction Example}
-    \label{tab:shapley_calculation}
-    \centering
-    \begin{tabularx}{\textwidth}{|c|c|Y|Y|Y|}
-        \hline
-        \textbf{Feature} & \textbf{Coalition} & \textbf{Prediction w/o Feature (\$)} & \textbf{Prediction w/ Feature (\$)} & \textbf{Marginal Contribution (\$)} \\
-        \hline
-        \texttt{size}     & None             & 350,000 & 460,000 & 110,000 \\
-        \texttt{size}     & \texttt{location} & 420,000 & 510,000 & 90,000  \\
-        \texttt{size}     & \texttt{age}      & 380,000 & 495,000 & 115,000 \\
-        \hline
-        \texttt{location} & None             & 350,000 & 410,000 & 60,000  \\
-        \texttt{location} & \texttt{size}    & 460,000 & 515,000 & 55,000  \\
-        \texttt{location} & \texttt{age}     & 380,000 & 435,000 & 55,000  \\
-        \hline
-        \texttt{age}      & None             & 350,000 & 335,000 & -15,000 \\
-        \texttt{age}      & \texttt{size}    & 460,000 & 442,000 & -18,000 \\
-        \texttt{age}      & \texttt{location}& 410,000 & 392,000 & -18,000 \\
-        \hline
-    \end{tabularx}
-\end{table}
-
-For each coalition, the marginal contribution is defined as the difference between the prediction with the feature and without it. The final SHAP value for each feature is computed as the average of its marginal contributions over all coalitions. For example, the SHAP value for \texttt{size} is computed as:
-
-\[
-\phi_{\texttt{size}} = \frac{(110\,000 + 90\,000 + 115\,000)}{3} \approx 105\,000.
-\]
-
-Similarly, the SHAP value for \texttt{location} is:
-
-\[
-\phi_{\texttt{location}} = \frac{(60\,000 + 55\,000 + 55\,000)}{3} \approx 56\,667,
-\]
-
-and for \texttt{age}:
-
-\[
-\phi_{\texttt{age}} = \frac{(-15\,000 - 18\,000 - 18\,000)}{3} = -17\,000.
-\]
-
-\subsubsection{Insights from the SHAP Calculation}
-
-This example demonstrates that:
-\begin{itemize}
-    \item The feature \texttt{size} contributes an additional \$105,000 to the prediction.
-    \item The feature \texttt{location} adds approximately \$56,667.
-    \item The feature \texttt{age} reduces the prediction by \$17,000.
-\end{itemize}
-
-Moreover, the sum of these contributions is equal to the difference between the actual prediction (\$500,000) and the baseline (\$350,000), thereby ensuring consistency in the additive explanation framework. This decomposition provides a clear and interpretable insight into how each feature influences the model’s output, making it possible for practitioners to trust and validate the model’s decision-making process.
-
-Through this detailed calculation, the reader can appreciate how SHAP values break down a prediction into constituent parts, offering an intuitive understanding of feature importance that forms the basis for further uncertainty quantification in our DSExplainer framework.
-The framework evaluates feature subsets up to size $k$. Explaining $n$ instances thus requires $O(n\,2^k)$ operations in the worst case.
-\begin{enumerate}
-    \item Compute SHAP values for all features and their combinations.
-    \item Normalize the absolute contributions to obtain BPAs.
-    \item Aggregate the masses to derive certainty and plausibility.
-\end{enumerate}
 
 \subsection{Interpretation and Utility of the Combined Framework}
 
