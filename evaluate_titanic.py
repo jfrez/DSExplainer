@@ -49,15 +49,25 @@ orig_subset = original_features.loc[subset.index]
 
 DATASET_DESCRIPTION = dedent(
     """
-    The Titanic dataset contains details about passengers on the ill-fated ship and whether they survived.
+    The Titanic dataset contains demographic and travel information about passengers aboard the RMS Titanic, including whether they survived the disaster. Features include age, sex, passenger class, fare, and cabin assignment, among others.
     """
 )
-OBJECTIVE_SHAP = "briefly conclude why the passenger survived or not based on SHAP features."
-OBJECTIVE_DEMPSTER = (
-    "Explain whether the passenger survived using the Certainty and "
-    "Plausibility metrics. Focus on these metrics and avoid stating the "
-    "exact survival percentage."
-)
+
+
+OBJECTIVE_SHAP = dedent("""
+    Write a single descriptive paragraph that explains why the passenger survived or not, using the SHAP feature importances as the main source of evidence.
+    Focus on the most relevant features (top SHAP values), and refer to input values (e.g., age, sex, fare) where appropriate.
+    Use a concise, technical tone and do not include bullet points or headings.
+    Conclude with a clear statement on the passenger's survival outcome (e.g., 'The passenger likely survived.').
+""")
+
+
+OBJECTIVE_DEMPSTER = dedent("""
+    Write a single descriptive paragraph that explains why the passenger survived or not, based on the Certainty and Plausibility metrics provided.
+    Highlight the most influential feature combinations, referencing their values when relevant (e.g., sex × age × fare).
+    Maintain a technical tone, avoid bullet points or headers, and focus on interpretability.
+    Finish the paragraph with a clear conclusion on whether the passenger survived or not (e.g., 'The model suggests the passenger did not survive.').
+""")
 
 (
     shap_prompts,
