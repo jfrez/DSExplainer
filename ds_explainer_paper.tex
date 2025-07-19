@@ -816,7 +816,7 @@ Analyzing individual instances provides a nuanced perspective on model interpret
 \end{itemize}
 
 Overall, this local instance analysis underscores the advantages of DSExplainer in providing both robust, direct insights (high certainty) and exploratory, indirect evidence (high plausibility), leading to a more comprehensive and actionable understanding of model predictions.
-\subsubsection{Evaluation Summary}
+\subsubsection{Evaluation Summary and Ablation Study}
 \label{sec:validation}
 
 To gauge the predictive performance of the underlying models, we generated explanations for random subsets of 10 samples in both datasets. For the Titanic experiment, the RandomForest regressor exhibited a mean absolute error of $0.1016$, which DSExplainer treats as the Dempster--Shafer ``uncertainty'' mass. Within this subset, only 2 of the 10 survival predictions matched the ground truth (20\% accuracy). Conversely, on the Iris dataset, the model error was just $0.0082$ and all 10 predictions were correct, yielding 100\% accuracy. The detailed outputs are provided in the supplementary files \texttt{titanic\_evaluation.txt} and \texttt{iris\_evaluation.txt}.
@@ -875,7 +875,7 @@ These messages often begin with statements such as ``The passenger's survival ca
 ``DSExplainer: Row~131 --- Prediction benign with uncertainty 2.08\%; plausibility for worst radius\$\times$worst texture\$\times$worst perimeter reaches 86.13\%.''\\
 ``DSExplainer: Row~81 --- Prediction malignant with similar uncertainty, supported by plausibility above 81\% for worst radius\$\times$worst perimeter\$\times$worst area.''\\
 \end{quote}
-\subsection{LLM-Assisted Interpretation}
+\subsubsection{LLM-Assisted Interpretation}
 
 Numerical metrics can be difficult to convey to non-experts. To bridge this gap we experimented with a lightweight large language model (LLM) that receives the top certainty and plausibility hypotheses as a prompt and returns a concise narrative explaining each prediction. We use the open-source \texttt{mannix/jan-nano} model via the \texttt{ollama} interface, allowing DSExplainer to produce a short textual rationale that complements the quantitative tables.
 
